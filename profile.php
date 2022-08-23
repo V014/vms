@@ -19,15 +19,7 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="index.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="table.php"><i class="fas fa-table"></i><span>Table</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="blank.php"><i class="fas fa-car"></i><span>Vehicles</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="blank.php"><i class="fas fa-steering-wheel"></i><span>Drivers</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="blank.php"><i class="fas fa-map"></i><span>Trips</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.php"><i class="far fa-user-circle"></i><span>Login</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="register.php"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="blank.php"><i class="fas fa-window-maximize"></i><span>Blank Page</span></a></li>
+                    <?php include_once "./components/nav_items.php" ?>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>

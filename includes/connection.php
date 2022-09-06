@@ -46,7 +46,7 @@ class DBConnection
         }
     }
 
-    private static function generateSQL()
+    public static function generateSQL()
     {
         $password = password_hash("secret", PASSWORD_DEFAULT);
         $defaultProfile = "./uploads/profiles/user-profile.png";
@@ -63,6 +63,11 @@ class DBConnection
             "sunday" => date('Y/m/d', strtotime("sunday 5 weeks ago"))
         ];
 
+        $orderDays = [
+            date('Y/m/d', strtotime("1 days ago")),
+            date('Y/m/d', strtotime("2 days ago")),
+        ];
+
         $schema = "
 CREATE TABLE IF NOT EXISTS users(
     id INT PRIMARY KEY A  UTO_INCREMENT,
@@ -73,44 +78,63 @@ CREATE TABLE IF NOT EXISTS users(
     updated_at DATE,
     phone_number VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(50) NOT NULL UNIQUE,
-    role ENUM('company', 'driver', 'admin') NOT NULL,
+    role ENUM('company', 'driver', 'admin') NOT NULL
 ) ENGINE = INNODB;
 
-CREATE TABLE IF NOT EXISTS company (
+CREATE TABLE IF NOT EXISTS companies (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     established INT NOT NULL,
-    location POINT NOT NULL,
+    location POINT NOT NULL
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS drivers (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     national_id VARCHAR(50) NOT NULL,
+    dob DATE NOT NULL,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS orders(
     id INT PRIMARY KEY AUTO_INCREMENT,
     company_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     quantity INT NOT NULL,
-    location POINT NOT NULL,
-    created_at DATE NOT NULL,
+    cost DECIMAL(15,2) NOT NULL,
+    status ENUM('pending', 'delivered') NOT NULL,
+    order_date DATE NOT NULL
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS order_driver(
     id INT PRIMARY KEY AUTO_INCREMENT,
     order_id INT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
     driver_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE
-    current_location POINT NOT NULL,
+    current_location POINT NOT NULL
 ) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS trips(
+
+);
 
 CREATE TABLE IF NOT EXISTS vehicles(
     id INT PRIMARY KEY AUTO_INCREMENT,
     registration_no VARCHAR(50) NOT NULL,
     make TEXT NOT NULL,
-    capacity INT NOT NULL,
+    capacity INT NOT NULL
 ) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS fuel_types(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name TEXT NOT NULL,
+    cost_per_litre DECIMAL(15, 2) NOT NULL
+) ENGINE = INNODB;
+
+INSERT INTO fuel_types(name, cost_per_litre) VALUES
+    ('parafin', '1200'),
+    ('diesel', '1850'),
+    ('petrol', '2000');
 
 INSERT INTO users (username, password, profile_picture, created_at, updated_at, phone_number, email, role) VALUES
     ('admin', '{$password}', '{$defaultProfile}', '{$weekDays['monday']}', '{$weekDays['monday']}', '{$phoneNumbers[0]}', 'admin@gmail.com', 'admin'),
@@ -129,6 +153,80 @@ INSERT INTO users (username, password, profile_picture, created_at, updated_at, 
     ('daniel', '{$password}', '{$defaultProfile}', '{$weekDays['sunday']}', '{$weekDays['sunday']}', '{$phoneNumbers[13]}', 'daniel@gmail.com', 'driver')
     ('mike', '{$password}', '{$defaultProfile}', '{$weekDays['saturday']}', '{$weekDays['saturday']}', '{$phoneNumbers[14]}', 'mike@gmail.com', 'driver')
     ('stewart', '{$password}', '{$defaultProfile}', '{$weekDays['monday']}', '{$weekDays['monday']}', '{$phoneNumbers[15]}', 'stewart@gmail.com', 'driver')
+
+
+INSERT INTO companies (user_id, name, established, location) VALUES
+    ('2', 'Neon Fuel', '1958', ST_GeomFromText('POINT('-15.841323217433517', '34.96090631240044')')),
+    ('3', 'FuturEnergy', '1999', ST_GeomFromText('POINT('-15.913119660843408', '35.05163534840747')')),
+    ('4', 'Work Fuel', '2000', ST_GeomFromText('POINT('-15.670896629485052', '34.92241982797238')')),
+    ('5', 'EnergyPlus', '1978', ST_GeomFromText('POINT('-13.999479366532892', '33.83301411828163')')),
+    ('6', 'EneGrade', '1990', ST_GeomFromText('POINT('-13.932744464015217', '33.802450662506544'')));
+
+INSERT INTO drivers (user_id, national_id, dob, first_name, last_name) VALUES
+    ('7', 'JK4893UI', '1998/05/12', 'Leon', 'Tsetsa'),
+    ('8', 'IP0392NG', '1978/01/01', 'Bright', 'Magoba'),
+    ('9', '10MDJ302', '1989/09/12', 'Masala', 'Dausi'),
+    ('10', 'AS9032PO', '1990/12/12', 'John', 'Limpopo'),
+    ('11', 'FG3849EM', '1970/11/20', 'Henry', 'Saladi'),
+    ('12', 'LM2010WO', '1988/07/29', 'Benjamin', 'Mavuto'),
+    ('13', 'HJG9430', '2000/02/01', 'Edward', 'Ulendo'),
+    ('14', 'VG3928AS', '1969/05/04', 'Daniel', 'Gonjani'),
+    ('15', 'RP2312QW', '1993/03/16', 'Mike', 'Pafupi'),
+    ('16', 'MK9839ZZ', '1997/02/15', 'Stewart', 'Mwomba');
+
+INSERT INTO orders (company_id, type_id, quantity, cost, status, order_date) VALUES
+    ('2', '2', '3500', '6475000', 'delivered', '2022/01/22'),
+    ('2', '2', '5000', '9250000', 'delivered', '2022/01/01'),
+    ('2', '2', '7600', '12950000', 'delivered', '2022/03/10'),
+    ('2', '3', '10000', '20000000', 'delivered', '2022/04/01'),
+    ('2', '3', '7600', '15200000', 'delivered', '2022/07/05'),
+    ('2', '3', '12000', '24000000', 'delivered', '2022/02/10'),
+    ('2', '3', '20000', '40000000', 'delivered', '2021/12/22'),
+    ('2', '2', '13000', '24050000', 'pending', '{$orderDays[0]}'),
+    ('2', '3', '8500', '17000000', 'pending', '{$orderDays[1]}'),
+    ('2', '2', '7900', '14615000', 'pending', '{$orderDays[1]}'),
+    ('3', '3', '10000', '20000000', 'delivered', '2022/03/22'),
+    ('3', '2', '12000', '22200000', 'delivered', '2022/02/02'),
+    ('3', '3', '5000', '10000000', 'delivered', '2022/06/09'),
+    ('3', '3', '7000', '14000000', 'delivered', '2022/03/01'),
+    ('3', '2', '8400', '15540000', 'delivered', '2022/05/01'),
+    ('3', '2', '5000', '9250000', 'delivered', '2022/08/22'),
+    ('3', '2', '7900', '14615000', 'delivered', '2022/07/01'),
+    ('3', '3', '10000', '20000000', 'delivered', '2022/04/05'),
+    ('3', '3', '8000', '16000000', 'pending', '{$orderDays[0]}'),
+    ('3', '2', '6000', '11100000', 'pending', '{$orderDays[0]}'),
+    ('4', '2', '7000', '12950000', 'delivered', '2022/01/01'),
+    ('4', '3', '9000', '18000000', 'delivered', '2022/01/31'),
+    ('4', '2', '6900', '12765000', 'delivered', '2022/02/01'),
+    ('4', '3', '8000', '16000000', 'delivered', '2022/02/27'),
+    ('4', '3', '4000', '8000000', 'delivered', '2022/03/01'),
+    ('4', '2', '7000', '12950000', 'delivered', '2022/03/31'),
+    ('4', '2', '6900', '12765000', 'delivered', '2022/04/01'),
+    ('4', '3', '15000', '30000000', 'pending', '{$orderDays[0]}'),
+    ('4', '3', '27000', '54000000', 'pending', '{$orderDays[1]}'),
+    ('4', '2', '14000', '25900000', 'pending' '{$orderDays[0]}'),
+    ('5', '3', '7000', '14000000', 'delivered', '2022/01/01'),
+    ('5', '2', '8000', '14800000', 'delivered', '2022/02/01'),
+    ('5', '3', '20000', '40000000', 'delivered', '2022/03/01'),
+    ('5', '2', '10000', '18500000', 'delivered', '2022/04/01'),
+    ('5', '3', '8000', '16000000', 'delivered', '2022/05/01'),
+    ('5', '2', '5000', '9250000', 'delivered', '2022/06/01'),
+    ('5', '2', '9000', '16650000', 'delivered', '2022/07/01'),
+    ('5', '2', '10000', '18500000', 'pending', '{$orderDays[0]}'),
+    ('5', '3', '6700', '13400000', 'pending', '{$orderDays[1]}'),
+    ('5', '3', '8000', '16000000', 'pending', '{$orderDays[0]}'),
+    ('6', '2', '10000', '18500000', 'delivered', '2022/01/01'),
+    ('6', '3', '7500', '15000000', 'delivered', '2022/02/01'),
+    ('6', '2', '8000', '8000', 'delivered', '2022/03/01'),
+    ('6', '2', '10000', '18500000', 'delivered', '2022/04/01'),
+    ('6', '3', '5000', '10000000', 'delivered', '2022/05/01'),
+    ('6', '2', '6700', '12395000', 'delivered', '2022/06/01'),
+    ('6', '3', '7900', '15800000', 'delivered', '2022/07/01'),
+    ('6', '3', '5000', '10000000', 'delivered', '2022/08/01'),
+    ('6', '2', '6000', '11100000', 'delivered', '2021/12/01'),
+    ('6', '2', '8000', '14800000', 'pending', '{$orderDays[0]}'),
+    ('6', '2', '2000', '3700000', 'pending', '{$orderDays[0]}'),
+    ('6', '2', '20000', '37000000', 'pending', '{$orderDays[1]}');
         ";
 
         return $schema;

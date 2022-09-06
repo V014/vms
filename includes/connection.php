@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS vehicles(
     capacity INT NOT NULL,
 ) ENGINE = INNODB;
         ";
+
         return $schema;
     }
 }

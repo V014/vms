@@ -48,5 +48,55 @@ class DBConnection
 
     private static function generateSQL()
     {
+        $schema = "
+CREATE TABLE IF NOT EXISTS users(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    profile_picture VARCHAR(255) NOT NULL,
+    created_at DATE NOT NULL,
+    updated_at DATE,
+    phone_number VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    role ENUM('company', 'driver', 'admin') NOT NULL,
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS company (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    established INT NOT NULL,
+    location POINT NOT NULL,
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS drivers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    national_id VARCHAR(50) NOT NULL,
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS orders(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    company_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    quantity INT NOT NULL,
+    location POINT NOT NULL,
+    created_at DATE NOT NULL,
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS order_driver(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    driver_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE
+    current_location POINT NOT NULL,
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS vehicles(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    registration_no VARCHAR(50) NOT NULL,
+    make TEXT NOT NULL,
+    capacity INT NOT NULL,
+) ENGINE = INNODB;
+        ";
+        return $schema;
     }
 }

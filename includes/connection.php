@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS drivers (
 CREATE TABLE IF NOT EXISTS orders(
     id INT PRIMARY KEY AUTO_INCREMENT,
     company_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    type_id INT REFERENCES fuel_types(id) ON DELETE SET NULL,
     quantity INT NOT NULL,
     cost DECIMAL(15,2) NOT NULL,
     status ENUM('pending', 'delivered') NOT NULL,
@@ -205,7 +206,7 @@ INSERT INTO orders (company_id, type_id, quantity, cost, status, order_date) VAL
     ('4', '2', '6900', '12765000', 'delivered', '2022/04/01'),
     ('4', '3', '15000', '30000000', 'pending', '{$orderDays[0]}'),
     ('4', '3', '27000', '54000000', 'pending', '{$orderDays[1]}'),
-    ('4', '2', '14000', '25900000', 'pending' '{$orderDays[0]}'),
+    ('4', '2', '14000', '25900000', 'pending', '{$orderDays[0]}'),
     ('5', '3', '7000', '14000000', 'delivered', '2022/01/01'),
     ('5', '2', '8000', '14800000', 'delivered', '2022/02/01'),
     ('5', '3', '20000', '40000000', 'delivered', '2022/03/01'),
@@ -284,16 +285,16 @@ INSERT INTO order_driver(order_id, driver_id) VALUES
     ('52', '8');
 
 INSERT INTO trips(order_id, current_location) VALUES
-    ('9', ST_GeomFromText('POINT('-15.903729096859049', '34.96071072503849')')),
-    ('10', ST_GeomFromText('POINT('-15.915343251644021', '34.95155782303004')')),
-    ('20', ST_GeomFromText('POINT('-15.655988721809182', '35.143702362244866')')),
-    ('28', ST_GeomFromText('POINT('-15.909226669406822', '34.957328091463125')')),
-    ('29', ST_GeomFromText('POINT('-15.926078039830687', '34.93828106190227')')),
-    ('30', ST_GeomFromText('POINT('-15.972961359204037', '34.90513923373642')')),
-    ('38', ST_GeomFromText('POINT('-14.291448144608832', '34.159836370404')')),
-    ('39', ST_GeomFromText('POINT('-14.329918416337309', '34.19418550406482')')),
-    ('40', ST_GeomFromText('POINT('-14.346341916809385', '34.22541198921102')')),
-    ('50', ST_GeomFromText('POINT('-14.026737870268617', '33.51245424399264')'));
+    ('9', ST_GeomFromText('POINT(-15.903729096859049 34.96071072503849)')),
+    ('10', ST_GeomFromText('POINT(-15.915343251644021 34.95155782303004)')),
+    ('20', ST_GeomFromText('POINT(-15.655988721809182 35.143702362244866)')),
+    ('28', ST_GeomFromText('POINT(-15.909226669406822 34.957328091463125)')),
+    ('29', ST_GeomFromText('POINT(-15.926078039830687 34.93828106190227)')),
+    ('30', ST_GeomFromText('POINT(-15.972961359204037 34.90513923373642)')),
+    ('38', ST_GeomFromText('POINT(-14.291448144608832 34.159836370404)')),
+    ('39', ST_GeomFromText('POINT(-14.329918416337309 34.19418550406482)')),
+    ('40', ST_GeomFromText('POINT(-14.346341916809385 34.22541198921102)')),
+    ('50', ST_GeomFromText('POINT(-14.026737870268617 33.51245424399264)'));
         ";
 
         return $schema;

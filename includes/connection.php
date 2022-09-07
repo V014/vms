@@ -157,11 +157,11 @@ INSERT INTO users (username, password, profile_picture, created_at, updated_at, 
 
 
 INSERT INTO companies (user_id, name, established, location) VALUES
-    ('2', 'Neon Fuel', '1958', ST_GeomFromText(POINT(-15.841323217433517 34.96090631240044))),
-    ('3', 'FuturEnergy', '1999', ST_GeomFromText(POINT(-15.913119660843408 35.05163534840747))),
-    ('4', 'Work Fuel', '2000', ST_GeomFromText(POINT(-15.670896629485052 34.92241982797238))),
-    ('5', 'EnergyPlus', '1978', ST_GeomFromText(POINT(-13.999479366532892 33.83301411828163))),
-    ('6', 'EneGrade', '1990', ST_GeomFromText(POINT(-13.932744464015217 33.802450662506544)));
+    ('2', 'Neon Fuel', '1958', ST_GeomFromText('POINT(-15.841323217433517 34.96090631240044)')),
+    ('3', 'FuturEnergy', '1999', ST_GeomFromText('POINT(-15.913119660843408 35.05163534840747)')),
+    ('4', 'Work Fuel', '2000', ST_GeomFromText('POINT(-15.670896629485052 34.92241982797238)')),
+    ('5', 'EnergyPlus', '1978', ST_GeomFromText('POINT(-13.999479366532892 33.83301411828163)')),
+    ('6', 'EneGrade', '1990', ST_GeomFromText('POINT(-13.932744464015217 33.802450662506544)'));
 
 INSERT INTO drivers (user_id, national_id, dob, first_name, last_name) VALUES
     ('7', 'JK4893UI', '1998/05/12', 'Leon', 'Tsetsa'),

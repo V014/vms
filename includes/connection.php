@@ -70,7 +70,7 @@ class DBConnection
 
         $schema = "
 CREATE TABLE IF NOT EXISTS users(
-    id INT PRIMARY KEY A  UTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     profile_picture VARCHAR(255) NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS vehicles(
 
 CREATE TABLE IF NOT EXISTS fuel_types(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name TEXT NOT NULL,
+    name VARCHAR(20) UNIQUE NOT NULL,
     cost_per_litre DECIMAL(15, 2) NOT NULL
 ) ENGINE = INNODB;
 
@@ -139,29 +139,29 @@ INSERT INTO fuel_types(name, cost_per_litre) VALUES
 
 INSERT INTO users (username, password, profile_picture, created_at, updated_at, phone_number, email, role) VALUES
     ('admin', '{$password}', '{$defaultProfile}', '{$weekDays['monday']}', '{$weekDays['monday']}', '{$phoneNumbers[0]}', 'admin@gmail.com', 'admin'),
-    ('neonfuel', '{$password}', '{$defaultProfile}', '{$weekDays['tuesday']}', '{$weekDays['tuesday']}', '{$phoneNumbers[1]}', 'neonfuel@gmail.com', 'company')
-    ('futurenergy', '{$password}', '{$defaultProfile}', '{$weekDays['thursday']}', '{$weekDays['thursday']}', '{$phoneNumbers[2]}', 'futurenergy@gmail.com', 'company')
-    ('workfuel', '{$password}', '{$defaultProfile}', '{$weekDays['saturday']}', '{$weekDays['saturday']}', '{$phoneNumbers[3]}', 'workfuel@gmail.com', 'company')
-    ('energyplus', '{$password}', '{$defaultProfile}', '{$weekDays['sunday']}', '{$weekDays['sunday']}', '{$phoneNumbers[4]}', 'energyplus@gmail.com', 'company')
-    ('enegrade', '{$password}', '{$defaultProfile}', '{$weekDays['sunday']}', '{$weekDays['sunday']}', '{$phoneNumbers[5]}', 'enegrade@gmail.com', 'company')
-    ('leon', '{$password}', '{$defaultProfile}', '{$weekDays['wednesday']}', '{$weekDays['wednesday']}', '{$phoneNumbers[6]}', 'leon@gmail.com', 'driver')
-    ('bright', '{$password}', '{$defaultProfile}', '{$weekDays['friday']}', '{$weekDays['friday']}', '{$phoneNumbers[7]}', 'bright@gmail.com', 'driver')
-    ('masala', '{$password}', '{$defaultProfile}', '{$weekDays['monday']}', '{$weekDays['monday']}', '{$phoneNumbers[8]}', 'masala@gmail.com', 'driver')
-    ('john', '{$password}', '{$defaultProfile}', '{$weekDays['tuesday']}', '{$weekDays['tuesday']}', '{$phoneNumbers[9]}', 'john@gmail.com', 'driver')
-    ('henry', '{$password}', '{$defaultProfile}', '{$weekDays['thursday']}', '{$weekDays['thursday']}', '{$phoneNumbers[10]}', 'henry@gmail.com', 'driver')
-    ('benjamin', '{$password}', '{$defaultProfile}', '{$weekDays['wednesday']}', '{$weekDays['wednesday']}', '{$phoneNumbers[11]}', 'benjamin@gmail.com', 'driver')
-    ('edward', '{$password}', '{$defaultProfile}', '{$weekDays['friday']}', '{$weekDays['friday']}', '{$phoneNumbers[12]}', 'edward@gmail.com', 'driver')
-    ('daniel', '{$password}', '{$defaultProfile}', '{$weekDays['sunday']}', '{$weekDays['sunday']}', '{$phoneNumbers[13]}', 'daniel@gmail.com', 'driver')
-    ('mike', '{$password}', '{$defaultProfile}', '{$weekDays['saturday']}', '{$weekDays['saturday']}', '{$phoneNumbers[14]}', 'mike@gmail.com', 'driver')
-    ('stewart', '{$password}', '{$defaultProfile}', '{$weekDays['monday']}', '{$weekDays['monday']}', '{$phoneNumbers[15]}', 'stewart@gmail.com', 'driver')
+    ('neonfuel', '{$password}', '{$defaultProfile}', '{$weekDays['tuesday']}', '{$weekDays['tuesday']}', '{$phoneNumbers[1]}', 'neonfuel@gmail.com', 'company'),
+    ('futurenergy', '{$password}', '{$defaultProfile}', '{$weekDays['thursday']}', '{$weekDays['thursday']}', '{$phoneNumbers[2]}', 'futurenergy@gmail.com', 'company'),
+    ('workfuel', '{$password}', '{$defaultProfile}', '{$weekDays['saturday']}', '{$weekDays['saturday']}', '{$phoneNumbers[3]}', 'workfuel@gmail.com', 'company'),
+    ('energyplus', '{$password}', '{$defaultProfile}', '{$weekDays['sunday']}', '{$weekDays['sunday']}', '{$phoneNumbers[4]}', 'energyplus@gmail.com', 'company'),
+    ('enegrade', '{$password}', '{$defaultProfile}', '{$weekDays['sunday']}', '{$weekDays['sunday']}', '{$phoneNumbers[5]}', 'enegrade@gmail.com', 'company'),
+    ('leon', '{$password}', '{$defaultProfile}', '{$weekDays['wednesday']}', '{$weekDays['wednesday']}', '{$phoneNumbers[6]}', 'leon@gmail.com', 'driver'),
+    ('bright', '{$password}', '{$defaultProfile}', '{$weekDays['friday']}', '{$weekDays['friday']}', '{$phoneNumbers[7]}', 'bright@gmail.com', 'driver'),
+    ('masala', '{$password}', '{$defaultProfile}', '{$weekDays['monday']}', '{$weekDays['monday']}', '{$phoneNumbers[8]}', 'masala@gmail.com', 'driver'),
+    ('john', '{$password}', '{$defaultProfile}', '{$weekDays['tuesday']}', '{$weekDays['tuesday']}', '{$phoneNumbers[9]}', 'john@gmail.com', 'driver'),
+    ('henry', '{$password}', '{$defaultProfile}', '{$weekDays['thursday']}', '{$weekDays['thursday']}', '{$phoneNumbers[10]}', 'henry@gmail.com', 'driver'),
+    ('benjamin', '{$password}', '{$defaultProfile}', '{$weekDays['wednesday']}', '{$weekDays['wednesday']}', '{$phoneNumbers[11]}', 'benjamin@gmail.com', 'driver'),
+    ('edward', '{$password}', '{$defaultProfile}', '{$weekDays['friday']}', '{$weekDays['friday']}', '{$phoneNumbers[12]}', 'edward@gmail.com', 'driver'),
+    ('daniel', '{$password}', '{$defaultProfile}', '{$weekDays['sunday']}', '{$weekDays['sunday']}', '{$phoneNumbers[13]}', 'daniel@gmail.com', 'driver'),
+    ('mike', '{$password}', '{$defaultProfile}', '{$weekDays['saturday']}', '{$weekDays['saturday']}', '{$phoneNumbers[14]}', 'mike@gmail.com', 'driver'),
+    ('stewart', '{$password}', '{$defaultProfile}', '{$weekDays['monday']}', '{$weekDays['monday']}', '{$phoneNumbers[15]}', 'stewart@gmail.com', 'driver');
 
 
 INSERT INTO companies (user_id, name, established, location) VALUES
-    ('2', 'Neon Fuel', '1958', ST_GeomFromText('POINT('-15.841323217433517', '34.96090631240044')')),
-    ('3', 'FuturEnergy', '1999', ST_GeomFromText('POINT('-15.913119660843408', '35.05163534840747')')),
-    ('4', 'Work Fuel', '2000', ST_GeomFromText('POINT('-15.670896629485052', '34.92241982797238')')),
-    ('5', 'EnergyPlus', '1978', ST_GeomFromText('POINT('-13.999479366532892', '33.83301411828163')')),
-    ('6', 'EneGrade', '1990', ST_GeomFromText('POINT('-13.932744464015217', '33.802450662506544')'));
+    ('2', 'Neon Fuel', '1958', ST_GeomFromText(POINT(-15.841323217433517 34.96090631240044))),
+    ('3', 'FuturEnergy', '1999', ST_GeomFromText(POINT(-15.913119660843408 35.05163534840747))),
+    ('4', 'Work Fuel', '2000', ST_GeomFromText(POINT(-15.670896629485052 34.92241982797238))),
+    ('5', 'EnergyPlus', '1978', ST_GeomFromText(POINT(-13.999479366532892 33.83301411828163))),
+    ('6', 'EneGrade', '1990', ST_GeomFromText(POINT(-13.932744464015217 33.802450662506544)));
 
 INSERT INTO drivers (user_id, national_id, dob, first_name, last_name) VALUES
     ('7', 'JK4893UI', '1998/05/12', 'Leon', 'Tsetsa'),

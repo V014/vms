@@ -1,3 +1,10 @@
+<?php
+include_once "./includes/connection.php";
+
+DBConnection::init();
+
+?>
+
 <!DOCTYPE html>
 <html>
 

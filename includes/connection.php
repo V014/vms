@@ -46,7 +46,7 @@ class DBConnection
         }
     }
 
-    public static function generateSQL()
+    private static function generateSQL()
     {
         $password = password_hash("secret", PASSWORD_DEFAULT);
         $defaultProfile = "./uploads/profiles/user-profile.png";

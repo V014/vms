@@ -94,19 +94,20 @@ class User
         $sth->execute($params);
     }
 
-    public static function count($role = null)
+    public static function findByRole($role = null)
     {
         $users = [];
         $query = "";
+        $columns = self::COLUMNS;
         switch ($role) {
             case 'driver':
-                $query = "SELECT COUNT(*) AS users FROM users WHERE role = 'driver'";
+                $query = "SELECT {$columns} FROM users WHERE role = 'driver'";
                 break;
             case 'company':
-                $query = "SELECT COUNT(*) AS users FROM users WHERE role != 'company'";
+                $query = "SELECT {$columns} FROM users WHERE role = 'company'";
                 break;
             default:
-                $query = "SELECT COUNT(*) AS users FROM users WHERE role != 'admin'";
+                $query = "SELECT {$columns} FROM users WHERE role != 'admin'";
                 break;
         }
 

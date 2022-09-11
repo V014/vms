@@ -3,8 +3,9 @@
 class Company
 {
     const TABLE = "companies";
-    const COLUMNS = "u.username, u.profile_picture, u.created_at, u.phone_number, u.email, c.name, c.established, c.location";
+    const COLUMNS = "c.id, u.username, u.profile_picture, u.created_at, u.phone_number, u.email, c.name, c.established, SET_X(c.location) AS longitude, SET_Y(c.location) AS latitude";
 
+    public $id;
     public $username;
     public $profile_picture;
     public $created_at;
@@ -12,18 +13,21 @@ class Company
     public $email;
     public $name;
     public $established;
-    public $location;
+    public $latitude;
+    public $longitude;
 
     public function __construct($data)
     {
-        $this->username;
-        $this->profile_picture;
-        $this->created_at;
-        $this->phone_number;
-        $this->email;
-        $this->name;
-        $this->established;
-        $this->location;
+        $this->id = $data["id"];
+        $this->username = $data["username"];
+        $this->profile_picture = $data["profile_picture"];
+        $this->created_at = $data["created_at"];
+        $this->phone_number = $data["phone_number"];
+        $this->email = $data["email"];
+        $this->name = $data["name"];
+        $this->established = $data["established"];
+        $this->latitude = $data["latitude"];
+        $this->longitude = $data["longitude"];
     }
 
     public static function byUserID($userID)
@@ -45,5 +49,22 @@ class Company
         }
 
         return new Company($result);
+    }
+
+    public function orders()
+    {
+        $connection = DBConnection::getConnection();
+        $orders = [];
+        $id = $this->id;
+        $query = "SELECT o.quantity, o.cost, o.status, o.order_date, f.name FROM orders AS o INNER JOIN fuel_types AS f ON f.id = o.type_id WHERE o.company_id = :id";
+        $sth = $connection->prepare($query);
+
+        if ($sth->execute([":id" => $id])) {
+            foreach ($sth->fetchAll() as $order) {
+                $products[] = new Order($order);
+            }
+        }
+
+        return $orders;
     }
 }

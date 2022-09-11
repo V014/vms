@@ -19,7 +19,7 @@ class User
     public $email;
     public $role;
 
-    public function __construct(array $data)
+    public function __construct($data)
     {
         $this->id = $data["id"];
         $this->username = $data["username"];

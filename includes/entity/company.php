@@ -33,10 +33,10 @@ class Company
         $this->longitude = $data["longitude"];
     }
 
-    public static function create($order)
+    public static function create($company)
     {
         $connection = DBConnection::getConnection();
-        $params = formatParams($order);
+        $params = formatParams($company);
 
         $companyTable = self::TABLE;
 
@@ -111,5 +111,15 @@ class Company
 
     public static function all()
     {
+        $companies = array();
+        $connection = DBConnection::getConnection();
+        $sth = $connection->prepare("SELECT c.name, c.established, ST_X(c.location) AS longitude, ST_Y(c.location) as latitude, SUM(o.quantity) AS total_quantity, SUM(o.cost) AS total_profit FROM companies AS c INNER JOIN orders AS o ON o.company_id = c.id GROUP BY c.id;");
+        if ($sth->execute()) {
+            foreach ($sth->fetchAll() as $company) {
+                $companies[] = $company;
+            }
+        }
+
+        return $companies;
     }
 }

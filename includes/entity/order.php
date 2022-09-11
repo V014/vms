@@ -29,5 +29,20 @@ class Order
 
     public static function byCompany($id)
     {
+        $orders = [];
+        $connection = DBConnection::getConnection();
+        $table = self::TABLE;
+        $columns = self::COLUMNS;
+
+        $query = "SELECT {$columns} FROM {$table} INNER JOIN companies AS c ON c.id = o.company_id INNER JOIN fuel_types AS f ON f.id = f.type_id WHERE o.company_id = :id";
+        $sth = $connection->prepare($query);
+
+        if ($sth->execute([":id" => $id])) {
+            foreach ($sth->fetchAll() as $order) {
+                $orders[] = new Order($order);
+            }
+        }
+
+        return $orders;
     }
 }

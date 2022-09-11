@@ -37,3 +37,10 @@ function uploadProfile()
 
     return $name;
 }
+
+function formatParams($arr)
+{
+    $newArr = array();
+    foreach ($arr as $key => $value) $newArr[":{$key}"] = $value;
+    return $newArr;
+}

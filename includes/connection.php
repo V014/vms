@@ -5,6 +5,8 @@ class DBConnection
 
     /**
      * Returns a handle to the database
+     *
+     * @return PDO
      */
     public static function getConnection()
     {

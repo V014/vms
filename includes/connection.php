@@ -111,7 +111,8 @@ CREATE TABLE IF NOT EXISTS orders(
 CREATE TABLE IF NOT EXISTS order_driver(
     id INT PRIMARY KEY AUTO_INCREMENT,
     order_id INT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-    driver_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE
+    driver_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    vehicle_id INT NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS trips(
@@ -295,6 +296,18 @@ INSERT INTO trips(order_id, current_location) VALUES
     ('39', ST_GeomFromText('POINT(-14.329918416337309 34.19418550406482)')),
     ('40', ST_GeomFromText('POINT(-14.346341916809385 34.22541198921102)')),
     ('50', ST_GeomFromText('POINT(-14.026737870268617 33.51245424399264)'));
+
+INSERT INTO vehicles (registration_no, make, capacity) VALUES
+    ('QW9032', 'VolksWagen', '30000'),
+    ('QW9032', 'Toyota', ''),
+    ('QW9032', 'VolksWagen', '30000'),
+    ('QW9032', 'Toyota', ''),
+    ('QW9032', 'VolksWagen', '30000'),
+    ('QW9032', 'Toyota', ''),
+    ('QW9032', 'VolksWagen', '30000'),
+    ('QW9032', 'Toyota', ''),
+    ('QW9032', 'VolksWagen', '30000'),
+    ('QW9032', 'Toyota', '30000');
         ";
 
         return $schema;

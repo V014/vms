@@ -50,6 +50,27 @@ class Company
         return self::find($connection->lastInsertId());
     }
 
+    public static function find($id)
+    {
+        $connection = DBConnection::getConnection();
+        $table = self::TABLE;
+        $columns = self::COLUMNS;
+        $query = "SELECT {$columns} FROM {$table} INNER JOIN users AS u ON u.id = c.user_id";
+        $sth = $connection->prepare($query);
+
+        if (!$sth->execute([":id" => $id])) {
+            return null;
+        }
+
+        $result = $sth->fetch();
+
+        if (!$result) {
+            return null;
+        }
+
+        return new Company($result);
+    }
+
     public static function byUserID($userID)
     {
         $table = self::TABLE;
@@ -86,5 +107,9 @@ class Company
         }
 
         return $orders;
+    }
+
+    public static function all()
+    {
     }
 }

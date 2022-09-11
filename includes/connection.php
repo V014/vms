@@ -299,17 +299,17 @@ INSERT INTO trips(order_id, current_location) VALUES
     ('40', ST_GeomFromText('POINT(-14.346341916809385 34.22541198921102)')),
     ('50', ST_GeomFromText('POINT(-14.026737870268617 33.51245424399264)'));
 
-INSERT INTO vehicles (registration_no, make, capacity) VALUES
-    ('QW9032', 'VolksWagen', '30000'),
-    ('HT3432', 'Toyota', '30000'),
-    ('LF3451', 'VolksWagen', '30000'),
-    ('PR9T34', 'Toyota', '30000'),
-    ('SDF3E', 'VolksWagen', '30000'),
-    ('DF2030', 'Toyota', '30000'),
-    ('KS1039', 'VolksWagen', '30000'),
-    ('SJ9433', 'Toyota', '30000'),
-    ('EQVD34', 'VolksWagen', '30000'),
-    ('LK0493', 'Toyota', '30000');
+INSERT INTO vehicles (registration_no, make, capacity, year) VALUES
+    ('QW9032', 'VolksWagen', '30000', '2005'),
+    ('HT3432', 'Toyota', '30000', '2007'),
+    ('LF3451', 'VolksWagen', '30000', '2008'),
+    ('PR9T34', 'Toyota', '30000', '2005'),
+    ('SDF3E', 'VolksWagen', '30000', '2005'),
+    ('DF2030', 'Toyota', '30000'), '2006',
+    ('KS1039', 'VolksWagen', '30000', '2007'),
+    ('SJ9433', 'Toyota', '30000', '2009'),
+    ('EQVD34', 'VolksWagen', '30000', '2005'),
+    ('LK0493', 'Toyota', '30000', '2008');
         ";
 
         return $schema;

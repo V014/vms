@@ -20,7 +20,7 @@ class Order
 
         if ($sth->execute()) {
             foreach ($sth->fetchAll() as $order) {
-                $orders[] = new Order();
+                $orders[] = new Order($order);
             }
         }
 
@@ -44,5 +44,9 @@ class Order
         }
 
         return $orders;
+    }
+
+    public function company() {
+        return Company::byUserID($this->);
     }
 }

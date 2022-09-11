@@ -1,5 +1,8 @@
 <?php
 
+include_once dirname(__FILE__) . "/../dbconnection.php";
+include_once dirname(__FILE__) . "/../utils.php";
+
 class Company
 {
     const TABLE = "companies";
@@ -28,6 +31,23 @@ class Company
         $this->established = $data["established"];
         $this->latitude = $data["latitude"];
         $this->longitude = $data["longitude"];
+    }
+
+    public static function create($order)
+    {
+        $connection = DBConnection::getConnection();
+        $params = formatParams($order);
+
+        $companyTable = self::TABLE;
+
+        $sth = $connection->prepare("INSERT INTO {$companyTable} (user_id, name, established, location) VALUES (:user_id, :name, :established, :location)");
+        $result = $sth->execute($params);
+
+        if (!$result) {
+            return null;
+        }
+
+        return self::find($connection->lastInsertId());
     }
 
     public static function byUserID($userID)

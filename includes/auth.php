@@ -5,6 +5,7 @@ declare(strict_types=1);
 session_start();
 
 include_once dirname(__FILE__) . "/dbconnection.php";
+include_once dirname(__FILE__) . "/validator.php";
 include_once dirname(__FILE__) . "/utils.php";
 
 class Auth
@@ -13,7 +14,7 @@ class Auth
      * Logs the admin in and sets the approapriate session
      * variables on
      */
-    public static function login(array $credentials)
+    public static function login($credentials)
     {
         $connection = DBConnection::getConnection();
         $username = $credentials["username"];
@@ -71,7 +72,8 @@ class Auth
     public static function role()
     {
         if (isset($_SESSION["id"])) {
-            return User::find($_SESSION["id"]);
+            $user = User::find($_SESSION["id"]);
+            $user->role;
         }
 
         return null;
@@ -94,15 +96,15 @@ class Auth
             $errors["profile_picture"] = "Failed to upload profile picture";
         }
 
-        if (!Validator::uniqueUsername($_POST["username"])) {
+        if (!FormValidator::isUnique($_POST["username"], "username", "users")) {
             $errors["username"] = "Username is not unique";
         }
 
-        if (!Validator::uniqueEmail($_POST["email"])) {
+        if (!FormValidator::isUnique($_POST["email"], "email", "users")) {
             $errors["email"] = "Email is not unique";
         }
 
-        if (!Validator::uniquePhoneNumber($_POST["phone_number"])) {
+        if (!FormValidator::isUnique($_POST["phone_number"], "phone_number", "users")) {
             $errors["phone_number"] = "Phone number is not unique";
         }
 
@@ -110,17 +112,17 @@ class Auth
             $user = User::create(array_merge($_POST, ["profile_picture" => $profilePicture]));
             $id = $user->id;
 
-            if ($_POST["role"] === "supplier") {
-                Supplier::create(["user_id" => $id]);
-            } else if ($_POST["role"] === "farmer") {
-                Farmer::create(["user_id" => $id]);
+            if ($_POST["role"] === "company") {
+                Company::create(["user_id" => $id]);
+            } else if ($_POST["role"] === "driver") {
+                Driver::create(["user_id" => $id]);
             }
 
             $connection->commit();
             $_SESSION["id"] = $user->id;
             $_SESSION["role"] = $user->role;
             setcookie("message", "Registration Successful");
-            redirectTo("http://localhost:8080/farmersconnect/public/profile.html.php?id={$id}");
+            redirect("http://localhost:8080/vms/");
         }
 
         return $errors;

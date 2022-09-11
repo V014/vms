@@ -93,4 +93,32 @@ class User
         $sth = $connection->prepare($sql);
         $sth->execute($params);
     }
+
+    public static function count($role = null)
+    {
+        $users = [];
+        $query = "";
+        switch ($role) {
+            case 'driver':
+                $query = "SELECT COUNT(*) AS users FROM users WHERE role = 'driver'";
+                break;
+            case 'company':
+                $query = "SELECT COUNT(*) AS users FROM users WHERE role != 'company'";
+                break;
+            default:
+                $query = "SELECT COUNT(*) AS users FROM users WHERE role != 'admin'";
+                break;
+        }
+
+        $connection = DBConnection::getConnection();
+        $sth = $connection->prepare($query);
+
+        if ($sth->execute()) {
+            foreach ($sth->fetchAll() as $user) {
+                $users[] = new User($user);
+            }
+        }
+
+        return $users;
+    }
 }

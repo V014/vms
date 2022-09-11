@@ -5,8 +5,7 @@ declare(strict_types=1);
 session_start();
 
 include_once dirname(__FILE__) . "/dbconnection.php";
-include_once dirname(__FILE__) . "/models/user.php";
-include_once dirname(__FILE__) . "/helpers.php";
+include_once dirname(__FILE__) . "/utils.php";
 
 class Auth
 {
@@ -14,63 +13,29 @@ class Auth
      * Logs the admin in and sets the approapriate session
      * variables on
      */
-    public static function adminLogin(array $credentials)
+    public static function login(array $credentials)
     {
         $connection = DBConnection::getConnection();
         $username = $credentials["username"];
         $password = $credentials["password"];
 
-        $sql = "SELECT 	id, username, password FROM admins AS a WHERE a.username = :username";
+        $sql = "SELECT 	id, username, password FROM users AS u WHERE u.username = :username";
         $sth = $connection->prepare($sql);
-        $sth->execute([":username" => $username]);
-        $admin = $sth->fetch();
-
-        if (!$admin) {
-            setcookie("errors", "Username/Password Incorrect");
-            redirectTo("http://localhost:8080/farmersconnect/public/admin_login.html.php");
-        }
-
-        if (password_verify($password, $admin["password"])) {
-            $_SESSION["id"] = $admin["id"];
-            $_SESSION["role"] = "admin";
-            setcookie("message", "Login Successful");
-            redirectTo("http://localhost:8080/farmersconnect/public/admin.html.php");
-        } else {
-            setcookie("errors", "Username/Password Incorrect");
-            redirectTo("http://localhost:8080/farmersconnect/public/admin_login.html.php");
-        }
-    }
-
-    /**
-     * Logs the user into their account if the credentials
-     * they've provided much a given user within the
-     * database
-     */
-    public static function userLogin(array $credentials)
-    {
-        $connection = DBConnection::getConnection();
-        $username = $credentials["username"];
-        $password = $credentials["password"];
-
-        $sql = "SELECT * FROM users AS u WHERE u.username = :username";
-        $sth = $connection->prepare($sql);
-
         $sth->execute([":username" => $username]);
         $user = $sth->fetch();
 
         if (!$user) {
             setcookie("errors", "Username/Password Incorrect");
-            redirectTo("http://localhost:8080/farmersconnect/public/login.html.php");
+            redirect("http://localhost:8080/vms/user_login.html.php");
         }
 
         if (password_verify($password, $user["password"])) {
             $_SESSION["id"] = $user["id"];
-            $_SESSION["role"] = $user["role"];
             setcookie("message", "Login Successful");
-            redirectTo("http://localhost:8080/farmersconnect/public/profile.html.php?id={$user['id']}");
+            redirect("http://localhost:8080/vms/user.html.php");
         } else {
             setcookie("errors", "Username/Password Incorrect");
-            redirectTo("http://localhost:8080/farmersconnect/public/login.html.php");
+            redirect("http://localhost:8080/vms/user_login.html.php");
         }
     }
 
@@ -78,23 +43,22 @@ class Auth
      * Logs the logged in user out of the system by unsetting some of
      * the session variables
      */
-    public static function logout(): void
+    public static function logout()
     {
         if (self::isLoggedIn()) {
             unset($_SESSION["id"]);
-            unset($_SESSION["role"]);
             setcookie("message", "Logout successful");
         }
 
-        redirectTo("http://localhost:8080/farmersconnect/public/");
+        redirect("http://localhost:8080/vms/");
     }
 
     /**
-     * Check if their is a user currently logged into the system
+     * Check if a user is currently logged into the system
      */
-    public static function isLoggedIn(): bool
+    public static function isLoggedIn()
     {
-        if (isset($_SESSION["id"]) && isset($_SESSION["role"])) {
+        if (isset($_SESSION["id"])) {
             return true;
         }
 
@@ -104,10 +68,10 @@ class Auth
     /**
      * Return the role of the logged in user, could be admin, farmer, supplier
      */
-    public static function role(): ?string
+    public static function role()
     {
-        if (isset($_SESSION["role"])) {
-            return $_SESSION["role"];
+        if (isset($_SESSION["id"])) {
+            return User::find($_SESSION["id"]);
         }
 
         return null;
@@ -117,14 +81,14 @@ class Auth
      * Create the new user with the given credentials and add them
      * into the database, return an array of invalid fields on error
      */
-    public static function register(array $user): array
+    public static function register($userCredentials)
     {
         //TODO: Implement register
         $errors = [];
 
         $connection = DBConnection::getConnection();
         $connection->beginTransaction();
-        $profilePicture = uploadProfilePicture();
+        $profilePicture = uploadProfile();
 
         if (!$profilePicture) {
             $errors["profile_picture"] = "Failed to upload profile picture";
@@ -166,7 +130,7 @@ class Auth
      * Returns an instance of the user model of the currently
      * logged in user
      */
-    public static function getUser(): User
+    public static function getUser()
     {
         return User::find($_SESSION["id"]);
     }

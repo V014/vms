@@ -5,38 +5,49 @@ declare(strict_types=1);
 session_start();
 
 include_once dirname(__FILE__) . "/dbconnection.php";
-include_once dirname(__FILE__) . "/validator.php";
-include_once dirname(__FILE__) . "/utils.php";
 
 class Auth
 {
     /**
-     * Logs the admin in and sets the approapriate session
-     * variables on
+     * Log the user into the system redirecting them to their respective views based on their roles
      */
     public static function login($credentials)
     {
         $connection = DBConnection::getConnection();
-        $username = $credentials["username"];
+        $email = $credentials["email"];
         $password = $credentials["password"];
 
-        $sql = "SELECT 	id, username, password FROM users AS u WHERE u.username = :username";
+        $sql = "SELECT 	id, email, role, password FROM users AS u WHERE u.email = :email";
         $sth = $connection->prepare($sql);
-        $sth->execute([":username" => $username]);
+        $sth->execute([":email" => $email]);
         $user = $sth->fetch();
 
         if (!$user) {
-            setcookie("errors", "Username/Password Incorrect");
+            setcookie("errors", "Email/Password Incorrect");
             redirect("http://localhost:8080/vms/user_login.html.php");
         }
 
         if (password_verify($password, $user["password"])) {
             $_SESSION["id"] = $user["id"];
-            setcookie("message", "Login Successful");
-            redirect("http://localhost:8080/vms/user.html.php");
-        } else {
-            setcookie("errors", "Username/Password Incorrect");
-            redirect("http://localhost:8080/vms/user_login.html.php");
+
+            switch ($user["role"]) {
+                case 'admin':
+                    setcookie("message", "Login Successful");
+                    redirect("http://localhost:8080/vms/admin_dashboard.php");
+                    break;
+                case 'company':
+                    setcookie("message", "Login Successful");
+                    redirect("http://localhost:8080/vms/company_dashboard.php");
+                    break;
+                case 'driver':
+                    setcookie("message", "Login Successful");
+                    redirect("http://localhost:8080/vms/driver_dashboard.php");
+                    break;
+                default:
+                    setcookie("errors", "Username/Password Incorrect");
+                    redirect("http://localhost:8080/vms/login.php");
+                    break;
+            }
         }
     }
 
@@ -64,19 +75,6 @@ class Auth
         }
 
         return false;
-    }
-
-    /**
-     * Return the role of the logged in user, could be admin, farmer, supplier
-     */
-    public static function role()
-    {
-        if (isset($_SESSION["id"])) {
-            $user = User::find($_SESSION["id"]);
-            $user->role;
-        }
-
-        return null;
     }
 
     /**

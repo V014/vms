@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 session_start();
 
-include_once dirname(__FILE__) . "/dbconnection.php";
+include_once dirname(__FILE__) . "/connection.php";
 
 class Auth
 {

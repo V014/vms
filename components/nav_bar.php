@@ -5,7 +5,7 @@
         </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
-            <?php include_once "./nav_items.php" ?>
+            <?php include_once dirname(__FILE__) . "/nav_items.php"; ?>
         </ul>
         <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
     </div>

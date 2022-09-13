@@ -25,7 +25,7 @@ class Auth
 
         if (!$user) {
             setcookie("errors", "Email/Password Incorrect");
-            redirect("http://localhost:8080/vms/user_login.html.php");
+            redirect("http://localhost/vms/user_login.html.php");
         }
 
         if (password_verify($password, $user["password"])) {
@@ -34,19 +34,19 @@ class Auth
             switch ($user["role"]) {
                 case 'admin':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost:8080/vms/admin_dashboard.php");
+                    redirect("http://localhost/vms/admin_dashboard.php");
                     break;
                 case 'company':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost:8080/vms/company_dashboard.php");
+                    redirect("http://localhost/vms/company_dashboard.php");
                     break;
                 case 'driver':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost:8080/vms/driver_dashboard.php");
+                    redirect("http://localhost/vms/driver_dashboard.php");
                     break;
                 default:
                     setcookie("errors", "Username/Password Incorrect");
-                    redirect("http://localhost:8080/vms/login.php");
+                    redirect("http://localhost/vms/login.php");
                     break;
             }
         }
@@ -63,7 +63,7 @@ class Auth
             setcookie("message", "Logout successful");
         }
 
-        redirect("http://localhost:8080/vms/");
+        redirect("http://localhost/vms/");
     }
 
     /**
@@ -121,7 +121,7 @@ class Auth
             $_SESSION["id"] = $user->id;
             $_SESSION["role"] = $user->role;
             setcookie("message", "Registration Successful");
-            redirect("http://localhost:8080/vms/");
+            redirect("http://localhost/vms/");
         }
 
         return $errors;

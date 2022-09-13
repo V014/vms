@@ -33,7 +33,6 @@
                                                 <div class="form-check"><input class="form-check-input custom-control-input" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Remember Me</label></div>
                                             </div>
                                         </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Login</button>
-                                        <hr><a class="btn btn-primary d-block btn-google btn-user w-100 mb-2" role="button"><i class="fab fa-google"></i>&nbsp; Login with Google</a><a class="btn btn-primary d-block btn-facebook btn-user w-100" role="button"><i class="fab fa-facebook-f"></i>&nbsp; Login with Facebook</a>
                                         <hr>
                                     </form>
                                     <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>

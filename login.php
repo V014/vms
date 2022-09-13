@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Welcome Back!</h4>
                                     </div>
-                                    <form class="user" name="login" method="POST" action=" <?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                    <form class="user" name="login" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
                                         <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email"></div>
                                         <div class="mb-3"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
                                         <div class="mb-3">

@@ -3,9 +3,9 @@
 /**
  * Redirects the browser to the given location
  */
-function redirect($newLocation)
+function redirect($iocation)
 {
-    header("Location: {$newLocation}");
+    header("Location: {$iocation}");
     exit;
 }
 

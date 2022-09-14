@@ -1,6 +1,9 @@
 <?php
 
 const BASE_DIR = "http://localhost/vms/";
+const ADMIN_DASHBOARD = BASE_DIR . "admin_dashboard.php";
+const DRIVER_DASHBOARD = BASE_DIR . "driver_dashboard.php";
+const COMPANY_DASHBOARD = BASE_DIR . "company_dashboard.php";
 
 function siteNav($bgColor = "bg-secondary", $txtColor = "text-white")
 {

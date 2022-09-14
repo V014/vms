@@ -13,12 +13,12 @@ $user = Auth::getUser();
 
 switch ($user->role) {
     case 'admin':
-        # code...
+        redirect(ADMIN_DASHBOARD);
         break;
     case 'driver':
-        # code...
+        redirect(DRIVER_DASHBOARD);
         break;
     case 'company':
-        # code...
+        redirect(COMPANY_DASHBOARD);
         break;
 }

@@ -21,7 +21,7 @@ function siteNav($bgColor = "bg-secondary")
             </div>
         </div>
     </nav>
-<?
+<?php
 }
 
 /**

@@ -1,3 +1,8 @@
+<?php
+include_once "./includes/utils.php";
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

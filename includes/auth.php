@@ -4,6 +4,7 @@ session_start();
 
 include_once dirname(__FILE__) . "/connection.php";
 include_once dirname(__FILE__) . "/utils.php";
+include_once dirname(__FILE__) . "/entity/user.php";
 
 class Auth
 {

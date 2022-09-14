@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-include_once dirname(__FILE__) . "/../dbconnection.php";
+include_once dirname(__FILE__) . "/../connection.php";
 include_once dirname(__FILE__) . "/../utils.php";
 
 class User
 {
     const TABLE = "users";
-    const COLUMNS = "u.id, u.username, u.about, u.profile_picture, u.created_at as date_joined, u.phone_number, u.email, u.role";
-    const INSERT_COLS = "username, about, password, profile_picture, phone_number, email, role, created_at";
-    const PLACEHOLDERS = ":username, :about, :password, :profile_picture, :phone_number, :email, :role, :created_at";
+    const COLUMNS = "u.id, u.username, u.profile_picture, u.created_at as date_joined, u.phone_number, u.email, u.role";
+    const INSERT_COLS = "username, password, profile_picture, phone_number, email, role, created_at";
+    const PLACEHOLDERS = ":username, :password, :profile_picture, :phone_number, :email, :role, :created_at";
 
     public $id;
     public $username;

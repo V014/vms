@@ -1,5 +1,7 @@
 <?php
 
+const BASE_DIR = "http://localhost/vms/";
+
 /**
  * Redirects the browser to the given location
  */

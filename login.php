@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 
 <body class="bg-gradient-primary">
-    <?php siteNav("bg-transparent") ?>
+    <?php siteNav("bg-primary", "text-white") ?>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-9 col-lg-12 col-xl-10">

@@ -71,11 +71,11 @@ class Auth
      */
     public static function isLoggedIn()
     {
-        if (isset($_SESSION["id"])) {
-            return true;
+        if (!isset($_SESSION["id"])) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**

@@ -1,3 +1,13 @@
+<?php
+
+include_once "./includes/auth.php";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    Auth::register($_POST);
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 

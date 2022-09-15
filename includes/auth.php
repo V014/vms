@@ -99,7 +99,6 @@ class Auth
 
         $connection->commit();
         $_SESSION["id"] = $user->id;
-        $_SESSION["role"] = $user->role;
         setcookie("message", "Registration Successful");
         redirect(BASE_DIR);
     }

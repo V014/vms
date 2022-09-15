@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="text-center">
                                 <h4 class="text-dark mb-4">Create an Account!</h4>
                             </div>
-                            <form class="user" name="register" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>" method="POST">
+                            <form class="user" name="register" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-sm-12 mb-3 mb-sm-0"><input class="form-control" type="file" name="profile_picture" id=""></div>
                                 </div>

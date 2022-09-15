@@ -45,7 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <div class="row mb-3">
                                     <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="examplePasswordInput" placeholder="Password" name="password" required></div>
                                     <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="exampleRepeatPasswordInput" placeholder="Repeat Password" name="password_repeat" required></div>
-                                </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Register Account</button>
+                                </div>
+                                <input type="hidden" name="role" value="company">
+                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Register Account</button>
                                 <hr>
                             </form>
                             <div class="text-center"><a class="small" href="login.php">Already have an account? Login!</a></div>

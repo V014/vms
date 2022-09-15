@@ -75,7 +75,7 @@ class User
 
         $query = "INSERT INTO {$userTable} ({$insertCols}) VALUES ({$placeholders})";
         $sth = $connection->prepare($query);
-        unset($params['password_repeat']);
+        unset($params[':password_repeat']);
         $result = $sth->execute($params);
 
         if (!$result) {

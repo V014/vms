@@ -86,9 +86,9 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS companies (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    name TEXT NOT NULL,
-    established INT NOT NULL,
-    location POINT NOT NULL
+    name TEXT,
+    established INT,
+    location POINT
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS drivers (

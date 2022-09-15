@@ -38,7 +38,7 @@ function redirect($iocation)
 
 function uploadProfile()
 {
-    $uploadsDir = dirname(__FILE__) . "./public/uploads/profiles/";
+    $uploadsDir = dirname(__FILE__) . "/uploads/profiles/";
     $name = "";
     $tmpPath = "";
     $newPath = "";

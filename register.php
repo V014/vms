@@ -34,6 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <h4 class="text-dark mb-4">Create an Account!</h4>
                             </div>
                             <form class="user">
+                                <div class="row">
+                                    <div class="col-sm-12 mb-3 mb-sm-0"><input class="form-control" type="file" name="profile_picture" id=""></div>
+                                </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Username" name="username" required></div>
                                     <div class="col-sm-6"><input class="form-control form-control-user" type="tel" id="exampleFirstName" placeholder="Phone Number" name="phone_number" required></div>

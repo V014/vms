@@ -24,7 +24,7 @@ class Auth
 
         if (!$user) {
             setcookie("errors", "Email/Password Incorrect");
-            redirect("http://localhost/vms/user_login.html.php");
+            redirect(BASE_DIR . "login.php");
         }
 
         if (password_verify($password, $user["password"])) {
@@ -33,19 +33,19 @@ class Auth
             switch ($user["role"]) {
                 case 'admin':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost/vms/admin_dashboard.php");
+                    redirect(ADMIN_DASHBOARD);
                     break;
                 case 'company':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost/vms/company_dashboard.php");
+                    redirect(COMPANY_DASHBOARD);
                     break;
                 case 'driver':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost/vms/driver_dashboard.php");
+                    redirect(DRIVER_DASHBOARD);
                     break;
                 default:
                     setcookie("errors", "Username/Password Incorrect");
-                    redirect("http://localhost/vms/login.php");
+                    redirect(BASE_DIR . "login.php");
                     break;
             }
         }
@@ -62,7 +62,7 @@ class Auth
             setcookie("message", "Logout successful");
         }
 
-        redirect("http://localhost/vms/");
+        redirect(BASE_DIR);
     }
 
     /**
@@ -120,7 +120,7 @@ class Auth
             $_SESSION["id"] = $user->id;
             $_SESSION["role"] = $user->role;
             setcookie("message", "Registration Successful");
-            redirect("http://localhost/vms/");
+            redirect(BASE_DIR);
         }
 
         return $errors;

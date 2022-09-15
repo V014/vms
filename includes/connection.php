@@ -11,14 +11,14 @@ class DBConnection
     public static function getConnection()
     {
         try {
+            if (!self::isSetUp()) {
+                self::init();
+            }
+
             if (self::$dbh === null) {
                 self::$dbh = new PDO("mysql:host=localhost;dbname=vms", "root", "");
                 self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 self::$dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-                if (!self::isSetUp(self::$dbh)) {
-                    self::init();
-                }
             }
 
             return self::$dbh;
@@ -52,11 +52,13 @@ class DBConnection
         }
     }
 
-    public static function isSetUp($dbh)
+    public static function isSetUp()
     {
-        $dbQuery = $dbh->query("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'vms'");
-        // Create the vms database if it does not exist
-        if (!$dbQuery->fetch()) {
+        $dbh = new PDO("mysql:host=localhost", "root", "");
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $query = $dbh->query("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'vms'");
+
+        if (!$query->fetch()) {
             return false;
         }
 

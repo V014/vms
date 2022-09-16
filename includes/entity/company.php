@@ -19,13 +19,13 @@ class Company
 
     public function __construct($data)
     {
-        $this->userdID = $data["user_id"];
+        $this->userID = $data["user_id"];
         $this->name = $data["name"];
         $this->established = $data["established"];
         $this->latitude = $data["latitude"];
         $this->longitude = $data["longitude"];
         $this->totalOrders = $data["total_orders"];
-        $this->totalProfit = $data["total_profit"];
+        $this->totalProfit = number_format($data["total_profit"]);
         $this->createdAt = $data["created_at"];
     }
 
@@ -115,7 +115,7 @@ class Company
 
         if ($sth->execute()) {
             foreach ($sth->fetchAll() as $company) {
-                $companies[] = $company;
+                $companies[] = new Company($company);
             }
         }
 

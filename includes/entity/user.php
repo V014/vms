@@ -63,7 +63,7 @@ class User
         $params = formatParams($user);
         $params[":password"] = password_hash($user['password'], PASSWORD_DEFAULT);
         $profilePicture = $user["profile_picture"];
-        $params[":profile_picture"] = "./uploads/profiles/$profilePicture";
+        $params[":profile_picture"] = "uploads/profiles/$profilePicture";
 
         if (!array_key_exists(":created_at", $params)) {
             $params[":created_at"] = date("Y/m/d", strtotime("today"));

@@ -68,7 +68,7 @@ class DBConnection
     private static function generateSQL()
     {
         $password = password_hash("secret", PASSWORD_DEFAULT);
-        $defaultProfile = "./uploads/profiles/user-profile.png";
+        $defaultProfile = "uploads/profiles/user-profile.png";
 
         $phoneNumbers = self::generatePhoneNumbers(16);
 

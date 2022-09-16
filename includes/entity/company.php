@@ -1,18 +1,20 @@
 <?php
 
-include_once dirname(__FILE__) . "/../dbconnection.php";
+include_once dirname(__FILE__) . "/../connection.php";
 include_once dirname(__FILE__) . "/../utils.php";
 
 class Company
 {
     const TABLE = "companies";
-    const COLUMNS = "u.id AS user_id, c.name, c.established, c.ST_X(location) AS longitude, c.ST_Y(location) AS latitude";
+    const COLUMNS = "u.id AS user_id, c.name, c.established, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, COUNT(o.id) AS total_orders, SUM(o.cost) AS total_profit";
 
     public $userID;
     public $name;
     public $established;
     public $latitude;
     public $longitude;
+    public $totalOrders;
+    public $totalProfit;
 
     public function __construct($data)
     {
@@ -103,7 +105,10 @@ class Company
     {
         $companies = array();
         $connection = DBConnection::getConnection();
-        $sth = $connection->prepare("SELECT c.name, c.established, ST_X(c.location) AS longitude, ST_Y(c.location) as latitude, SUM(o.quantity) AS total_quantity, SUM(o.cost) AS total_profit FROM companies AS c INNER JOIN orders AS o ON o.company_id = c.id GROUP BY c.id;");
+        $columns = self::COLUMNS;
+
+        $sth = $connection->prepare("SELECT {$columns} FROM companies AS c INNER JOIN users AS u ON u.id = c.user_id INNER JOIN orders AS o ON o.company_id = u.id GROUP BY c.id;");
+
         if ($sth->execute()) {
             foreach ($sth->fetchAll() as $company) {
                 $companies[] = $company;

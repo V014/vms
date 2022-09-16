@@ -23,6 +23,8 @@ class Company
         $this->established = $data["established"];
         $this->latitude = $data["latitude"];
         $this->longitude = $data["longitude"];
+        $this->totalOrders = $data["total_orders"];
+        $this->totalProfit = $data["total_profit"];
     }
 
     public static function create($company)

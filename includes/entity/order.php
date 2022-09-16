@@ -1,5 +1,6 @@
 <?php
 
+include_once dirname(__FILE__) . "/../connection.php";
 class Order
 {
     const TABLE = "orders";
@@ -46,7 +47,33 @@ class Order
         return $orders;
     }
 
-    public function company() {
-        return Company::byUserID($this->);
+    public function company()
+    {
+    }
+
+    public static function count($type = null)
+    {
+        $connection = DBConnection::getConnection();
+        $orderTable = self::TABLE;
+
+        switch ($type) {
+            case 'delivered':
+                $sql = "SELECT COUNT(*) AS total FROM {$orderTable} AS o WHERE o.status = '{$type}'";
+                break;
+            case 'pending':
+                $sql = "SELECT COUNT(*) AS total FROM {$orderTable} AS o WHERE o.status = '{$type}'";
+                break;
+            default:
+                $sql = "SELECT COUNT(*) AS total FROM {$orderTable} AS o WHERE o.status = '{$type}'";
+                break;
+        }
+
+        $sth = $connection->prepare($sql);
+
+        if (!$sth->execute()) {
+            return null;
+        }
+
+        return $sth->fetch()["total"];
     }
 }

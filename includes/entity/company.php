@@ -6,14 +6,9 @@ include_once dirname(__FILE__) . "/../utils.php";
 class Company
 {
     const TABLE = "companies";
-    const COLUMNS = "c.id, u.username, u.profile_picture, u.created_at, u.phone_number, u.email, c.name, c.established, SET_X(c.location) AS longitude, SET_Y(c.location) AS latitude";
+    const COLUMNS = "u.id AS user_id, c.name, c.established, c.ST_X(location) AS longitude, c.ST_Y(location) AS latitude";
 
-    public $id;
-    public $username;
-    public $profile_picture;
-    public $created_at;
-    public $phone_number;
-    public $email;
+    public $userID;
     public $name;
     public $established;
     public $latitude;
@@ -21,12 +16,7 @@ class Company
 
     public function __construct($data)
     {
-        $this->id = $data["id"];
-        $this->username = $data["username"];
-        $this->profile_picture = $data["profile_picture"];
-        $this->created_at = $data["created_at"];
-        $this->phone_number = $data["phone_number"];
-        $this->email = $data["email"];
+        $this->userdID = $data["user_id"];
         $this->name = $data["name"];
         $this->established = $data["established"];
         $this->latitude = $data["latitude"];

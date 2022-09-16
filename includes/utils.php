@@ -1,6 +1,6 @@
 <?php
 
-include_once "./auth.php";
+include_once dirname(__FILE__) . "/auth.php";
 
 const BASE_DIR = "http://localhost/vms/";
 const ADMIN_DASHBOARD = BASE_DIR . "admin_dashboard.php";

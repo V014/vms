@@ -144,7 +144,8 @@ CREATE TABLE IF NOT EXISTS vehicles(
     id INT PRIMARY KEY AUTO_INCREMENT,
     registration_no VARCHAR(50) NOT NULL,
     make TEXT NOT NULL,
-    capacity INT NOT NULL
+    capacity INT NOT NULL,
+    year INT NOT NULL
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS fuel_types(

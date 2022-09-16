@@ -1,5 +1,8 @@
 <?php
+include_once "./includes/auth.php";
+
 $currentPage = $_SERVER['SCRIPT_NAME'];
+$user = Auth::getUser();
 ?>
 
 <li class="nav-item"><a class="nav-link <?php echo preg_match("/index/", $currentPage) == 1 ? "active" : "" ?>" href="index.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>

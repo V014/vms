@@ -1,5 +1,8 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/auth.php";
+
+$user = Auth::getUser();
 
 ?>
 

@@ -6,7 +6,7 @@ include_once dirname(__FILE__) . "/../utils.php";
 class Company
 {
     const TABLE = "companies";
-    const COLUMNS = "u.id AS user_id, c.name, c.established, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, COUNT(o.id) AS total_orders, SUM(o.cost) AS total_profit";
+    const COLUMNS = "u.id AS user_id, u.created_at, c.name, c.established, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, COUNT(o.id) AS total_orders, SUM(o.cost) AS total_profit";
 
     public $userID;
     public $name;
@@ -15,6 +15,7 @@ class Company
     public $longitude;
     public $totalOrders;
     public $totalProfit;
+    public $createdAt;
 
     public function __construct($data)
     {
@@ -25,6 +26,7 @@ class Company
         $this->longitude = $data["longitude"];
         $this->totalOrders = $data["total_orders"];
         $this->totalProfit = $data["total_profit"];
+        $this->createdAt = $data["created_at"];
     }
 
     public static function create($company)

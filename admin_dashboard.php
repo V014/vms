@@ -55,10 +55,10 @@ $dieselOrders = Fuel::type('diesel');
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <div class="d-sm-flex justify-content-between align-items-center mb-5">
                         <h3 class="text-dark mb-0">Dashboard</h3>
                     </div>
-                    <h5>Activity</h5>
+                    <h5>Orders</h5>
                     <!-- Order Section -->
                     <div class="row">
                         <div class="col-md-6 col-xl-3 mb-4">
@@ -74,8 +74,48 @@ $dieselOrders = Fuel::type('diesel');
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-primary py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Pending Orders</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo $pending;  ?></span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-primary py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Pending Orders</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo $pending;  ?></span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-primary py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Pending Orders</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo $pending;  ?></span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- User Section -->
+                    <h5>Users</h5>
                     <div class="row">
                         <div class="col-md-6 col-xl-3 mb-4">
                             <div class="card shadow border-start-primary py-2">
@@ -140,6 +180,7 @@ $dieselOrders = Fuel::type('diesel');
                         </div>
                     </div>
                     <!-- Trip Section -->
+                    <h5>Trips</h5>
                     <div class="row">
                         <div class="col-lg-7 col-xl-8">
                             <div class="card shadow mb-4">

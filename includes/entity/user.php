@@ -124,4 +124,12 @@ class User
 
         return $users;
     }
+
+    public static function type($role)
+    {
+    }
+
+    public static function all()
+    {
+    }
 }

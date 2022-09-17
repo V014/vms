@@ -76,4 +76,8 @@ class Order
 
         return $sth->fetch()["total"];
     }
+
+    public static function sum()
+    {
+    }
 }

@@ -49,7 +49,7 @@ $orders = Order::all();
                                 </div>
                             </div>
                             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                                <table class="table table-dark my-0" id="dataTable">
+                                <table class="table table-primary my-0" id="dataTable">
                                     <thead>
                                         <tr>
                                             <th>Company Name</th>

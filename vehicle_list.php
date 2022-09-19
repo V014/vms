@@ -49,9 +49,10 @@ $vehicles = Vehicle::all();
                                 </div>
                             </div>
                             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                                <table class="table my-0" id="dataTable">
+                                <table class="table table-primary my-0" id="dataTable">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Registration No.</th>
                                             <th>Make</th>
                                             <th>Year</th>
@@ -64,7 +65,8 @@ $vehicles = Vehicle::all();
                                         foreach ($vehicles as $vehicle) {
                                         ?>
                                             <tr>
-                                                <td><i class="fas fa-truck mr-2"></i><?php echo $vehicle->registrationNo; ?></td>
+                                                <td><i class="fas fa-truck mr-2"></td>
+                                                <td></i><?php echo $vehicle->registrationNo; ?></td>
                                                 <td><?php echo $vehicle->make; ?></td>
                                                 <td><?php echo $vehicle->year; ?></td>
                                                 <td><a href="vehicle_detail.php?id=<?php echo $vehicle->id; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
@@ -75,7 +77,7 @@ $vehicles = Vehicle::all();
                                     </tbody>
                                     <tfoot>
                                         <tr>
-
+                                            <td><strong></strong></td>
                                             <td><strong>Registration No.</strong></td>
                                             <td><strong>Make</strong></td>
                                             <td><strong>Year</strong></td>
@@ -103,14 +105,13 @@ $vehicles = Vehicle::all();
                         </div>
                     </div>
                 </div>
-
             </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2022</span></div>
+                </div>
+            </footer>
         </div>
-        <footer class="bg-white sticky-footer">
-            <div class="container my-auto">
-                <div class="text-center my-auto copyright"><span>Copyright © Brand 2022</span></div>
-            </div>
-        </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>

@@ -1,36 +1,32 @@
 <?php
 
-include_once dirname(__FILE__) . "/../dbconnection.php";
+include_once dirname(__FILE__) . "/../connection.php";
 include_once dirname(__FILE__) . "/../utils.php";
 
 class Company
 {
     const TABLE = "companies";
-    const COLUMNS = "c.id, u.username, u.profile_picture, u.created_at, u.phone_number, u.email, c.name, c.established, SET_X(c.location) AS longitude, SET_Y(c.location) AS latitude";
+    const COLUMNS = "u.id AS user_id, u.created_at, c.name, c.established, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, COUNT(o.id) AS total_orders, SUM(o.cost) AS total_profit";
 
-    public $id;
-    public $username;
-    public $profile_picture;
-    public $created_at;
-    public $phone_number;
-    public $email;
+    public $userID;
     public $name;
     public $established;
     public $latitude;
     public $longitude;
+    public $totalOrders;
+    public $totalProfit;
+    public $createdAt;
 
     public function __construct($data)
     {
-        $this->id = $data["id"];
-        $this->username = $data["username"];
-        $this->profile_picture = $data["profile_picture"];
-        $this->created_at = $data["created_at"];
-        $this->phone_number = $data["phone_number"];
-        $this->email = $data["email"];
+        $this->userID = $data["user_id"];
         $this->name = $data["name"];
         $this->established = $data["established"];
         $this->latitude = $data["latitude"];
         $this->longitude = $data["longitude"];
+        $this->totalOrders = $data["total_orders"];
+        $this->totalProfit = number_format($data["total_profit"]);
+        $this->createdAt = $data["created_at"];
     }
 
     public static function create($company)
@@ -113,10 +109,13 @@ class Company
     {
         $companies = array();
         $connection = DBConnection::getConnection();
-        $sth = $connection->prepare("SELECT c.name, c.established, ST_X(c.location) AS longitude, ST_Y(c.location) as latitude, SUM(o.quantity) AS total_quantity, SUM(o.cost) AS total_profit FROM companies AS c INNER JOIN orders AS o ON o.company_id = c.id GROUP BY c.id;");
+        $columns = self::COLUMNS;
+
+        $sth = $connection->prepare("SELECT {$columns} FROM companies AS c INNER JOIN users AS u ON u.id = c.user_id INNER JOIN orders AS o ON o.company_id = u.id GROUP BY c.id;");
+
         if ($sth->execute()) {
             foreach ($sth->fetchAll() as $company) {
-                $companies[] = $company;
+                $companies[] = new Company($company);
             }
         }
 

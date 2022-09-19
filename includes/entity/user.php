@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-include_once dirname(__FILE__) . "/../dbconnection.php";
+include_once dirname(__FILE__) . "/../connection.php";
 include_once dirname(__FILE__) . "/../utils.php";
 
 class User
 {
     const TABLE = "users";
-    const COLUMNS = "u.id, u.username, u.about, u.profile_picture, u.created_at as date_joined, u.phone_number, u.email, u.role";
-    const INSERT_COLS = "username, about, password, profile_picture, phone_number, email, role, created_at";
-    const PLACEHOLDERS = ":username, :about, :password, :profile_picture, :phone_number, :email, :role, :created_at";
+    const COLUMNS = "u.id, u.username, u.profile_picture, u.created_at as date_joined, u.phone_number, u.email, u.role";
+    const INSERT_COLS = "username, password, profile_picture, phone_number, email, role, created_at";
+    const PLACEHOLDERS = ":username, :password, :profile_picture, :phone_number, :email, :role, :created_at";
 
     public $id;
     public $username;
@@ -18,6 +18,7 @@ class User
     public $phoneNumber;
     public $email;
     public $role;
+    public $createdAt;
 
     public function __construct($data)
     {
@@ -27,6 +28,7 @@ class User
         $this->phoneNumber = $data["phone_number"];
         $this->email = $data["email"];
         $this->role = $data["role"];
+        $this->createdAt = $data["date_joined"];
     }
 
     /**
@@ -63,7 +65,7 @@ class User
         $params = formatParams($user);
         $params[":password"] = password_hash($user['password'], PASSWORD_DEFAULT);
         $profilePicture = $user["profile_picture"];
-        $params[":profile_picture"] = "./uploads/profiles/$profilePicture";
+        $params[":profile_picture"] = "uploads/profiles/$profilePicture";
 
         if (!array_key_exists(":created_at", $params)) {
             $params[":created_at"] = date("Y/m/d", strtotime("today"));
@@ -73,7 +75,9 @@ class User
         $insertCols = self::INSERT_COLS;
         $placeholders = self::PLACEHOLDERS;
 
-        $sth = $connection->prepare("INSERT INTO {$userTable} ({$insertCols}) VALUES ({$placeholders})");
+        $query = "INSERT INTO {$userTable} ({$insertCols}) VALUES ({$placeholders})";
+        $sth = $connection->prepare($query);
+        unset($params[':password_repeat']);
         $result = $sth->execute($params);
 
         if (!$result) {
@@ -121,5 +125,13 @@ class User
         }
 
         return $users;
+    }
+
+    public static function type($role)
+    {
+    }
+
+    public static function all()
+    {
     }
 }

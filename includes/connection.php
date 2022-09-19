@@ -11,6 +11,10 @@ class DBConnection
     public static function getConnection()
     {
         try {
+            if (!self::isSetUp()) {
+                self::init();
+            }
+
             if (self::$dbh === null) {
                 self::$dbh = new PDO("mysql:host=localhost;dbname=vms", "root", "");
                 self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -48,10 +52,23 @@ class DBConnection
         }
     }
 
-    private static function generateSQL()
+    public static function isSetUp()
+    {
+        $dbh = new PDO("mysql:host=localhost", "root", "");
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $query = $dbh->query("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'vms'");
+
+        if (!$query->fetch()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function generateSQL()
     {
         $password = password_hash("secret", PASSWORD_DEFAULT);
-        $defaultProfile = "./uploads/profiles/user-profile.png";
+        $defaultProfile = "uploads/profiles/user-profile.png";
 
         $phoneNumbers = self::generatePhoneNumbers(16);
 
@@ -86,9 +103,9 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS companies (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    name TEXT NOT NULL,
-    established INT NOT NULL,
-    location POINT NOT NULL
+    name TEXT,
+    established INT,
+    location POINT
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS drivers (
@@ -127,7 +144,8 @@ CREATE TABLE IF NOT EXISTS vehicles(
     id INT PRIMARY KEY AUTO_INCREMENT,
     registration_no VARCHAR(50) NOT NULL,
     make TEXT NOT NULL,
-    capacity INT NOT NULL
+    capacity INT NOT NULL,
+    year INT NOT NULL
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS fuel_types(
@@ -237,8 +255,8 @@ INSERT INTO order_driver(order_id, driver_id, vehicle_id) VALUES
     ('1', '7', '1'),
     ('2', '8', '4'),
     ('3', '9', '2'),
-    ('4', '10', 5''),
-    ('5', '11', 6''),
+    ('4', '10', '5'),
+    ('5', '11', '6'),
     ('6', '12', '7'),
     ('7', '13', '8'),
     ('8', '14', '10'),
@@ -305,7 +323,7 @@ INSERT INTO vehicles (registration_no, make, capacity, year) VALUES
     ('LF3451', 'VolksWagen', '30000', '2008'),
     ('PR9T34', 'Toyota', '30000', '2005'),
     ('SDF3E', 'VolksWagen', '30000', '2005'),
-    ('DF2030', 'Toyota', '30000'), '2006',
+    ('DF2030', 'Toyota', '30000', '2006'),
     ('KS1039', 'VolksWagen', '30000', '2007'),
     ('SJ9433', 'Toyota', '30000', '2009'),
     ('EQVD34', 'VolksWagen', '30000', '2005'),

@@ -1,5 +1,8 @@
 <?php
 
-class Trips
+class Trip
 {
+    public static function all()
+    {
+    }
 }

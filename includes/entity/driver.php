@@ -3,7 +3,7 @@
 class Driver
 {
     const TABLE = "drivers";
-    const COLUMNS = "user_id, national_id, dob, first_name, last_name";
+    const COLUMNS = "u.id, d.first_name, d.last_name, d.dob, d.national_id";
 
     public $userID;
     public $nationalID;
@@ -13,11 +13,11 @@ class Driver
 
     public function __construct($data)
     {
-        $this->userID = $data["userID"];
-        $this->nationalID = $data["nationalID"];
+        $this->userID = $data["id"];
+        $this->nationalID = $data["national_id"];
         $this->dob = $data["dob"];
-        $this->firstName = $data["firstName"];
-        $this->lastName = $data["lastName"];
+        $this->firstName = $data["first_name"];
+        $this->lastName = $data["last_name"];
     }
 
     public static function create($data)
@@ -57,5 +57,24 @@ class Driver
         }
 
         return new Driver($result);
+    }
+
+    public static function all()
+    {
+        $drivers = [];
+        $connection = DBConnection::getConnection();
+        $table = self::TABLE;
+        $columns = self::COLUMNS;
+
+        $query = "SELECT {$columns} FROM users AS u INNER JOIN drivers AS d ON d.user_id = u.id";
+        $sth = $connection->prepare($query);
+
+        if ($sth->execute()) {
+            foreach ($sth->fetchAll() as $driver) {
+                $drivers[] = new Driver($driver);
+            }
+        }
+
+        return $drivers;
     }
 }

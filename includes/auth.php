@@ -4,6 +4,7 @@ session_start();
 
 include_once dirname(__FILE__) . "/connection.php";
 include_once dirname(__FILE__) . "/utils.php";
+include_once dirname(__FILE__) . "/entity/user.php";
 
 class Auth
 {
@@ -23,7 +24,7 @@ class Auth
 
         if (!$user) {
             setcookie("errors", "Email/Password Incorrect");
-            redirect("http://localhost/vms/user_login.html.php");
+            redirect(BASE_DIR . "login.php");
         }
 
         if (password_verify($password, $user["password"])) {
@@ -32,19 +33,19 @@ class Auth
             switch ($user["role"]) {
                 case 'admin':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost/vms/admin_dashboard.php");
+                    redirect(ADMIN_DASHBOARD);
                     break;
                 case 'company':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost/vms/company_dashboard.php");
+                    redirect(COMPANY_DASHBOARD);
                     break;
                 case 'driver':
                     setcookie("message", "Login Successful");
-                    redirect("http://localhost/vms/driver_dashboard.php");
+                    redirect(DRIVER_DASHBOARD);
                     break;
                 default:
                     setcookie("errors", "Username/Password Incorrect");
-                    redirect("http://localhost/vms/login.php");
+                    redirect(BASE_DIR . "login.php");
                     break;
             }
         }
@@ -61,7 +62,7 @@ class Auth
             setcookie("message", "Logout successful");
         }
 
-        redirect("http://localhost/vms/");
+        redirect(BASE_DIR);
     }
 
     /**
@@ -80,49 +81,26 @@ class Auth
      * Create the new user with the given credentials and add them
      * into the database, return an array of invalid fields on error
      */
-    public static function register($userCredentials)
+    public static function register($credentials)
     {
-        //TODO: Implement register
-        $errors = [];
-
         $connection = DBConnection::getConnection();
         $connection->beginTransaction();
         $profilePicture = uploadProfile();
 
-        if (!$profilePicture) {
-            $errors["profile_picture"] = "Failed to upload profile picture";
+        $user = User::create(array_merge($_POST, ["profile_picture" => $profilePicture]));
+        $id = $user->id;
+
+        if ($_POST["role"] === "company") {
+            Company::create(["user_id" => $id]);
+        } else if ($_POST["role"] === "driver") {
+            //TODO: Touch up driver
+            Driver::create(["user_id" => $id]);
         }
 
-        if (!FormValidator::isUnique($_POST["username"], "username", "users")) {
-            $errors["username"] = "Username is not unique";
-        }
-
-        if (!FormValidator::isUnique($_POST["email"], "email", "users")) {
-            $errors["email"] = "Email is not unique";
-        }
-
-        if (!FormValidator::isUnique($_POST["phone_number"], "phone_number", "users")) {
-            $errors["phone_number"] = "Phone number is not unique";
-        }
-
-        if (empty($errors)) {
-            $user = User::create(array_merge($_POST, ["profile_picture" => $profilePicture]));
-            $id = $user->id;
-
-            if ($_POST["role"] === "company") {
-                Company::create(["user_id" => $id]);
-            } else if ($_POST["role"] === "driver") {
-                Driver::create(["user_id" => $id]);
-            }
-
-            $connection->commit();
-            $_SESSION["id"] = $user->id;
-            $_SESSION["role"] = $user->role;
-            setcookie("message", "Registration Successful");
-            redirect("http://localhost/vms/");
-        }
-
-        return $errors;
+        $connection->commit();
+        $_SESSION["id"] = $user->id;
+        setcookie("message", "Registration Successful");
+        redirect(BASE_DIR);
     }
 
     /**

@@ -4,7 +4,30 @@ include_once dirname(__FILE__) . "/../connection.php";
 class Order
 {
     const TABLE = "orders";
-    const COLUMNS = "c.name, SET_X(c.location) AS longitude, SET_Y(c.location) AS latitude, c.established, f.name, o.quantity, o.cost, o.status, o.order_date";
+    const COLUMNS = "o.id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date";
+
+    public $id;
+    public $name;
+    public $longitude;
+    public $latitude;
+    public $fuelName;
+    public $quantity;
+    public $cost;
+    public $status;
+    public $orderDate;
+
+    public function __construct($data)
+    {
+        $this->id = $data["id"];
+        $this->name = $data["name"];
+        $this->longitude = $data["longitude"];
+        $this->latitude = $data["latitude"];
+        $this->fuelName = $data["fuel_name"];
+        $this->quantity = $data["quantity"];
+        $this->cost = $data["cost"];
+        $this->status = $data["status"];
+        $this->orderDate = $data["order_date"];
+    }
 
     /*
     Returns all the orders made by companies so far
@@ -16,7 +39,7 @@ class Order
         $table = self::TABLE;
         $columns = self::COLUMNS;
 
-        $query = "SELECT {$columns} FROM {$table} INNER JOIN companies AS c ON c.id = o.company_id INNER JOIN fuel_types AS f ON f.id = f.type_id";
+        $query = "SELECT {$columns} FROM orders AS o INNER JOIN companies AS c ON c.id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id";
         $sth = $connection->prepare($query);
 
         if ($sth->execute()) {

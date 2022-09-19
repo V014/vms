@@ -33,6 +33,7 @@ $companies = Company::all();
                 </nav>
                 <div class="container-fluid">
                     <h3 class="text-dark mb-4">Companies</h3>
+                    <p>Manage, Create and View Companies</p>
                     <div class="card shadow">
                         <div class="card-header py-3">
                             <p class="text-primary m-0 fw-bold">Company List</p>
@@ -52,6 +53,8 @@ $companies = Company::all();
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
                                             <th>Established</th>
                                             <th>Total Orders</th>
                                             <th>Total Profit</th>
@@ -60,17 +63,20 @@ $companies = Company::all();
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <!-- Company List -->
                                         <?php
                                         foreach ($companies as $company) {
                                             $user = User::find($company->userID);
                                         ?>
                                             <tr>
                                                 <td><img class="rounded-circle me-2" src="<?php echo $user->profilePicture; ?>" width="30" height="30"><?php echo $company->name ?></td>
+                                                <td><?php echo $user->email; ?></td>
+                                                <td><?php echo $user->phoneNumber; ?></td>
                                                 <td><?php echo $company->established; ?></td>
                                                 <td><?php echo $company->totalOrders; ?></td>
                                                 <td><?php echo $company->totalProfit; ?></td>
                                                 <td><?php echo $company->createdAt; ?></td>
-                                                <td><a href="company_detail.php?id=<?php echo $company->userID; ?>"><button type="button" class="btn btn-primary">View</button></a></td>
+                                                <td><a href="company_detail.php?id=<?php echo $company->userID; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
                                             </tr>
                                         <?php
                                         }
@@ -79,6 +85,8 @@ $companies = Company::all();
                                     <tfoot>
                                         <tr>
                                             <td><strong>Name</strong></td>
+                                            <td><strong>Email</strong></td>
+                                            <td><strong>Phone Number</strong></td>
                                             <td><strong>Established</strong></td>
                                             <td><strong>Total Orders</strong></td>
                                             <td><strong>Total Profit</strong></td>
@@ -106,7 +114,6 @@ $companies = Company::all();
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <footer class="bg-white sticky-footer">

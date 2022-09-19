@@ -18,6 +18,7 @@ class User
     public $phoneNumber;
     public $email;
     public $role;
+    public $createdAt;
 
     public function __construct($data)
     {
@@ -27,6 +28,7 @@ class User
         $this->phoneNumber = $data["phone_number"];
         $this->email = $data["email"];
         $this->role = $data["role"];
+        $this->createdAt = $data["date_joined"];
     }
 
     /**

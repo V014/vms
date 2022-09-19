@@ -1,6 +1,9 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/driver.php";
 
+// TODO: Implement all static method for drivers
+$drivers = Driver::all();
 ?>
 
 <!DOCTYPE html>
@@ -29,21 +32,17 @@ include_once "./includes/utils.php";
                     </div>
                 </nav>
                 <div class="container-fluid">
-
-                    <h3 class="text-dark mb-4">Team</h3>
+                    <h3 class="text-dark mb-4">Drivers</h3>
+                    <p>Manage, Create and View Drivers</p>
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Employee Info</p>
+                            <p class="text-primary m-0 fw-bold">Driver List</p>
                         </div>
+                        <a href="company_create.php"><button type="button" class="btn btn-primary">Add Driver</button></a>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 text-nowrap">
-                                    <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
-                                                <option value="10" selected="">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>&nbsp;</label></div>
+                                    <span><?php echo count($drivers); ?> Drivers</span>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
@@ -53,104 +52,48 @@ include_once "./includes/utils.php";
                                 <table class="table my-0" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th></th>
+                                            <th>Firstname</th>
+                                            <th>Lastname</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
+                                            <th>DoB</th>
+                                            <th>Date Registered</th>
+                                            <th>National ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar1.jpeg" width="30" height="30">Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>33</td>
-                                            <td>2008/11/28</td>
-                                            <td>$162,700</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar2.jpeg" width="30" height="30">Angelica Ramos</td>
-                                            <td>Chief Executive Officer(CEO)</td>
-                                            <td>London</td>
-                                            <td>47</td>
-                                            <td>2009/10/09<br></td>
-                                            <td>$1,200,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar3.jpeg" width="30" height="30">Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td>San Francisco</td>
-                                            <td>66</td>
-                                            <td>2009/01/12<br></td>
-                                            <td>$86,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar4.jpeg" width="30" height="30">Bradley Greer</td>
-                                            <td>Software Engineer</td>
-                                            <td>London</td>
-                                            <td>41</td>
-                                            <td>2012/10/13<br></td>
-                                            <td>$132,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar5.jpeg" width="30" height="30">Brenden Wagner</td>
-                                            <td>Software Engineer</td>
-                                            <td>San Francisco</td>
-                                            <td>28</td>
-                                            <td>2011/06/07<br></td>
-                                            <td>$206,850</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar1.jpeg" width="30" height="30">Brielle Williamson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>New York</td>
-                                            <td>61</td>
-                                            <td>2012/12/02<br></td>
-                                            <td>$372,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar2.jpeg" width="30" height="30">Bruno Nash<br></td>
-                                            <td>Software Engineer</td>
-                                            <td>London</td>
-                                            <td>38</td>
-                                            <td>2011/05/03<br></td>
-                                            <td>$163,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar3.jpeg" width="30" height="30">Caesar Vance</td>
-                                            <td>Pre-Sales Support</td>
-                                            <td>New York</td>
-                                            <td>21</td>
-                                            <td>2011/12/12<br></td>
-                                            <td>$106,450</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar4.jpeg" width="30" height="30">Cara Stevens</td>
-                                            <td>Sales Assistant</td>
-                                            <td>New York</td>
-                                            <td>46</td>
-                                            <td>2011/12/06<br></td>
-                                            <td>$145,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" src="assets/img/avatars/avatar5.jpeg" width="30" height="30">Cedric Kelly</td>
-                                            <td>Senior JavaScript Developer</td>
-                                            <td>Edinburgh</td>
-                                            <td>22</td>
-                                            <td>2012/03/29<br></td>
-                                            <td>$433,060</td>
-                                        </tr>
+                                        <!-- Driver List -->
+                                        <?php
+                                        foreach ($drivers as $driver) {
+                                            $user = User::find($driver->userID);
+                                        ?>
+                                            <tr>
+                                                <td><img src="<?php echo $user->profilePicture; ?>" alt="" class="rounded-circle me-2" width="30" height="30"></td>
+                                                <td><?php echo $driver->firstName; ?></td>
+                                                <td><?php echo $driver->lastName; ?></td>
+                                                <td><?php echo $user->email; ?></td>
+                                                <td><?php echo $user->phoneNumber; ?></td>
+                                                <td><?php echo $driver->dob; ?></td>
+                                                <td><?php echo $user->createdAt; ?></td>
+                                                <td><?php echo $driver->nationalID; ?></td>
+                                                <td><a href="driver_detail.php?id=<?php echo $user->id; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td><strong>Name</strong></td>
-                                            <td><strong>Position</strong></td>
-                                            <td><strong>Office</strong></td>
-                                            <td><strong>Age</strong></td>
-                                            <td><strong>Start date</strong></td>
-                                            <td><strong>Salary</strong></td>
+                                            <td><strong></strong></td>
+                                            <td><strong>Firstname</strong></td>
+                                            <td><strong>Lastname</strong></td>
+                                            <td><strong>Email</strong></td>
+                                            <td><strong>Phone Number</strong></td>
+                                            <td><strong>DoB</strong></td>
+                                            <td><strong>Date Registered</strong></td>
+                                            <td><strong>National ID</strong></td>
+                                            <td><strong></strong></td>
                                         </tr>
                                     </tfoot>
                                 </table>

@@ -4,6 +4,7 @@ class Driver
 {
     const TABLE = "drivers";
     const COLUMNS = "u.id, d.first_name, d.last_name, d.dob, d.national_id";
+    const INSERT_COLS = "user_id, national_id, dob, first_name, last_name";
 
     public $userID;
     public $nationalID;
@@ -26,9 +27,9 @@ class Driver
         $params = formatParams($data);
 
         $driverTable = self::TABLE;
-        $columns = self::COLUMNS;
+        $insertCols = self::INSERT_COLS;
 
-        $sth = $connection->prepare("INSERT INTO {$driverTable} ({$columns}) VALUES (:user_id, :national_id, :dob, :firstname, :lastname)");
+        $sth = $connection->prepare("INSERT INTO {$driverTable} ({$insertCols}) VALUES (:user_id, :national_id, :dob, :firstname, :lastname)");
         $result = $sth->execute($params);
 
         if (!$result) {

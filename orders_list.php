@@ -38,7 +38,7 @@ $orders = Order::all();
                         <div class="card-header py-3">
                             <p class="text-primary m-0 fw-bold">Order List</p>
                         </div>
-                        <a href="company_create.php"><button type="button" class="btn btn-primary">Create Order</button></a>
+                        <a href="order_create.php"><button type="button" class="btn btn-primary">Create Order</button></a>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 text-nowrap">

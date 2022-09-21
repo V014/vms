@@ -1,5 +1,28 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/user.php";
+include_once "./includes/entity/driver.php";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $user = User::create([
+        "username" => $_POST["username"],
+        "password" => "secret",
+        "profile_picture" => uploadProfile(),
+        "phone_number" => $_POST["phone_number"],
+        "email" => $_POST["email"],
+        "role" => "driver",
+    ]);
+
+    Driver::create([
+        "user_id" => $user->id,
+        "national_id" => $_POST["national_id"],
+        "dob" => $_POST["dob"],
+        "first_name" => $_POST["first_name"],
+        "last_name" => $_POST["last_name"],
+    ]);
+
+    redirect(BASE_DIR . "driver_list.php");
+}
 
 ?>
 

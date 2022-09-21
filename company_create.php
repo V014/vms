@@ -1,9 +1,25 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/user.php";
+include_once "./includes/entity/company.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    var_dump($_POST);
-    exit;
+    $user = User::create([
+        "username" => $_POST["username"],
+        "password" => "secret",
+        "profile_picture" => $_POST["profile_picture"],
+        "phone_number" => $_POST["phone_number"],
+        "email" => $_POST["email"],
+        "role" => "company",
+    ]);
+
+    Company::create([
+        "user_id" => $user->id,
+        "name" => $_POST["name"],
+        "established" => $_POST["established"],
+    ]);
+
+    redirect(BASE_DIR . "company_list.php");
 }
 
 ?>

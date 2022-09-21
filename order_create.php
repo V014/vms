@@ -1,5 +1,16 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/company.php";
+include_once "./includes/entity/fuel.php";
+
+$companies = Company::all();
+$fuelTypes = Fuel::all();
+
+$costs = [];
+
+foreach ($fuelTypes as $fuelType) {
+    $costs[$fuelType->name] = $fuelType->cost;
+}
 
 ?>
 
@@ -13,6 +24,7 @@ include_once "./includes/utils.php";
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -29,21 +41,43 @@ include_once "./includes/utils.php";
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-4">
-                            <h3 class="text-dark mb-1">
-                                Add Company
-                            </h3>
-                        </div>
-                        <div class="col-8">
-                            <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email"></div>
-                                <div class="mb-3"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
+                    <div class="row align-items-center px-5" style="width: 650px; margin: 0 auto;">
+                        <div class="col-12">
+                            <h3 style="text-align: center;">Create Order For Company</h3>
+                            <p style="text-align: center;">Provide the details of the company to add it to the system</p>
+                            <form class="user" name="company" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
                                 <div class="mb-3">
-                                    <div class="custom-control custom-checkbox small">
-                                        <div class="form-check"><input class="form-check-input custom-control-input" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Remember Me</label></div>
+                                    <!-- Company Selection -->
+                                    <div class="mb-5">
+                                        <label for="company_id" class="form-label">Company</label>
+                                        <select name="company_id" class="form-select">
+                                            <?php
+                                            foreach ($companies as $company) {
+                                            ?>
+                                                <option value="<?php echo $company->userID; ?>"><?php echo $company->name; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
-                                </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Login</button>
+                                    <!-- Fuel Selection -->
+                                    <div class="mb-5">
+                                        <label for="fuel_type_id" class="form-label">Fuel Type</label>
+                                        <select name="fuel_type_id" class="form-select">
+                                            <?php
+                                            foreach ($fuelTypes as $fuelType) {
+                                            ?>
+                                                <option value="<?php echo $fuelType->id; ?>"><?php echo ucfirst($fuelType->name) . " (K" . $fuelType->cost . ")"; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-5">
+                                        <input class="form-control" type="number" max="30000" placeholder="Quantity in Litres" name="quantity">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Create Order</button>
                                 <hr>
                             </form>
                         </div>

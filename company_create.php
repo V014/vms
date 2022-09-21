@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user = User::create([
         "username" => $_POST["username"],
         "password" => "secret",
-        "profile_picture" => $_POST["profile_picture"],
+        "profile_picture" => uploadProfile(),
         "phone_number" => $_POST["phone_number"],
         "email" => $_POST["email"],
         "role" => "company",

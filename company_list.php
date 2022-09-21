@@ -74,7 +74,7 @@ $companies = Company::all();
                                                 <td><?php echo $user->phoneNumber; ?></td>
                                                 <td><?php echo $company->established; ?></td>
                                                 <td><?php echo $company->totalOrders; ?></td>
-                                                <td><?php echo $company->totalProfit; ?></td>
+                                                <td><?php echo $company->totalSpend; ?></td>
                                                 <td><?php echo $company->createdAt; ?></td>
                                                 <td><a href="company_detail.php?id=<?php echo $company->userID; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
                                             </tr>

@@ -29,7 +29,8 @@ class Driver
         $driverTable = self::TABLE;
         $insertCols = self::INSERT_COLS;
 
-        $sth = $connection->prepare("INSERT INTO {$driverTable} ({$insertCols}) VALUES (:user_id, :national_id, :dob, :firstname, :lastname)");
+        $query = "INSERT INTO {$driverTable} ({$insertCols}) VALUES (:user_id, :national_id, :dob, :firstname, :lastname)";
+        $sth = $connection->prepare($query);
         $result = $sth->execute($params);
 
         if (!$result) {

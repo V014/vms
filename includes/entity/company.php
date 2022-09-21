@@ -111,7 +111,8 @@ class Company
         $connection = DBConnection::getConnection();
         $columns = self::COLUMNS;
 
-        $sth = $connection->prepare("SELECT {$columns} FROM companies AS c INNER JOIN users AS u ON u.id = c.user_id INNER JOIN orders AS o ON o.company_id = u.id GROUP BY c.id;");
+        $query = "SELECT {$columns} FROM companies AS c INNER JOIN users AS u ON u.id = c.user_id LEFT JOIN orders AS o ON o.company_id = u.id GROUP BY c.id;";
+        $sth = $connection->prepare($query);
 
         if ($sth->execute()) {
             foreach ($sth->fetchAll() as $company) {

@@ -2,6 +2,8 @@
 include_once "./includes/utils.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    var_dump($_POST);
+    exit;
 }
 
 ?>
@@ -34,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <div class="col-12">
                             <h3 style="text-align: center;">Add Company</h3>
                             <p style="text-align: center;">Provide the details of the company to add it to the system</p>
-                            <form class="user" name="company" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                            <form class="user" name="company" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <input class="form-control" type="file" name="profile_picture" id="">
                                 </div>

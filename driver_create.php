@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="row align-items-center px-5" style="width: 650px; margin: 0 auto;">
                         <div class="col-12">
                             <h3 style="text-align: center;">Add Driver</h3>
-                            <p style="text-align: center;">Provide the details of the company to add it to the system</p>
+                            <p style="text-align: center;">Provide the details of the driver to add it to the system</p>
                             <form class="user" name="company" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <input class="form-control" type="file" name="profile_picture" id="">

@@ -29,21 +29,40 @@ include_once "./includes/utils.php";
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-4">
-                            <h3 class="text-dark mb-1">
-                                Add Driver
-                            </h3>
-                        </div>
-                        <div class="col-8">
-                            <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email"></div>
-                                <div class="mb-3"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
+                    <div class="row align-items-center px-5" style="width: 650px; margin: 0 auto;">
+                        <div class="col-12">
+                            <h3 style="text-align: center;">Add Driver</h3>
+                            <p style="text-align: center;">Provide the details of the company to add it to the system</p>
+                            <form class="user" name="company" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
                                 <div class="mb-3">
-                                    <div class="custom-control custom-checkbox small">
-                                        <div class="form-check"><input class="form-check-input custom-control-input" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Remember Me</label></div>
+                                    <input class="form-control" type="file" name="profile_picture" id="">
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Username" name="username" required>
                                     </div>
-                                </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Login</button>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-user" type="tel" id="exampleFirstName" placeholder="Phone Number" name="phone_number" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email">
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Jonathan" name="first_name" required>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Moto" name="last_name" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control form-control-user" type="date" id="exampleInputEmail" aria-describedby="emailHelp" name="dob" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="National ID" name="national_id">
+                                </div>
+                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Register Driver</button>
                                 <hr>
                             </form>
                         </div>

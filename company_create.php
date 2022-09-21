@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "user_id" => $user->id,
         "name" => $_POST["name"],
         "established" => $_POST["established"],
+        "location" => null,
     ]);
 
     redirect(BASE_DIR . "company_list.php");

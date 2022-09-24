@@ -5,6 +5,8 @@ class Order
 {
     const TABLE = "orders";
     const COLUMNS = "o.id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date";
+    const INSERT_COLS = "company_id, type_id, quantity, cost, status, order_date";
+    const PLACEHOLDERS = ":company_id, :type_id, :quantity, :cost, :status, :order_date";
 
     public $id;
     public $name;
@@ -27,6 +29,30 @@ class Order
         $this->cost = $data["cost"];
         $this->status = $data["status"];
         $this->orderDate = $data["order_date"];
+    }
+
+    /**
+     * Creates the order in the database and returns an instance
+     * of the Order class with the data filled in from the matching
+     * row
+     */
+    public static function create($order)
+    {
+        $connection = DBConnection::getConnection();
+        $params = formatParams($order);
+        $table = self::TABLE;
+        $insertCols = self::INSERT_COLS;
+        $placeholders = self::PLACEHOLDERS;
+
+        $query = "INSERT INTO {$table} ({$insertCols}) VALUES ({$placeholders})";
+        $sth = $connection->prepare($query);
+        $result = $sth->execute($params);
+
+        if (!$result) {
+            return null;
+        }
+
+        return self::find($connection->lastInsertId());
     }
 
     /*

@@ -14,7 +14,7 @@ $user = User::find($company->userID);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>VMS - Company Detail</title>
+    <title>VMS - <?php echo $company->name; ?></title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -40,11 +40,24 @@ $user = User::find($company->userID);
                             <div class="row">
                                 <div class="col">
                                     <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                                        <ol class="breadcrumb mb-0">
-                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                            <li class="breadcrumb-item"><a href="#">User</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-                                        </ol>
+                                        <?php
+                                        if ($user->role === "admin") {
+                                        ?>
+                                            <ol class="breadcrumb mb-0">
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "admin_dashboard.php"; ?>">Home</a></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "company_list.php"; ?>">Companies</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
+                                            </ol>
+                                        <?php
+                                        } elseif ($user->role === "company") {
+                                        ?>
+                                            <ol class="breadcrumb mb-0">
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "company_dashboard.php"; ?>">Home</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
+                                            </ol>
+                                        <?php
+                                        }
+                                        ?>
                                     </nav>
                                 </div>
                             </div>

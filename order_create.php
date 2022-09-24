@@ -1,6 +1,7 @@
 <?php
 include_once "./includes/utils.php";
 include_once "./includes/entity/company.php";
+include_once "./includes/entity/order.php";
 include_once "./includes/entity/fuel.php";
 include_once "./includes/auth.php";
 

@@ -9,6 +9,7 @@ class Order
     const PLACEHOLDERS = ":company_id, :type_id, :quantity, :cost, :status, :order_date";
 
     public $id;
+    public $userID;
     public $name;
     public $longitude;
     public $latitude;
@@ -21,6 +22,7 @@ class Order
     public function __construct($data)
     {
         $this->id = $data["id"];
+        $this->userID = $data["user_id"];
         $this->name = $data["name"];
         $this->longitude = $data["longitude"];
         $this->latitude = $data["latitude"];

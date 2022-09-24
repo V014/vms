@@ -28,6 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "order_date" => date("Y/m/d", strtotime("today")),
         ];
     }
+
+    Order::create($order);
+    redirect(BASE_DIR . "orders_list");
 }
 
 $companies = Company::all();

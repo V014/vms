@@ -42,4 +42,24 @@ class Fuel
 
         return $fuelTypes;
     }
+
+    public static function find($id)
+    {
+        $table = self::TABLE;
+        $columns = self::COLUMNS;
+        $connection = DBConnection::getConnection();
+        $sth = $connection->prepare("SELECT {$columns} FROM {$table} WHERE id = :id");
+
+        if (!$sth->execute([":id" => $id])) {
+            return null;
+        }
+
+        $result = $sth->fetch();
+
+        if (!$result) {
+            return null;
+        }
+
+        return new Fuel($result);
+    }
 }

@@ -62,8 +62,8 @@ foreach ($fuelTypes as $fuelType) {
                                     </div>
                                     <!-- Fuel Selection -->
                                     <div class="mb-5">
-                                        <label for="fuel_type_id" class="form-label">Fuel Type</label>
-                                        <select name="fuel_type_id" class="form-select">
+                                        <label for="type_id" class="form-label">Fuel Type</label>
+                                        <select name="type_id" class="form-select">
                                             <?php
                                             foreach ($fuelTypes as $fuelType) {
                                             ?>

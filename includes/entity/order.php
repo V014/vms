@@ -22,7 +22,7 @@ class Order
     public function __construct($data)
     {
         $this->id = $data["id"];
-        $this->userID = $data["user_id"];
+        $this->userID = $data["company_id"];
         $this->name = $data["name"];
         $this->longitude = $data["longitude"];
         $this->latitude = $data["latitude"];

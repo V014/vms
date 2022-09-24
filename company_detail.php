@@ -1,5 +1,10 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/company.php";
+include_once "./includes/entity/USER.php";
+
+$company = Company::find($_GET["id"]);
+$user = User::find($company->userID);
 
 ?>
 

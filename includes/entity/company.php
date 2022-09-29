@@ -122,4 +122,32 @@ class Company
 
         return $companies;
     }
+
+    public function countOrders($type = null)
+    {
+        $connection = DBConnection::getConnection();
+        $query = "";
+
+        switch ($type) {
+            case 'pending':
+                $query = "SELECT COUNT(*) FROM `orders` WHERE status = {$type} AND company_id = :id";
+                break;
+            case 'delivered':
+                $query = "SELECT COUNT(*) FROM `orders` WHERE status = {$type} AND company_id = :id";
+                break;
+            default:
+                $query = "SELECT COUNT(*) FROM `orders` WHERE company_id = :id";
+                break;
+        }
+
+        $sth = $connection->prepare($query);
+        $sth->execute([":id" => $this->userID]);
+        $result = $sth->fetch();
+
+        if (!$result) {
+            return null;
+        }
+
+        return $result;
+    }
 }

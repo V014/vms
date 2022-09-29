@@ -45,7 +45,7 @@ class Driver
         $connection = DBConnection::getConnection();
         $table = self::TABLE;
         $columns = self::COLUMNS;
-        $query = "SELECT {$columns} FROM {$table} AS d INNER JOIN users AS u ON u.id = :id";
+        $query = "SELECT {$columns} FROM {$table} AS d INNER JOIN users AS u ON u.id = d.user_id WHERE u.id = :id";
         $sth = $connection->prepare($query);
 
         if (!$sth->execute([":id" => $id])) {

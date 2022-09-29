@@ -8,6 +8,8 @@ $authUser = Auth::getUser();
 $driver = Driver::find($_GET["id"]);
 $userDriver = User::find($driver->userID);
 
+$details = $driver->details();
+
 ?>
 
 <!DOCTYPE html>
@@ -68,9 +70,10 @@ $userDriver = User::find($driver->userID);
                                 <div class="col-lg-4">
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
-                                            <img src="<?php echo $userCompany->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                                            <h5 class="my-3"><?php echo $company->name; ?></h5>
-                                            <p class="text-muted mb-1"><?php echo $company->established; ?></p>
+                                            <img src="<?php echo $userDriver->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                            <h5 class="my-3"><?php echo $driver->firstName; ?></h5>
+                                            <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
+                                            <p class="text-muted mb-1"><?php echo $driver->dob; ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -79,10 +82,10 @@ $userDriver = User::find($driver->userID);
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-3">
-                                                    <p class="mb-0">Company Name</p>
+                                                    <p class="mb-0">Full Name</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $company->name; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $driver->firstName . " " . $driver->lastName; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -91,7 +94,7 @@ $userDriver = User::find($driver->userID);
                                                     <p class="mb-0">Email</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $userCompany->email; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $userDriver->email; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -100,7 +103,7 @@ $userDriver = User::find($driver->userID);
                                                     <p class="mb-0">Phone</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $userDriver->phoneNumber; ?></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -109,7 +112,7 @@ $userDriver = User::find($driver->userID);
                                         <div class="col-md-12">
                                             <div class="card mb-4 mb-md-0">
                                                 <div class="card-body">
-                                                    <p class="mb-4"><span class="text-primary font-italic me-1"><a href="orders_list.php">orders</a></span> Order Status and Details</p>
+                                                    <p class="mb-4"><span class="text-primary font-italic me-1"><a href="trips_list.php">trips</a></span>Trip Status and Details</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,8 +125,8 @@ $userDriver = User::find($driver->userID);
                                         <div class="card-body">
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col me-2">
-                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Orders</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->totalOrders; ?></span></div>
+                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Deliveries</span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $details["deliveries"]; ?></span></div>
                                                 </div>
                                                 <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
                                             </div>
@@ -135,21 +138,8 @@ $userDriver = User::find($driver->userID);
                                         <div class="card-body">
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col me-2">
-                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Spend</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo "K" . $company->totalSpend; ?></span></div>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-money-bill fa-2x text-gray-300"></i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-xl-3 mb-4">
-                                    <div class="card shadow border-start-primary py-2">
-                                        <div class="card-body">
-                                            <div class="row align-items-center no-gutters">
-                                                <div class="col me-2">
-                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Deliveries Fulfilled</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->countOrders("delivered"); ?></span></div>
+                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Fulfilled Deliveries</span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $details["delivered"]; ?></span></div>
                                                 </div>
                                                 <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
                                             </div>
@@ -162,9 +152,22 @@ $userDriver = User::find($driver->userID);
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col me-2">
                                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Deliveries Pending</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->countOrders("pending"); ?></span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $details["pending"]; ?></span></div>
                                                 </div>
                                                 <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xl-3 mb-4">
+                                    <div class="card shadow border-start-primary py-2">
+                                        <div class="card-body">
+                                            <div class="row align-items-center no-gutters">
+                                                <div class="col me-2">
+                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Quantity Delivered</span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo number_format($details["quantity_delivered"]) . "L" ?></span></div>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-oil-can fa-2x text-gray-300"></i></div>
                                             </div>
                                         </div>
                                     </div>

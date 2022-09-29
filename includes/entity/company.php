@@ -51,7 +51,7 @@ class Company
         $connection = DBConnection::getConnection();
         $table = self::TABLE;
         $columns = self::COLUMNS;
-        $query = "SELECT {$columns} FROM {$table} AS c INNER JOIN users AS u ON u.id = c.user_id INNER JOIN orders AS o ON o.company_id = c.id WHERE c.id = :id";
+        $query = "SELECT {$columns} FROM {$table} AS c INNER JOIN users AS u ON u.id = c.user_id INNER JOIN orders AS o ON o.company_id = u.id WHERE user_id = :id GROUP BY u.id";
         $sth = $connection->prepare($query);
 
         if (!$sth->execute([":id" => $id])) {
@@ -111,7 +111,7 @@ class Company
         $connection = DBConnection::getConnection();
         $columns = self::COLUMNS;
 
-        $query = "SELECT {$columns} FROM companies AS c INNER JOIN users AS u ON u.id = c.user_id LEFT JOIN orders AS o ON o.company_id = u.id GROUP BY c.id;";
+        $query = "SELECT {$columns} FROM companies AS c INNER JOIN users AS u ON u.id = c.user_id LEFT JOIN orders AS o ON o.company_id = u.id GROUP BY c.id ORDER BY created_at DESC";
         $sth = $connection->prepare($query);
 
         if ($sth->execute()) {
@@ -121,5 +121,33 @@ class Company
         }
 
         return $companies;
+    }
+
+    public function countOrders($type = null)
+    {
+        $connection = DBConnection::getConnection();
+        $query = "";
+
+        switch ($type) {
+            case 'pending':
+                $query = "SELECT COUNT(*) AS amount FROM `orders` WHERE status = '{$type}' AND company_id = :id";
+                break;
+            case 'delivered':
+                $query = "SELECT COUNT(*) AS amount FROM `orders` WHERE status = '{$type}' AND company_id = :id";
+                break;
+            default:
+                $query = "SELECT COUNT(*) AS amount FROM `orders` WHERE company_id = :id";
+                break;
+        }
+
+        $sth = $connection->prepare($query);
+        $sth->execute([":id" => $this->userID]);
+        $result = $sth->fetch();
+
+        if (!$result) {
+            return null;
+        }
+
+        return $result["amount"];
     }
 }

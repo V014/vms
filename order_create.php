@@ -1,7 +1,38 @@
 <?php
 include_once "./includes/utils.php";
 include_once "./includes/entity/company.php";
+include_once "./includes/entity/order.php";
 include_once "./includes/entity/fuel.php";
+include_once "./includes/auth.php";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $fuel = Fuel::find($_POST["type_id"]);
+    $user = Auth::getUser();
+    $order = [];
+
+    if ($user->role === "admin") {
+        $order = [
+            "company_id" => $_POST["company_id"],
+            "type_id" => $_POST["type_id"],
+            "quantity" => $_POST["quantity"],
+            "cost" => $fuel->cost * $_POST["quantity"],
+            "status" => "pending",
+            "order_date" => date("Y/m/d", strtotime("today")),
+        ];
+    } elseif ($user->role === "company") {
+        $order = [
+            "company_id" => $user->id,
+            "type_id" => $_POST["type_id"],
+            "quantity" => $_POST["quantity"],
+            "cost" => $fuel->cost * $_POST["quantity"],
+            "status" => "pending",
+            "order_date" => date("Y/m/d", strtotime("today")),
+        ];
+    }
+
+    Order::create($order);
+    redirect(BASE_DIR . "orders_list");
+}
 
 $companies = Company::all();
 $fuelTypes = Fuel::all();
@@ -62,8 +93,8 @@ foreach ($fuelTypes as $fuelType) {
                                     </div>
                                     <!-- Fuel Selection -->
                                     <div class="mb-5">
-                                        <label for="fuel_type_id" class="form-label">Fuel Type</label>
-                                        <select name="fuel_type_id" class="form-select">
+                                        <label for="type_id" class="form-label">Fuel Type</label>
+                                        <select name="type_id" class="form-select">
                                             <?php
                                             foreach ($fuelTypes as $fuelType) {
                                             ?>

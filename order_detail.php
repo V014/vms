@@ -1,14 +1,22 @@
 <?php
 include_once "./includes/utils.php";
 include_once "./includes/auth.php";
+include_once "./includes/entity/company.php";
 include_once "./includes/entity/driver.php";
+include_once "./includes/entity/order.php";
 include_once "./includes/entity/user.php";
+include_once "./includes/entity/vehicle.php";
 
 $authUser = Auth::getUser();
-$driver = Driver::find($_GET["id"]);
-$userDriver = User::find($driver->userID);
+$order = Order::find($_GET["id"]);
 
-$details = $driver->details();
+$company = Company::find($order->userID);
+$companyUser = User::find($company->userID);
+
+$driver = Driver::find($order->driverID);
+$driverUser = User::find($driver->userID);
+
+$vehicle = Vehicle::find($order->vehicleID);
 
 ?>
 
@@ -18,7 +26,7 @@ $details = $driver->details();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>VMS - <?php echo $driver->firstName . " " . $driver->lastName; ?></title>
+    <title>VMS - <?php echo $company->name; ?></title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -50,15 +58,24 @@ $details = $driver->details();
                                         ?>
                                             <ol class="breadcrumb mb-0">
                                                 <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "admin_dashboard.php"; ?>">Home</a></li>
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "driver_list.php"; ?>">Drivers</a></li>
-                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $driver->firstName . " " . $driver->lastName; ?></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Orders</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
                                             </ol>
                                         <?php
-                                        } elseif ($authUser->role === "driver") {
+                                        } elseif ($authUser->role === "company") {
+                                        ?>
+                                            <ol class="breadcrumb mb-0">
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "company_dashboard.php"; ?>">Home</a></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Orders</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
+                                            </ol>
+                                        <?php
+                                        } else {
                                         ?>
                                             <ol class="breadcrumb mb-0">
                                                 <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "driver_dashboard.php"; ?>">Home</a></li>
-                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $driver->firstName . " " . $driver->lastName; ?></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Order</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
                                             </ol>
                                         <?php
                                         }
@@ -70,10 +87,17 @@ $details = $driver->details();
                                 <div class="col-lg-4">
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
-                                            <img src="<?php echo $userDriver->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                                            <h5 class="my-3"><?php echo $driver->firstName; ?></h5>
+                                            <p>Company</p>
+                                            <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                            <h5 class="my-3"><?php echo $company->name; ?></h5>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-4">
+                                        <div class="card-body text-center">
+                                            <p>Driver</p>
+                                            <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                            <h5 class="my-3"><?php echo $driver->firstName . " " . $driver->lastName; ?></h5>
                                             <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
-                                            <p class="text-muted mb-1"><?php echo $driver->dob; ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -82,92 +106,66 @@ $details = $driver->details();
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-3">
-                                                    <p class="mb-0">Full Name</p>
+                                                    <p class="mb-0">Vehicle Registration Number</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $driver->firstName . " " . $driver->lastName; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $vehicle->registrationNo; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
                                             <div class="row">
                                                 <div class="col-sm-3">
-                                                    <p class="mb-0">Email</p>
+                                                    <p class="mb-0">Vehicle Make</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $userDriver->email; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $vehicle->make; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
                                             <div class="row">
                                                 <div class="col-sm-3">
-                                                    <p class="mb-0">Phone</p>
+                                                    <p class="mb-0">Order Date</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $userDriver->phoneNumber; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $order->orderDate; ?></p>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Status</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="card mb-4 mb-md-0">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="card shadow border-start-primary py-2">
                                                 <div class="card-body">
-                                                    <p class="mb-4"><span class="text-primary font-italic me-1"><a href="trips_list.php">trips</a></span>Trip Status and Details</p>
+                                                    <div class="row align-items-center no-gutters">
+                                                        <div class="col me-2">
+                                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Quantity</span></div>
+                                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo $order->quantity . "L"; ?></span></div>
+                                                        </div>
+                                                        <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xl-3 mb-4">
-                                    <div class="card shadow border-start-primary py-2">
-                                        <div class="card-body">
-                                            <div class="row align-items-center no-gutters">
-                                                <div class="col me-2">
-                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Deliveries</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $details["deliveries"]; ?></span></div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="card shadow border-start-primary py-2">
+                                                <div class="card-body">
+                                                    <div class="row align-items-center no-gutters">
+                                                        <div class="col me-2">
+                                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Cost</span></div>
+                                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo "K" . number_format($order->cost); ?></span></div>
+                                                        </div>
+                                                        <div class="col-auto"><i class="fas fa-money-bill fa-2x text-gray-300"></i></div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-xl-3 mb-4">
-                                    <div class="card shadow border-start-primary py-2">
-                                        <div class="card-body">
-                                            <div class="row align-items-center no-gutters">
-                                                <div class="col me-2">
-                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Fulfilled Deliveries</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $details["delivered"]; ?></span></div>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-xl-3 mb-4">
-                                    <div class="card shadow border-start-primary py-2">
-                                        <div class="card-body">
-                                            <div class="row align-items-center no-gutters">
-                                                <div class="col me-2">
-                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Deliveries Pending</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $details["pending"]; ?></span></div>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-xl-3 mb-4">
-                                    <div class="card shadow border-start-primary py-2">
-                                        <div class="card-body">
-                                            <div class="row align-items-center no-gutters">
-                                                <div class="col me-2">
-                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Quantity Delivered</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo number_format($details["quantity_delivered"]) . "L" ?></span></div>
-                                                </div>
-                                                <div class="col-auto"><i class="fas fa-oil-can fa-2x text-gray-300"></i></div>
                                             </div>
                                         </div>
                                     </div>

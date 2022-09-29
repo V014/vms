@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     <input class="form-control form-control-user" type="date" id="exampleInputEmail" aria-describedby="emailHelp" name="dob" required>
                                 </div>
                                 <div class="mb-3">
-                                    <input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="National ID" name="national_id">
+                                    <input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="National ID" name="national_id" required>
                                 </div>
                                 <button class="btn btn-primary d-block btn-user w-100" type="submit">Register Driver</button>
                                 <hr>

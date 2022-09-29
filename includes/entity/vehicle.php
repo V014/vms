@@ -37,4 +37,20 @@ class Vehicle
 
         return $vehicles;
     }
+
+    public static function find($id)
+    {
+        $connection = DBConnection::getConnection();
+        $table = self::TABLE;
+        $columns = self::COLUMNS;
+
+        $query = "SELECT {$columns} FROM {$table} WHERE id = :id";
+        $sth = $connection->prepare($query);
+
+        if (!$sth->execute([":id" => $id])) {
+            return null;
+        }
+
+        return new Vehicle($sth->fetch());
+    }
 }

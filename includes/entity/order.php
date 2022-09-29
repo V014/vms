@@ -4,7 +4,7 @@ include_once dirname(__FILE__) . "/../connection.php";
 class Order
 {
     const TABLE = "orders";
-    const COLUMNS = "o.id, c.user_id AS company_id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date, od.driver_id AS driver_id, od.veicle_id";
+    const COLUMNS = "o.id, c.user_id AS company_id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date, od.driver_id AS driver_id, od.vehicle_id";
     const INSERT_COLS = "company_id, type_id, quantity, cost, status, order_date";
     const PLACEHOLDERS = ":company_id, :type_id, :quantity, :cost, :status, :order_date";
 

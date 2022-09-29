@@ -110,29 +110,53 @@ $userCompany = User::find($company->userID);
                                                 <div class="card-body">
                                                     <p class="mb-4"><span class="text-primary font-italic me-1"><a href="orders_list.php">orders</a></span> Order Status and Details
                                                     </p>
-                                                    <p class="mb-1" style="font-size: .77rem;">Total Orders</p>
-                                                    <div class="progress rounded" style="height: 5px;">
-                                                        <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <p class="mb-0">Total Orders</p>
+                                                        </div>
+                                                        <div class="col-sm-9">
+                                                            <p class="text-muted mb-0"><?php echo $company->totalOrders; ?></p>
+                                                        </div>
                                                     </div>
-                                                    <p class="mt-4 mb-1" style="font-size: .77rem;">Total Spend</p>
-                                                    <div class="progress rounded" style="height: 5px;">
-                                                        <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <p class="mb-0">Total Spend</p>
+                                                        </div>
+                                                        <div class="col-sm-9">
+                                                            <p class="text-muted mb-0"><?php echo "K" . $company->totalSpend; ?></p>
+                                                        </div>
                                                     </div>
-                                                    <p class="mt-4 mb-1" style="font-size: .77rem;">Diesel Orders</p>
-                                                    <div class="progress rounded" style="height: 5px;">
-                                                        <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <p class="mb-0">Diesel Orders</p>
+                                                        </div>
+                                                        <div class="col-sm-9">
+                                                            <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
+                                                        </div>
                                                     </div>
-                                                    <p class="mt-4 mb-1" style="font-size: .77rem;">Petrol Orders</p>
-                                                    <div class="progress rounded" style="height: 5px;">
-                                                        <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <p class="mb-0">Petrol Orders</p>
+                                                        </div>
+                                                        <div class="col-sm-9">
+                                                            <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
+                                                        </div>
                                                     </div>
-                                                    <p class="mt-4 mb-1" style="font-size: .77rem;">Deliveries Fulfilled</p>
-                                                    <div class="progress rounded" style="height: 5px;">
-                                                        <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <p class="mb-0">Deliveries Fulfilled</p>
+                                                        </div>
+                                                        <div class="col-sm-9">
+                                                            <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
+                                                        </div>
                                                     </div>
-                                                    <p class="mt-4 mb-1" style="font-size: .77rem;">Deliveries Pending</p>
-                                                    <div class="progress rounded" style="height: 5px;">
-                                                        <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <p class="mb-0">Deliveries Pending</p>
+                                                        </div>
+                                                        <div class="col-sm-9">
+                                                            <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

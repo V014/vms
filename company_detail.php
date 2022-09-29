@@ -62,7 +62,6 @@ $userCompany = User::find($company->userID);
                                     </nav>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="card mb-4">
@@ -108,57 +107,62 @@ $userCompany = User::find($company->userID);
                                         <div class="col-md-12">
                                             <div class="card mb-4 mb-md-0">
                                                 <div class="card-body">
-                                                    <p class="mb-4"><span class="text-primary font-italic me-1"><a href="orders_list.php">orders</a></span> Order Status and Details
-                                                    </p>
-                                                    <div class="row">
-                                                        <div class="col-sm-3">
-                                                            <p class="mb-0">Total Orders</p>
-                                                        </div>
-                                                        <div class="col-sm-9">
-                                                            <p class="text-muted mb-0"><?php echo $company->totalOrders; ?></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-3">
-                                                            <p class="mb-0">Total Spend</p>
-                                                        </div>
-                                                        <div class="col-sm-9">
-                                                            <p class="text-muted mb-0"><?php echo "K" . $company->totalSpend; ?></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-3">
-                                                            <p class="mb-0">Diesel Orders</p>
-                                                        </div>
-                                                        <div class="col-sm-9">
-                                                            <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-3">
-                                                            <p class="mb-0">Petrol Orders</p>
-                                                        </div>
-                                                        <div class="col-sm-9">
-                                                            <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-3">
-                                                            <p class="mb-0">Deliveries Fulfilled</p>
-                                                        </div>
-                                                        <div class="col-sm-9">
-                                                            <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-3">
-                                                            <p class="mb-0">Deliveries Pending</p>
-                                                        </div>
-                                                        <div class="col-sm-9">
-                                                            <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
-                                                        </div>
-                                                    </div>
+                                                    <p class="mb-4"><span class="text-primary font-italic me-1"><a href="orders_list.php">orders</a></span> Order Status and Details</p>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xl-3 mb-4">
+                                    <div class="card shadow border-start-primary py-2">
+                                        <div class="card-body">
+                                            <div class="row align-items-center no-gutters">
+                                                <div class="col me-2">
+                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Orders</span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->totalOrders; ?></span></div>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xl-3 mb-4">
+                                    <div class="card shadow border-start-primary py-2">
+                                        <div class="card-body">
+                                            <div class="row align-items-center no-gutters">
+                                                <div class="col me-2">
+                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Spend</span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo "K" . $company->totalSpend; ?></span></div>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-money-bill fa-2x text-gray-300"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xl-3 mb-4">
+                                    <div class="card shadow border-start-primary py-2">
+                                        <div class="card-body">
+                                            <div class="row align-items-center no-gutters">
+                                                <div class="col me-2">
+                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Deliveries Fulfilled</span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->countOrders("delivered"); ?></span></div>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xl-3 mb-4">
+                                    <div class="card shadow border-start-primary py-2">
+                                        <div class="card-body">
+                                            <div class="row align-items-center no-gutters">
+                                                <div class="col me-2">
+                                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Deliveries Pending</span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->countOrders("pending"); ?></span></div>
+                                                </div>
+                                                <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
                                             </div>
                                         </div>
                                     </div>

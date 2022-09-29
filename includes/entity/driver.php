@@ -68,7 +68,7 @@ class Driver
         $table = self::TABLE;
         $columns = self::COLUMNS;
 
-        $query = "SELECT {$columns} FROM users AS u INNER JOIN drivers AS d ON d.user_id = u.id";
+        $query = "SELECT {$columns} FROM users AS u INNER JOIN drivers AS d ON d.user_id = u.id ORDER BY u.created_at DESC";
         $sth = $connection->prepare($query);
 
         if ($sth->execute()) {

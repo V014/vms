@@ -4,7 +4,7 @@ include_once dirname(__FILE__) . "/../connection.php";
 class Order
 {
     const TABLE = "orders";
-    const COLUMNS = "o.id, c.user_id AS company_id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date";
+    const COLUMNS = "o.id, c.user_id AS company_id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date, od.driver_id AS driver_id";
     const INSERT_COLS = "company_id, type_id, quantity, cost, status, order_date";
     const PLACEHOLDERS = ":company_id, :type_id, :quantity, :cost, :status, :order_date";
 
@@ -18,6 +18,7 @@ class Order
     public $cost;
     public $status;
     public $orderDate;
+    public $driverID;
 
     public function __construct($data)
     {
@@ -31,6 +32,7 @@ class Order
         $this->cost = $data["cost"];
         $this->status = $data["status"];
         $this->orderDate = $data["order_date"];
+        $this->driverID = $data["driver_id"];
     }
 
     /**
@@ -62,7 +64,8 @@ class Order
         $table = self::TABLE;
         $columns = self::COLUMNS;
         $connection = DBConnection::getConnection();
-        $sth = $connection->prepare("SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id WHERE o.id = :id");
+        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id INNER JOIN order_driver AS od ON od.order_id = o.id WHERE o.id = :id";
+        $sth = $connection->prepare($query);
 
         if (!$sth->execute([":id" => $id])) {
             return null;

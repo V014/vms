@@ -130,13 +130,13 @@ class Company
 
         switch ($type) {
             case 'pending':
-                $query = "SELECT COUNT(*) FROM `orders` WHERE status = {$type} AND company_id = :id";
+                $query = "SELECT COUNT(*) AS amount FROM `orders` WHERE status = '{$type}' AND company_id = :id";
                 break;
             case 'delivered':
-                $query = "SELECT COUNT(*) FROM `orders` WHERE status = {$type} AND company_id = :id";
+                $query = "SELECT COUNT(*) AS amount FROM `orders` WHERE status = '{$type}' AND company_id = :id";
                 break;
             default:
-                $query = "SELECT COUNT(*) FROM `orders` WHERE company_id = :id";
+                $query = "SELECT COUNT(*) AS amount FROM `orders` WHERE company_id = :id";
                 break;
         }
 
@@ -148,6 +148,6 @@ class Company
             return null;
         }
 
-        return $result;
+        return $result["amount"];
     }
 }

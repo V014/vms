@@ -1,8 +1,10 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/auth.php";
 include_once "./includes/entity/company.php";
 include_once "./includes/entity/user.php";
 
+$authUser = Auth::getUser();
 $company = Company::find($_GET["id"]);
 $userCompany = User::find($company->userID);
 
@@ -42,7 +44,7 @@ $userCompany = User::find($company->userID);
                                 <div class="col">
                                     <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
                                         <?php
-                                        if ($user->role === "admin") {
+                                        if ($authUser->role === "admin") {
                                         ?>
                                             <ol class="breadcrumb mb-0">
                                                 <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "admin_dashboard.php"; ?>">Home</a></li>
@@ -50,7 +52,7 @@ $userCompany = User::find($company->userID);
                                                 <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
                                             </ol>
                                         <?php
-                                        } elseif ($user->role === "company") {
+                                        } elseif ($authUser->role === "company") {
                                         ?>
                                             <ol class="breadcrumb mb-0">
                                                 <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "company_dashboard.php"; ?>">Home</a></li>

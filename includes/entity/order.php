@@ -66,7 +66,7 @@ class Order
         $table = self::TABLE;
         $columns = self::COLUMNS;
         $connection = DBConnection::getConnection();
-        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id INNER JOIN order_driver AS od ON od.order_id = o.id WHERE o.id = :id";
+        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id LEFT JOIN order_driver AS od ON od.order_id = o.id WHERE o.id = :id";
         $sth = $connection->prepare($query);
 
         if (!$sth->execute([":id" => $id])) {
@@ -86,7 +86,7 @@ class Order
         $table = self::TABLE;
         $columns = self::COLUMNS;
 
-        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id INNER JOIN order_driver AS od ON od.order_id = o.id ORDER BY o.order_date DESC";
+        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id LEFT JOIN order_driver AS od ON od.order_id = o.id ORDER BY o.order_date DESC";
         $sth = $connection->prepare($query);
 
         if ($sth->execute()) {

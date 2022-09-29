@@ -84,7 +84,7 @@ class Order
         $table = self::TABLE;
         $columns = self::COLUMNS;
 
-        $query = "SELECT {$columns} FROM orders AS o INNER JOIN companies AS c ON c.id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id ORDER BY order_date DESC";
+        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id INNER JOIN order_driver AS od ON od.order_id = o.id ORDER BY o.order_date DESC";
         $sth = $connection->prepare($query);
 
         if ($sth->execute()) {

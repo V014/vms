@@ -3,12 +3,13 @@
 class Vehicle
 {
     const TABLE = "vehicles";
-    const COLUMNS = "id, registration_no, make, year";
+    const COLUMNS = "id, registration_no, make, year, capacity";
 
     public $id;
     public $registrationNo;
     public $make;
     public $year;
+    public $capacity;
 
     public function __construct($data)
     {
@@ -16,6 +17,7 @@ class Vehicle
         $this->registrationNo = $data["registration_no"];
         $this->make = $data["make"];
         $this->year = $data["year"];
+        $this->capacity = $data["capacity"];
     }
 
 

@@ -64,4 +64,18 @@ class Vehicle
         $sth->execute([":id" => $this->id]);
         return $sth->fetchAll();
     }
+
+    public function stats()
+    {
+        $connection = DBConnection::getConnection();
+        $query = "SELECT
+                    COUNT(o.id) AS total_orders,
+                    SUM(o.cost) AS total_profit,
+                    (SELECT COUNT(*) FROM order_driver INNER JOIN orders ON orders.id = order_driver.order_id WHERE orders.type_id = 3 AND order_driver.vehicle_id = :petrol_deliveries) AS petrol_deliveries,
+                    (SELECT COUNT(*) FROM order_driver INNER JOIN orders ON orders.id = order_driver.order_id WHERE orders.type_id = 2 AND order_driver.vehicle_id = ::diesel_deliveries) AS diesel_deliveries
+                  FROM vehicles AS v INNER JOIN order_driver AS od ON od.vehicle_id = v.id INNER JOIN drivers AS d ON d.user_id = od.driver_id INNER JOIN orders AS o ON o.id = od.order_id WHERE v.id = :vehicle_id GROUP BY v.id";
+        $sth = $connection->prepare($query);
+        $sth->execute();
+        return $sth->fetch();
+    }
 }

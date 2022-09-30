@@ -52,59 +52,13 @@ $vehicle = Vehicle::find($_GET["id"]);
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
                                             <div class="mb-3"><i class="fas fa-truck fa-9x"></i></div>
-                                            <p class="h4"><?php echo $vehicle->make; ?></p>
+                                            <p class="h4"><?php echo $vehicle->make . " (" . $vehicle->year . ")"; ?></p>
                                             <p class="h4"><?php echo $vehicle->registrationNo; ?></p>
-                                        </div>
-                                    </div>
-                                    <div class="card mb-4">
-                                        <div class="card-body text-center">
-                                            <p>Driver</p>
-                                            <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                                            <h5 class="my-3"><?php echo $driver->firstName . " " . $driver->lastName; ?></h5>
-                                            <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
+                                            <p class="h3"><?php echo $vehicle->capacity . "L"; ?></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
-                                    <div class="card mb-4">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Vehicle Registration Number</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $vehicle->registrationNo; ?></p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Vehicle Make</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $vehicle->make; ?></p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Order Date</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $order->orderDate; ?></p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Status</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
                                             <div class="card shadow border-start-primary py-2">

@@ -12,7 +12,7 @@ $vehicle = Vehicle::find($_GET["id"]);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>VMS - Vehicle Detail</title>
+    <title>VMS - <?php echo $vehicle->make . " (" . $vehicle->registrationNo . ")"; ?></title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -39,33 +39,11 @@ $vehicle = Vehicle::find($_GET["id"]);
                             <div class="row">
                                 <div class="col">
                                     <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                                        <?php
-                                        if ($authUser->role === "admin") {
-                                        ?>
-                                            <ol class="breadcrumb mb-0">
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "admin_dashboard.php"; ?>">Home</a></li>
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Orders</a></li>
-                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
-                                            </ol>
-                                        <?php
-                                        } elseif ($authUser->role === "company") {
-                                        ?>
-                                            <ol class="breadcrumb mb-0">
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "company_dashboard.php"; ?>">Home</a></li>
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Orders</a></li>
-                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
-                                            </ol>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <ol class="breadcrumb mb-0">
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "driver_dashboard.php"; ?>">Home</a></li>
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Order</a></li>
-                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
-                                            </ol>
-                                        <?php
-                                        }
-                                        ?>
+                                        <ol class="breadcrumb mb-0">
+                                            <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "admin_dashboard.php"; ?>">Home</a></li>
+                                            <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "vehicle_list.php"; ?>">Vehicle</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page"><?php echo $vehicle->make . $vehicle->make; ?></li>
+                                        </ol>
                                     </nav>
                                 </div>
                             </div>

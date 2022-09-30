@@ -53,4 +53,13 @@ class Vehicle
 
         return new Vehicle($sth->fetch());
     }
+
+    public function history()
+    {
+        $connection = DBConnection::getConnection();
+        $query = "SELECT * FROM vehicles AS v INNER JOIN order_driver AS od INNER JOIN drivers AS d ON od.driver_id = d.user_id INNER JOIN orders AS o ON o.id = od.order_id WHERE v.id = :id";
+        $sth = $connection->prepare($query);
+        $sth->execute([":id" => $this->id]);
+        return $sth->fetchAll();
+    }
 }

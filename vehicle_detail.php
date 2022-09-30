@@ -42,7 +42,7 @@ $vehicle = Vehicle::find($_GET["id"]);
                                         <ol class="breadcrumb mb-0">
                                             <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "admin_dashboard.php"; ?>">Home</a></li>
                                             <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "vehicle_list.php"; ?>">Vehicle</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page"><?php echo $vehicle->make . $vehicle->make; ?></li>
+                                            <li class="breadcrumb-item active" aria-current="page"><?php echo $vehicle->make . " (" . $vehicle->registrationNo . ")"; ?></li>
                                         </ol>
                                     </nav>
                                 </div>
@@ -51,9 +51,9 @@ $vehicle = Vehicle::find($_GET["id"]);
                                 <div class="col-lg-4">
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
-                                            <p>Company</p>
-                                            <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                                            <h5 class="my-3"><?php echo $company->name; ?></h5>
+                                            <div class="mb-3"><i class="fas fa-truck fa-9x"></i></div>
+                                            <p class="h4"><?php echo $vehicle->make; ?></p>
+                                            <p class="h4"><?php echo $vehicle->registrationNo; ?></p>
                                         </div>
                                     </div>
                                     <div class="card mb-4">

@@ -3,6 +3,8 @@ include_once "./includes/utils.php";
 include_once "./includes/entity/vehicle.php";
 
 $vehicle = Vehicle::find($_GET["id"]);
+$vehicleHistory = $vehicle->history();
+$vehicleStats = $vehicle->stats();
 
 ?>
 

@@ -76,7 +76,11 @@ class Vehicle
                   FROM vehicles AS v INNER JOIN order_driver AS od ON od.vehicle_id = v.id INNER JOIN drivers AS d ON d.user_id = od.driver_id INNER JOIN orders AS o ON o.id = od.order_id WHERE v.id = :vehicle_id";
 
         $sth = $connection->prepare($query);
-        $sth->execute([]);
+        $sth->execute([
+            ":diesel_deliveries" => $this->id,
+            ":petrol_deliveries" => $this->id,
+            ":vehicle_id" => $this->id
+        ]);
         return $sth->fetch();
     }
 }

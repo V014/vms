@@ -4,9 +4,12 @@ include_once dirname(__FILE__) . "/../connection.php";
 class Order
 {
     const TABLE = "orders";
-    const COLUMNS = "o.id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date";
+    const COLUMNS = "o.id, c.user_id AS company_id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date, od.driver_id AS driver_id, od.vehicle_id";
+    const INSERT_COLS = "company_id, type_id, quantity, cost, status, order_date";
+    const PLACEHOLDERS = ":company_id, :type_id, :quantity, :cost, :status, :order_date";
 
     public $id;
+    public $userID;
     public $name;
     public $longitude;
     public $latitude;
@@ -15,10 +18,13 @@ class Order
     public $cost;
     public $status;
     public $orderDate;
+    public $driverID;
+    public $vehicleID;
 
     public function __construct($data)
     {
         $this->id = $data["id"];
+        $this->userID = $data["company_id"];
         $this->name = $data["name"];
         $this->longitude = $data["longitude"];
         $this->latitude = $data["latitude"];
@@ -27,6 +33,47 @@ class Order
         $this->cost = $data["cost"];
         $this->status = $data["status"];
         $this->orderDate = $data["order_date"];
+        $this->driverID = $data["driver_id"];
+        $this->vehicleID = $data["vehicle_id"];
+    }
+
+    /**
+     * Creates the order in the database and returns an instance
+     * of the Order class with the data filled in from the matching
+     * row
+     */
+    public static function create($order)
+    {
+        $connection = DBConnection::getConnection();
+        $params = formatParams($order);
+        $table = self::TABLE;
+        $insertCols = self::INSERT_COLS;
+        $placeholders = self::PLACEHOLDERS;
+
+        $query = "INSERT INTO {$table} ({$insertCols}) VALUES ({$placeholders})";
+        $sth = $connection->prepare($query);
+        $result = $sth->execute($params);
+
+        if (!$result) {
+            return null;
+        }
+
+        return self::find($connection->lastInsertId());
+    }
+
+    public static function find($id)
+    {
+        $table = self::TABLE;
+        $columns = self::COLUMNS;
+        $connection = DBConnection::getConnection();
+        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id INNER JOIN order_driver AS od ON od.order_id = o.id WHERE o.id = :id";
+        $sth = $connection->prepare($query);
+
+        if (!$sth->execute([":id" => $id])) {
+            return null;
+        }
+
+        return new Order($sth->fetch());
     }
 
     /*
@@ -39,7 +86,7 @@ class Order
         $table = self::TABLE;
         $columns = self::COLUMNS;
 
-        $query = "SELECT {$columns} FROM orders AS o INNER JOIN companies AS c ON c.id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id";
+        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id INNER JOIN order_driver AS od ON od.order_id = o.id ORDER BY o.order_date DESC";
         $sth = $connection->prepare($query);
 
         if ($sth->execute()) {

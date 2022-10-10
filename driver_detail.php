@@ -12,7 +12,6 @@ $details = $driver->details();
 
 ?>
 
-
 <!DOCTYPE html>
 <html>
 

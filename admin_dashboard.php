@@ -27,6 +27,8 @@ $trips = Trip::all();
 $petrolOrders = Fuel::type('petrol');
 $dieselOrders = Fuel::type('diesel');
 
+$userStats = User::stats();
+
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +59,48 @@ $dieselOrders = Fuel::type('diesel');
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-5">
                         <h3 class="text-dark mb-0">Dashboard</h3>
+                    </div>
+                    <h5>Users</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card shadow border-start-primary py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Users</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo $userStats["total_users"]; ?></span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-user fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card shadow border-start-primary py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Companies</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo $userStats["total_companies"]; ?></span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-building fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card shadow border-start-primary py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Drivers</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo $userStats["total_drivers"]; ?></span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <h5>Orders</h5>
                     <!-- Order Section -->

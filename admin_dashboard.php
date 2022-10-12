@@ -27,7 +27,7 @@ $trips = Trip::all();
 $petrolOrders = Fuel::type('petrol');
 $dieselOrders = Fuel::type('diesel');
 
-$userStats = User::stats();
+$userStats = User::totalStats();
 
 ?>
 

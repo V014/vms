@@ -135,7 +135,7 @@ class User
     {
     }
 
-    public static function stats()
+    public static function totalStats()
     {
         $connection = DBConnection::getConnection();
         $sql = "SELECT

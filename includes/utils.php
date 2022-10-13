@@ -7,7 +7,7 @@ const ADMIN_DASHBOARD = BASE_DIR . "admin_dashboard.php";
 const DRIVER_DASHBOARD = BASE_DIR . "driver_dashboard.php";
 const COMPANY_DASHBOARD = BASE_DIR . "company_dashboard.php";
 
-function rndRGBColorCode()
+function dynamicColor()
 {
     return 'rgb(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ')'; #using the inbuilt random function
 }

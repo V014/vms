@@ -1,6 +1,7 @@
 <?php
 
 include_once dirname(__FILE__) . "/../connection.php";
+include_once dirname(__FILE__) . "/../utils.php";
 class Order
 {
     const TABLE = "orders";
@@ -172,5 +173,41 @@ class Order
         $sth = $connection->prepare($sql);
         $sth->execute();
         return $sth->fetch();
+    }
+
+    public static function monthlyOrderStats()
+    {
+        $connection = DBConnection::getConnection();
+        $sql = "SELECT
+                    MONTHNAME(o.order_date) AS month,
+                    COUNT(*) AS total_orders,
+                    FORMAT(SUM(o.cost), 2) AS total_profit
+                FROM orders AS o WHERE YEAR(o.order_date) = 2022 GROUP BY MONTH(o.order_date)";
+
+        $sth = $connection->prepare($sql);
+        $sth->execute();
+        return $sth->fetchAll();
+    }
+
+    public static function parsedMonthlyOrderStats()
+    {
+        $months = [];
+        $orderCount = [];
+        $totalProfit = [];
+        $colors = [];
+
+        foreach (self::monthlyOrderStats() as $_ => $order) {
+            $months[] = $order["month"];
+            $orderCount[] = $order["total_orders"];
+            $totalProfit[] = $order["total_profit"];
+            $colors[] = dynamicColor();
+        }
+
+        return [
+            "months" => $months,
+            "orderCount" => $orderCount,
+            "totalProfit" => $totalProfit,
+            "colors" => $colors
+        ];
     }
 }

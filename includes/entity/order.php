@@ -150,4 +150,27 @@ class Order
     public static function sum()
     {
     }
+
+    public static function totalStats()
+    {
+        $connection = DBConnection::getConnection();
+        $sql = "SELECT
+                    (SELECT
+                        COUNT(*)
+                        FROM orders AS o
+                        INNER JOIN fuel_types AS ft ON o.type_id = ft.id WHERE ft.name = 'petrol') AS total_petrol_orders,
+                        (SELECT
+                        COUNT(*)
+                        FROM orders AS o
+                        INNER JOIN fuel_types AS ft ON o.type_id = ft.id WHERE ft.name = 'diesel') AS total_diesel_orders,
+                        FORMAT(SUM(o.quantity), 2) AS total_quantity,
+                        FORMAT(SUM(o.cost), 2) AS total_profit,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'pending') AS total_pending,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'delivered') AS total_delivered
+                FROM orders AS o;";
+
+        $sth = $connection->prepare($sql);
+        $sth->execute();
+        return $sth->fetch();
+    }
 }

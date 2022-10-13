@@ -2,7 +2,10 @@
 include_once "./includes/utils.php";
 include_once "./includes/entity/company.php";
 include_once "./includes/entity/order.php";
+include_once "./includes/entity/order_driver.php";
 include_once "./includes/entity/fuel.php";
+include_once "./includes/entity/vehicle.php";
+include_once "./includes/entity/driver.php";
 include_once "./includes/auth.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -30,12 +33,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ];
     }
 
-    Order::create($order);
+    $order = Order::create($order);
+
+    $orderDriver = [
+        "order_id" => $order->id,
+        "vehicle_id" => $_POST["vehicle_id"],
+        "driver_id" => $_POST["driver_id"]
+    ];
+
+    OrderDriver::create($orderDriver);
+
     redirect(BASE_DIR . "orders_list");
 }
 
 $companies = Company::all();
 $fuelTypes = Fuel::all();
+$drivers = Driver::all();
+$vehicles = Vehicle::all();
 
 $costs = [];
 
@@ -99,6 +113,32 @@ foreach ($fuelTypes as $fuelType) {
                                             foreach ($fuelTypes as $fuelType) {
                                             ?>
                                                 <option value="<?php echo $fuelType->id; ?>"><?php echo ucfirst($fuelType->name) . " (K" . $fuelType->cost . ")"; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <!-- Driver Selection -->
+                                    <div class="mb-5">
+                                        <label for="driver_id" class="form-label">Driver</label>
+                                        <select name="driver_id" class="form-select">
+                                            <?php
+                                            foreach ($drivers as $driver) {
+                                            ?>
+                                                <option value="<?php echo $driver->userID; ?>"><?php echo $driver->firstName . " " . $driver->lastName . " ( {$driver->nationalID} )"; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <!-- Vehicle Selection -->
+                                    <div class="mb-5">
+                                        <label for="vehicle_id" class="form-label">Vehicle</label>
+                                        <select name="vehicle_id" class="form-select">
+                                            <?php
+                                            foreach ($vehicles as $vehicle) {
+                                            ?>
+                                                <option value="<?php echo $vehicle->id; ?>"><?php echo $vehicle->make . "( {$vehicle->registrationNo} )"; ?></option>
                                             <?php
                                             }
                                             ?>

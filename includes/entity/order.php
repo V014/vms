@@ -1,6 +1,7 @@
 <?php
 
 include_once dirname(__FILE__) . "/../connection.php";
+include_once dirname(__FILE__) . "/../utils.php";
 class Order
 {
     const TABLE = "orders";
@@ -66,7 +67,7 @@ class Order
         $table = self::TABLE;
         $columns = self::COLUMNS;
         $connection = DBConnection::getConnection();
-        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id INNER JOIN order_driver AS od ON od.order_id = o.id WHERE o.id = :id";
+        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id LEFT JOIN order_driver AS od ON od.order_id = o.id WHERE o.id = :id";
         $sth = $connection->prepare($query);
 
         if (!$sth->execute([":id" => $id])) {
@@ -86,7 +87,7 @@ class Order
         $table = self::TABLE;
         $columns = self::COLUMNS;
 
-        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id INNER JOIN order_driver AS od ON od.order_id = o.id ORDER BY o.order_date DESC";
+        $query = "SELECT {$columns} FROM {$table} AS o INNER JOIN companies AS c ON c.user_id = o.company_id INNER JOIN fuel_types AS f ON f.id = o.type_id LEFT JOIN order_driver AS od ON od.order_id = o.id ORDER BY o.order_date DESC";
         $sth = $connection->prepare($query);
 
         if ($sth->execute()) {
@@ -149,5 +150,64 @@ class Order
 
     public static function sum()
     {
+    }
+
+    public static function totalStats()
+    {
+        $connection = DBConnection::getConnection();
+        $sql = "SELECT
+                    (SELECT
+                        COUNT(*)
+                        FROM orders AS o
+                        INNER JOIN fuel_types AS ft ON o.type_id = ft.id WHERE ft.name = 'petrol') AS total_petrol_orders,
+                        (SELECT
+                        COUNT(*)
+                        FROM orders AS o
+                        INNER JOIN fuel_types AS ft ON o.type_id = ft.id WHERE ft.name = 'diesel') AS total_diesel_orders,
+                        SUM(o.quantity) AS total_quantity,
+                        SUM(o.cost) AS total_profit,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'pending') AS total_pending,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'delivered') AS total_delivered
+                FROM orders AS o;";
+
+        $sth = $connection->prepare($sql);
+        $sth->execute();
+        return $sth->fetch();
+    }
+
+    public static function monthlyOrderStats()
+    {
+        $connection = DBConnection::getConnection();
+        $sql = "SELECT
+                    MONTHNAME(o.order_date) AS month,
+                    COUNT(*) AS total_orders,
+                    SUM(o.cost) AS total_profit
+                FROM orders AS o WHERE YEAR(o.order_date) = 2022 GROUP BY MONTH(o.order_date)";
+
+        $sth = $connection->prepare($sql);
+        $sth->execute();
+        return $sth->fetchAll();
+    }
+
+    public static function parsedMonthlyOrderStats()
+    {
+        $months = [];
+        $orderCount = [];
+        $totalProfit = [];
+        $colors = [];
+
+        foreach (self::monthlyOrderStats() as $_ => $order) {
+            $months[] = $order["month"];
+            $orderCount[] = $order["total_orders"];
+            $totalProfit[] = $order["total_profit"];
+            $colors[] = dynamicColor();
+        }
+
+        return [
+            "months" => $months,
+            "orderCount" => $orderCount,
+            "totalProfit" => $totalProfit,
+            "colors" => $colors
+        ];
     }
 }

@@ -68,7 +68,7 @@ class Driver
         $table = self::TABLE;
         $columns = self::COLUMNS;
 
-        $query = "SELECT {$columns} FROM users AS u INNER JOIN drivers AS d ON d.user_id = u.id";
+        $query = "SELECT {$columns} FROM users AS u INNER JOIN drivers AS d ON d.user_id = u.id ORDER BY u.created_at DESC";
         $sth = $connection->prepare($query);
 
         if ($sth->execute()) {
@@ -85,12 +85,12 @@ class Driver
         $connection = DBConnection::getConnection();
         $query = "SELECT
                     COUNT(o.id) AS deliveries,
-                    (SELECT COUNT(*) FROM order_driver INNER JOIN orders ON orders.id = order_driver.order_id WHERE orders.status = 'delivered' AND order_driver.driver_id = :delivered_id) AS delivered,
-                    (SELECT COUNT(*) FROM order_driver INNER JOIN orders ON orders.id = order_driver.order_id WHERE orders.status = 'pending' AND order_driver.driver_id = :pending_id) AS pending,
+                    (SELECT COUNT(*) FROM order_driver LEFT JOIN orders ON orders.id = order_driver.order_id WHERE orders.status = 'delivered' AND order_driver.driver_id = :delivered_id) AS delivered,
+                    (SELECT COUNT(*) FROM order_driver LEFT JOIN orders ON orders.id = order_driver.order_id WHERE orders.status = 'pending' AND order_driver.driver_id = :pending_id) AS pending,
                     SUM(o.quantity) AS quantity_delivered
                  FROM drivers AS d
-                 INNER JOIN order_driver AS od ON od.driver_id = d.user_id
-                 INNER JOIN orders AS o ON o.id = od.order_id
+                 LEFT JOIN order_driver AS od ON od.driver_id = d.user_id
+                 LEFT JOIN orders AS o ON o.id = od.order_id
                  WHERE d.user_id = :user_id GROUP BY d.user_id";
         $sth = $connection->prepare($query);
 

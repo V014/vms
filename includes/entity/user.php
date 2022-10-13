@@ -134,4 +134,17 @@ class User
     public static function all()
     {
     }
+
+    public static function totalStats()
+    {
+        $connection = DBConnection::getConnection();
+        $sql = "SELECT
+                    COUNT(*) AS total_users,
+                    (SELECT COUNT(*) FROM users WHERE role = 'company') AS total_companies,
+                    (SELECT COUNT(*) FROM users WHERE role = 'driver') AS total_drivers
+                FROM users;";
+        $sth = $connection->prepare($sql);
+        $sth->execute();
+        return $sth->fetch();
+    }
 }

@@ -98,7 +98,7 @@ $parsedMonthlyStats = Order::parsedMonthlyOrderStats();
                                         <div class="row align-items-center no-gutters">
                                             <div class="col me-2">
                                                 <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Expected Income (2022)</span></div>
-                                                <div class="text-dark fw-bold h5 mb-0"><span><?php echo "K" . $orderTotalStats["total_profit"]; ?></span></div>
+                                                <div class="text-dark fw-bold h5 mb-0"><span><?php echo "K" . number_format($orderTotalStats["total_profit"], 2); ?></span></div>
                                             </div>
                                             <div class="col-auto"><i class="fas fa-money-bill fa-2x text-gray-300"></i></div>
                                         </div>
@@ -111,7 +111,7 @@ $parsedMonthlyStats = Order::parsedMonthlyOrderStats();
                                         <div class="row align-items-center no-gutters">
                                             <div class="col me-2">
                                                 <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Quantity Ordered (2022)</span></div>
-                                                <div class="text-dark fw-bold h5 mb-0"><span><?php echo $orderTotalStats["total_quantity"] . "L"; ?></span></div>
+                                                <div class="text-dark fw-bold h5 mb-0"><span><?php echo number_format($orderTotalStats["total_quantity"], 2) . "L"; ?></span></div>
                                             </div>
                                             <div class="col-auto"><i class="fas fa-oil-can fa-2x text-gray-300"></i></div>
                                         </div>
@@ -268,7 +268,7 @@ $parsedMonthlyStats = Order::parsedMonthlyOrderStats();
             datasets: [{
                 label: 'Earnings',
                 data: <?php echo json_encode($parsedMonthlyStats["totalProfit"]); ?>,
-                fill: false,
+                fill: true,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1
             }]

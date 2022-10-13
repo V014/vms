@@ -164,8 +164,8 @@ class Order
                         COUNT(*)
                         FROM orders AS o
                         INNER JOIN fuel_types AS ft ON o.type_id = ft.id WHERE ft.name = 'diesel') AS total_diesel_orders,
-                        FORMAT(SUM(o.quantity), 2) AS total_quantity,
-                        FORMAT(SUM(o.cost), 2) AS total_profit,
+                        SUM(o.quantity) AS total_quantity,
+                        SUM(o.cost) AS total_profit,
                         (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'pending') AS total_pending,
                         (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'delivered') AS total_delivered
                 FROM orders AS o;";
@@ -181,7 +181,7 @@ class Order
         $sql = "SELECT
                     MONTHNAME(o.order_date) AS month,
                     COUNT(*) AS total_orders,
-                    FORMAT(SUM(o.cost), 2) AS total_profit
+                    SUM(o.cost) AS total_profit
                 FROM orders AS o WHERE YEAR(o.order_date) = 2022 GROUP BY MONTH(o.order_date)";
 
         $sth = $connection->prepare($sql);

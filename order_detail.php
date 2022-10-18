@@ -141,7 +141,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                             <hr>
                                             <div class="row">
                                                 <?php
-                                                if ($order->status === 'pending') {
+                                                if ($order->status === 'pending' && $authUser->role === 'admin') {
                                                 ?>
                                                     <div class="col-sm-3">
                                                         <p class="mb-0">Status</p>

@@ -1,5 +1,12 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/vehicle.php";
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    Vehicle::create($_POST);
+    redirect(BASE_DIR . "vehicle_list.php");
+}
 
 ?>
 

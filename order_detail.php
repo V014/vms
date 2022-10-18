@@ -132,12 +132,30 @@ $vehicle = Vehicle::find($order->vehicleID);
                                             </div>
                                             <hr>
                                             <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Status</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
-                                                </div>
+                                                <?php
+                                                if ($order->status === 'pending') {
+                                                ?>
+                                                    <div class="col-sm-3">
+                                                        <p class="mb-0">Status</p>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                                            <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
+                                                            <input type="submit" value="Mark Delivered">
+                                                        </form>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <div class="col-sm-3">
+                                                        <p class="mb-0">Status</p>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
+                                                    </div>
+                                                <?php }
+                                                ?>
                                             </div>
                                         </div>
                                     </div>

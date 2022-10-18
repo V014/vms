@@ -7,6 +7,13 @@ include_once "./includes/entity/order.php";
 include_once "./includes/entity/user.php";
 include_once "./includes/entity/vehicle.php";
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $order = Order::find($_POST["order_id"]);
+    $order->delivered();
+
+    redirect(BASE_DIR . "order_detail.php?id=" . $order->id);
+}
+
 $authUser = Auth::getUser();
 $order = Order::find($_GET["id"]);
 
@@ -17,6 +24,7 @@ $driver = Driver::find($order->driverID);
 $driverUser = User::find($driver->userID);
 
 $vehicle = Vehicle::find($order->vehicleID);
+
 
 ?>
 
@@ -144,7 +152,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                                     <div class="col-sm-3">
                                                         <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
                                                             <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
-                                                            <input type="submit" value="Mark Delivered">
+                                                            <input class="btn btn-primary" type="submit" value="MARK DELIVERED">
                                                         </form>
                                                     </div>
                                                 <?php } else { ?>

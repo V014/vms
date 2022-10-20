@@ -172,3 +172,53 @@ function navActions()
     </ul>
 <?php
 }
+
+function totalStats($id)
+{
+    $conn = DBConnection::getConnection();
+    $user = User::find($id);
+    $sql = '';
+
+    switch ($user->role) {
+        case 'company':
+            $sql = "SELECT
+                        SUM(o.quantity) AS total_quanitity,
+                        SUM(o.cost) AS total_cost,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND o.company_id = :diesel_id) AS total_diesel_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND o.company_id = :petrol_id) AS total_petrol_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND o.company_id = :paraffin_id) AS total_paraffin_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'delivered' AND o.company_id = :delivered_id) AS total_delivered,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'pending' AND o.company_id = :pending_id) AS total_pending
+                    FROM order_driver AS od
+                    LEFT JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN companies AS c ON o.company_id = c.user_id
+                    WHERE c.id = :id AND YEAR(o.order_date) > 2021";
+            break;
+        case 'driver':
+            $sql = "SELECT
+                        SUM(o.quantity) AS total_quanitity,
+                        SUM(o.cost) AS total_cost,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND od.driver_id = :diesel_id) AS total_diesel_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND od.driver_id = :petrol_id) AS total_petrol_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND od.driver_id = :paraffin_id) AS total_paraffin_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'delivered' AND od.driver_id = :delivered_id) AS total_delivered,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'pending' AND od.driver_id = :pending_id) AS total_pending
+                    FROM order_driver AS od
+                    LEFT JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN drivers AS d ON od.driver_id = d.user_id
+                    WHERE d.id = :id AND YEAR(o.order_date) > 2021";
+            break;
+    }
+
+    $sth = $conn->prepare($sql);
+    $sth->execute([
+        ':diesel_id' => $id,
+        ':petrol_id' => $id,
+        ':paraffin_id' => $id,
+        ':delivered_id' => $id,
+        ':pending_id' => $id,
+        ':id' => $id,
+    ]);
+
+    return $sth->fetch();
+}

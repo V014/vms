@@ -126,7 +126,7 @@ $monthlyStats = monthlyOrderStats($user->id);
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col me-2">
                                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Orders</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->totalOrders; ?></span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $totalStats["total_orders"]; ?></span></div>
                                                 </div>
                                                 <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
                                             </div>
@@ -139,7 +139,7 @@ $monthlyStats = monthlyOrderStats($user->id);
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col me-2">
                                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Total Spend</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo "K" . $company->totalSpend; ?></span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo "K" . number_format($totalStats["total_cost"], 2); ?></span></div>
                                                 </div>
                                                 <div class="col-auto"><i class="fas fa-money-bill fa-2x text-gray-300"></i></div>
                                             </div>
@@ -152,7 +152,7 @@ $monthlyStats = monthlyOrderStats($user->id);
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col me-2">
                                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Deliveries Fulfilled</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->countOrders("delivered"); ?></span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $totalStats["total_delivered"]; ?></span></div>
                                                 </div>
                                                 <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
                                             </div>
@@ -165,7 +165,7 @@ $monthlyStats = monthlyOrderStats($user->id);
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col me-2">
                                                     <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Deliveries Pending</span></div>
-                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $company->countOrders("pending"); ?></span></div>
+                                                    <div class="text-dark fw-bold h5 mb-0"><span><?php echo $totalStats["total_pending"]; ?></span></div>
                                                 </div>
                                                 <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
                                             </div>

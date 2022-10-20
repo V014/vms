@@ -184,6 +184,7 @@ function totalStats($id)
             $sql = "SELECT
                         SUM(o.quantity) AS total_quanitity,
                         SUM(o.cost) AS total_cost,
+                        COUNT(*) AS total_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND o.company_id = :diesel_id) AS total_diesel_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND o.company_id = :petrol_id) AS total_petrol_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND o.company_id = :paraffin_id) AS total_paraffin_orders,
@@ -198,6 +199,7 @@ function totalStats($id)
             $sql = "SELECT
                         SUM(o.quantity) AS total_quanitity,
                         SUM(o.cost) AS total_cost,
+                        COUNT(*) AS total_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND od.driver_id = :diesel_id) AS total_diesel_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND od.driver_id = :petrol_id) AS total_petrol_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND od.driver_id = :paraffin_id) AS total_paraffin_orders,

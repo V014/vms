@@ -176,6 +176,18 @@ $monthlyStats = monthlyOrderStats($user->id);
                         </div>
                     </section>
                     <!-- End Profile Section -->
+                    <div class="row">
+                        <div class="col-lg">
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="text-primary fw-bold m-0">Monthly Order Cost</h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="costChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">

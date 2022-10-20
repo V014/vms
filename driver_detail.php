@@ -6,9 +6,10 @@ include_once "./includes/entity/user.php";
 
 $authUser = Auth::getUser();
 $driver = Driver::find($_GET["id"]);
-$userDriver = User::find($driver->userID);
+$user = User::find($driver->userID);
 
-$details = $driver->details();
+$totalStats = totalStats($user->id);
+$monthlyStats = monthlyOrderStats($user->id)
 
 ?>
 
@@ -70,7 +71,7 @@ $details = $driver->details();
                                 <div class="col-lg-4">
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
-                                            <img src="<?php echo $userDriver->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                            <img src="<?php echo $user->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                                             <h5 class="my-3"><?php echo $driver->firstName; ?></h5>
                                             <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
                                             <p class="text-muted mb-1"><?php echo $driver->dob; ?></p>
@@ -94,7 +95,7 @@ $details = $driver->details();
                                                     <p class="mb-0">Email</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $userDriver->email; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $user->email; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -103,7 +104,7 @@ $details = $driver->details();
                                                     <p class="mb-0">Phone</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $userDriver->phoneNumber; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $user->phoneNumber; ?></p>
                                                 </div>
                                             </div>
                                         </div>

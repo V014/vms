@@ -6,7 +6,10 @@ include_once "./includes/entity/user.php";
 
 $authUser = Auth::getUser();
 $company = Company::find($_GET["id"]);
-$userCompany = User::find($company->userID);
+$user = User::find($company->userID);
+
+$totalStats = totalStats($user->id);
+$monthlyStats = monthlyOrderStats($user->id);
 
 ?>
 
@@ -68,7 +71,7 @@ $userCompany = User::find($company->userID);
                                 <div class="col-lg-4">
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
-                                            <img src="<?php echo $userCompany->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                            <img src="<?php echo $user->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                                             <h5 class="my-3"><?php echo $company->name; ?></h5>
                                             <p class="text-muted mb-1"><?php echo $company->established; ?></p>
                                         </div>
@@ -91,7 +94,7 @@ $userCompany = User::find($company->userID);
                                                     <p class="mb-0">Email</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $userCompany->email; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $user->email; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -100,7 +103,7 @@ $userCompany = User::find($company->userID);
                                                     <p class="mb-0">Phone</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $userCompany->phoneNumber; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $user->phoneNumber; ?></p>
                                                 </div>
                                             </div>
                                         </div>

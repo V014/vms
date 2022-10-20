@@ -222,3 +222,51 @@ function totalStats($id)
 
     return $sth->fetch();
 }
+
+function monthlyOrderStats($id)
+{
+    $monthlyStats = [];
+    $conn = DBConnection::getConnection();
+
+    $user = User::find($id);
+    $sql = '';
+
+    switch ($user->role) {
+        case 'company':
+            $sql = "SELECT
+                        MONTHNAME(o.order_date) AS month,
+                        COUNT(*) AS total_orders,
+                        SUM(o.cost) AS total_cost
+                    FROM order_driver AS od
+                    LEFT JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN companies AS c ON c.user_id = o.company_id
+                    WHERE YEAR(o.order_date) = 2022 AND
+                    c.user_id = :id
+                    GROUP BY MONTH(o.order_date)";
+            break;
+        case 'driver':
+            $sql = "SELECT
+                        MONTHNAME(o.order_date) AS month,
+                        COUNT(*) AS total_orders,
+                        SUM(o.cost) AS total_cost
+                    FROM order_driver AS od
+                    LEFT JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN drivers AS d ON d.user_id = od.driver_id
+                    WHERE YEAR(o.order_date) = 2022 AND
+                    d.user_id = :id
+                    GROUP BY MONTH(o.order_date)";
+            break;
+    }
+
+    $sth = $conn->prepare($sql);
+    $sth->execute([':id' => $id]);
+
+    foreach ($sth->fetchAll() as $stat) {
+        $monthlyStats[strtolower($stat["month"])] = [
+            "total_orders" => $stat["total_orders"],
+            "total_cost" => $stat["total_cost"],
+        ];
+    }
+
+    return $monthlyStats;
+}

@@ -193,7 +193,7 @@ function totalStats($id)
                     FROM order_driver AS od
                     LEFT JOIN orders AS o ON o.id = od.order_id
                     INNER JOIN companies AS c ON o.company_id = c.user_id
-                    WHERE c.id = :id AND YEAR(o.order_date) > 2021";
+                    WHERE c.user_id = :id AND YEAR(o.order_date) > 2021";
             break;
         case 'driver':
             $sql = "SELECT

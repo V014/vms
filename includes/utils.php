@@ -184,7 +184,7 @@ function totalStats($id)
             $sql = "SELECT
                         SUM(o.quantity) AS total_quanitity,
                         SUM(o.cost) AS total_cost,
-                        COUNT(*) AS total_orders,
+                        (SELECT COUNT(*) FROM orders WHERE company_id = :total_orders_id) AS total_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND o.company_id = :diesel_id) AS total_diesel_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND o.company_id = :petrol_id) AS total_petrol_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND o.company_id = :paraffin_id) AS total_paraffin_orders,
@@ -199,7 +199,7 @@ function totalStats($id)
             $sql = "SELECT
                         SUM(o.quantity) AS total_quanitity,
                         SUM(o.cost) AS total_cost,
-                        COUNT(*) AS total_orders,
+                        (SELECT COUNT(*) FROM orders WHERE company_id = :total_orders_id) AS total_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND od.driver_id = :diesel_id) AS total_diesel_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND od.driver_id = :petrol_id) AS total_petrol_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND od.driver_id = :paraffin_id) AS total_paraffin_orders,
@@ -208,12 +208,13 @@ function totalStats($id)
                     FROM order_driver AS od
                     LEFT JOIN orders AS o ON o.id = od.order_id
                     INNER JOIN drivers AS d ON od.driver_id = d.user_id
-                    WHERE d.id = :id AND YEAR(o.order_date) > 2021";
+                    WHERE d.user_id = :id AND YEAR(o.order_date) > 2021";
             break;
     }
 
     $sth = $conn->prepare($sql);
     $sth->execute([
+        ':total_orders_id' => $id,
         ':diesel_id' => $id,
         ':petrol_id' => $id,
         ':paraffin_id' => $id,

@@ -23,6 +23,7 @@ $monthlyStats = monthlyOrderStats($user->id);
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -200,6 +201,36 @@ $monthlyStats = monthlyOrderStats($user->id);
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script>
+        <?php $months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]; ?>
+
+        let data = {
+            labels: <?php echo json_encode(array_map(function ($month) {
+                        return ucfirst($month);
+                    }, $months)); ?>,
+            datasets: [{
+                label: 'Monthly Order Spend (K)',
+                data: <?php
+                        echo json_encode(array_map(function ($month) {
+                            global $monthlyStats;
+                            return array_key_exists($month, $monthlyStats) ? $monthlyStats[$month]["total_cost"] : 0;
+                        }, $months)); ?>,
+                fill: true,
+                borderColor: '<?php echo dynamicColor(); ?>',
+                tension: 0.1
+            }]
+        };
+
+        let config = {
+            type: 'line',
+            data: data,
+        };
+
+        new Chart(
+            document.getElementById('costChart'),
+            config
+        );
+    </script>
 </body>
 
 </html>

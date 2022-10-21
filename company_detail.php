@@ -177,6 +177,7 @@ $monthlyStats = monthlyOrderStats($user->id);
                         </div>
                     </section>
                     <!-- End Profile Section -->
+                    <!-- Start Monthly Cost Chart -->
                     <div class="row">
                         <div class="col-lg">
                             <div class="card shadow mb-4">
@@ -186,6 +187,41 @@ $monthlyStats = monthlyOrderStats($user->id);
                                 <div class="card-body">
                                     <canvas id="costChart"></canvas>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Monthly Cost Chart -->
+                <div class="row">
+                    <div class="col-lg-5 col-xl-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Fuel Types Ordered</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="fuelTypesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-xl-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary fw-bold m-0">Orders Overview</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="totalOrdersChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -228,6 +264,63 @@ $monthlyStats = monthlyOrderStats($user->id);
 
         new Chart(
             document.getElementById('costChart'),
+            config
+        );
+
+        data = {
+            labels: <?php echo json_encode(array_map(function ($month) {
+                        return ucfirst($month);
+                    }, $months)); ?>,
+            datasets: [{
+                label: 'Orders',
+                data: <?php
+                        echo json_encode(array_map(function ($month) {
+                            global $monthlyStats;
+                            return array_key_exists($month, $monthlyStats) ? $monthlyStats[$month]["total_orders"] : 0;
+                        }, $months)); ?>,
+                borderWidth: 1,
+                backgroundColor: <?php echo json_encode(array_map(function () {
+                                        return dynamicColor();
+                                    }, $months)); ?>
+            }]
+        };
+
+        config = {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+        };
+
+        new Chart(
+            document.getElementById('totalOrdersChart'),
+            config
+        );
+
+        data = {
+            labels: ['Petrol', 'Diesel', 'Paraffin'],
+            datasets: [{
+                label: 'Fuel Orders',
+                backgroundColor: ["<?php echo dynamicColor(); ?>", "<?php echo dynamicColor(); ?>", "<?php echo dynamicColor(); ?>"],
+                data: [<?php echo $totalStats["total_petrol_orders"]; ?>, <?php echo $totalStats["total_diesel_orders"]; ?>, <?php echo $totalStats["total_paraffin_orders"]; ?>],
+                hoverOffSet: 4,
+            }]
+        };
+
+        config = {
+            type: 'pie',
+            data: data,
+            options: {}
+        };
+
+
+        new Chart(
+            document.getElementById('fuelTypesChart'),
             config
         );
     </script>

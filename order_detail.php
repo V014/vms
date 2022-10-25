@@ -96,14 +96,14 @@ $vehicle = Vehicle::find($order->vehicleID);
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
                                             <p>Company</p>
-                                            <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                            <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
                                             <h5 class="my-3"><?php echo $company->name; ?></h5>
                                         </div>
                                     </div>
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
                                             <p>Driver</p>
-                                            <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                            <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
                                             <h5 class="my-3"><?php echo $driver->firstName . " " . $driver->lastName; ?></h5>
                                             <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
                                         </div>

@@ -182,7 +182,7 @@ function totalStats($id)
     switch ($user->role) {
         case 'company':
             $sql = "SELECT
-                        SUM(o.quantity) AS total_quanitity,
+                        SUM(o.quantity) AS total_quantity,
                         SUM(o.cost) AS total_cost,
                         (SELECT COUNT(*) FROM orders WHERE company_id = :total_orders_id) AS total_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND o.company_id = :diesel_id) AS total_diesel_orders,
@@ -197,7 +197,7 @@ function totalStats($id)
             break;
         case 'driver':
             $sql = "SELECT
-                        SUM(o.quantity) AS total_quanitity,
+                        SUM(o.quantity) AS total_quantity,
                         SUM(o.cost) AS total_cost,
                         (SELECT COUNT(*) FROM orders WHERE company_id = :total_orders_id) AS total_orders,
                         (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND od.driver_id = :diesel_id) AS total_diesel_orders,

@@ -273,3 +273,35 @@ function monthlyOrderStats($id)
 
     return $monthlyStats;
 }
+
+function totalVehicleStats($id)
+{
+    $conn = DBConnection::getConnection();
+
+    $sql = "SELECT
+                SUM(o.quantity) AS total_quantity,
+                SUM(o.cost) AS total_cost,
+                (SELECT COUNT(*) FROM order_driver WHERE driver_id = 7) AS total_orders,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND od.driver_id = 7) AS total_diesel_orders,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND od.driver_id = 7) AS total_petrol_orders,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND od.driver_id = 7) AS total_paraffin_orders,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'delivered' AND od.driver_id = 7) AS total_delivered,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'pending' AND od.driver_id = 7) AS total_pending
+            FROM order_driver AS od
+            LEFT JOIN orders AS o ON o.id = od.order_id
+            INNER JOIN drivers AS d ON od.driver_id = d.id
+            WHERE od.driver_id = 7 AND YEAR(o.order_date) > 2021";
+
+    $sth = $conn->prepare($sql);
+    $sth->execute([
+        ':total_orders_id' => $id,
+        ':diesel_id' => $id,
+        ':petrol_id' => $id,
+        ':paraffin_id' => $id,
+        ':delivered_id' => $id,
+        ':pending_id' => $id,
+        ':id' => $id,
+    ]);
+
+    return $sth->fetch();
+}

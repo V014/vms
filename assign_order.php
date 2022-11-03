@@ -44,7 +44,10 @@ $order = Order::find($_GET["id"]);
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-1">Blank Page</h3>
+                    <div class="row">
+                        <div class="col-8"></div>
+                        <div class="col-4"></div>
+                    </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">

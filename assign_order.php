@@ -1,6 +1,14 @@
 <?php
 include_once "./includes/utils.php";
 
+/*
+ * If post request, extract post data such as the order id and the id of the driver
+ * The ids are used to create the order driver entry in the vms database. Ensuring
+ * The order that the company has placed is given the correct driver to execute
+ */
+if ($_REQUEST["METHOD"] === "POST") {
+}
+
 ?>
 
 

@@ -1,5 +1,6 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/order.php";
 
 /*
  * If post request, extract post data such as the order id and the id of the driver
@@ -7,10 +8,15 @@ include_once "./includes/utils.php";
  * The order that the company has placed is given the correct driver to execute
  */
 if ($_REQUEST["METHOD"] === "POST") {
+    $orderID = $_POST["order_id"];
+    $driverID = $_POST["driver_id"];
+    $vehicleID = $_POST["vehicle_id"];
 }
 
-?>
+// Retrieve id of the order to assign a driver and vehicle to
+$order = Order::find($_GET["id"]);
 
+?>
 
 <!DOCTYPE html>
 <html>

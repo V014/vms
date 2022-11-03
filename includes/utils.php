@@ -305,3 +305,30 @@ function totalVehicleStats($id)
 
     return $sth->fetch();
 }
+
+/**
+ * Returns a boolean result after querying the database checking if the order
+ * has been assigned a driver and vehicle
+ */
+function isAssigned($id)
+{
+    $conn = DBConnection::getConnection();
+
+    // Query to find the id of the order in the order_driver table, if found
+    // then order has been assigned driver otherwise it has not
+    $sql = "SELECT
+                o.id
+            FROM order_driver AS od
+            INNER JOIN orders AS o ON o.id = od.order_id
+            WHERE o.id = :id";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([":id" => $id]);
+    $result = $stmt->fetch();
+
+    if (!is_array($result)) {
+        return false;
+    }
+
+    return true;
+}

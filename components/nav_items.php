@@ -15,13 +15,13 @@ switch ($user->role) {
         break;
     case 'driver': ?>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/driver_dashboard/", $currentPage) == 1 ? "active" : "" ?>" href="index.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-        <li class="nav-item"><a class="nav-link <?php echo preg_match("/orders_list/", $currentPage) == 1 ? "active" : "" ?>" href="orders_list.php"><i class="fas fa-truck"></i><span>Orders</span></a></li>
+        <li class="nav-item"><a class="nav-link <?php echo preg_match("/user_orders/", $currentPage) == 1 ? "active" : "" ?>" href="user_orders.php"><i class="fas fa-truck"></i><span>Orders</span></a></li>
     <?php
         break;
     case 'company':
     ?>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/company_dashboard/", $currentPage) == 1 ? "active" : "" ?>" href="index.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-        <li class="nav-item"><a class="nav-link <?php echo preg_match("/orders_list/", $currentPage) == 1 ? "active" : "" ?>" href="orders_list.php"><i class="fas fa-truck"></i><span>Orders</span></a></li>
+        <li class="nav-item"><a class="nav-link <?php echo preg_match("/user_orders/", $currentPage) == 1 ? "active" : "" ?>" href="user_orders.php"><i class="fas fa-truck"></i><span>Orders</span></a></li>
 <?php
         break;
 }

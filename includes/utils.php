@@ -332,3 +332,22 @@ function isAssigned($id)
 
     return true;
 }
+
+/**
+ * Retrieves orders for the logged in user, based on role will either return
+ * orders for drivers or company
+ */
+function findUserOrders()
+{
+    $user = Auth::getUser();
+    $orders = [];
+
+    switch ($user->role) {
+        case 'company':
+            break;
+        case 'driver':
+            break;
+    }
+
+    return $orders;
+}

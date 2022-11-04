@@ -339,14 +339,43 @@ function isAssigned($id)
  */
 function findUserOrders()
 {
-    $user = Auth::getUser();
+    $conn = DBConnection::getConnection();
     $orders = [];
+    $sql = "";
+    $user = Auth::getUser();
 
     switch ($user->role) {
         case 'company':
+            $sql = "SELECT
+                        o.id,
+                        c.id AS company_id,
+                        c.name,
+                        ST_X(c.location) AS longitude,
+                        ST_Y(c.location) AS latitude,
+                        ft.name,
+                        o.quantity,
+                        o.cost,
+                        o.status,
+                        o.order_date,
+                        od.driver_id,
+                        od.vehicle_id
+                    FROM orders AS o
+                    INNER JOIN companies AS c ON c.user_id = o.company_id
+                    INNER JOIN fuel_types AS ft ON ft.id = o.type_id
+                    LEFT JOIN order_driver AS od ON od.order_id = o.id
+                    WHERE c.user_id = :id";
             break;
         case 'driver':
+            $sql = "";
             break;
+    }
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([":id" => $user->id]);
+    $result = $stmt->fetchAll();
+
+    foreach ($result as $order) {
+        $orders[] = new Order($order);
     }
 
     return $orders;

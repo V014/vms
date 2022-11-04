@@ -1,6 +1,7 @@
 <?php
 
 include_once dirname(__FILE__) . "/auth.php";
+include_once dirname(__FILE__) . "/entity/order.php";
 
 const BASE_DIR = "http://localhost/vms/";
 const ADMIN_DASHBOARD = BASE_DIR . "admin_dashboard.php";
@@ -352,7 +353,7 @@ function findUserOrders()
                         c.name,
                         ST_X(c.location) AS longitude,
                         ST_Y(c.location) AS latitude,
-                        ft.name,
+                        ft.name AS fuel_name,
                         o.quantity,
                         o.cost,
                         o.status,

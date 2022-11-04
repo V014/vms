@@ -367,7 +367,24 @@ function findUserOrders()
                     WHERE c.user_id = :id";
             break;
         case 'driver':
-            $sql = "";
+            $sql = "SELECT
+                        o.id,
+                        c.id AS company_id,
+                        c.name,
+                        ST_X(c.location) AS longitude,
+                        ST_Y(c.location) AS latitude,
+                        ft.name AS fuel_name,
+                        o.quantity,
+                        o.cost,
+                        o.status,
+                        o.order_date,
+                        od.driver_id,
+                        od.vehicle_id
+                    FROM order_driver AS od
+                    INNER JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN companies AS c ON c.user_id = o.company_id
+                    INNER JOIN fuel_types AS ft ON ft.id = o.type_id
+                    WHERE od.driver_id = :id";
             break;
     }
 

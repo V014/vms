@@ -11,7 +11,6 @@ include_once "./includes/auth.php";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fuel = Fuel::find($_POST["type_id"]);
     $user = Auth::getUser();
-    $order = [];
 
     if ($user->role === "admin") {
         $order = [
@@ -22,6 +21,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "status" => "pending",
             "order_date" => date("Y/m/d", strtotime("today")),
         ];
+
+        $order = Order::create($order);
+
+        $orderDriver = [
+            "order_id" => $order->id,
+            "vehicle_id" => $_POST["vehicle_id"],
+            "driver_id" => $_POST["driver_id"]
+        ];
+
+        OrderDriver::create($orderDriver);
+
+        redirect(BASE_DIR . "orders_list");
     } elseif ($user->role === "company") {
         $order = [
             "company_id" => $user->id,
@@ -31,19 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "status" => "pending",
             "order_date" => date("Y/m/d", strtotime("today")),
         ];
+
+        Order::create($order);
+
+        redirect(BASE_DIR . "user_orders");
     }
-
-    $order = Order::create($order);
-
-    $orderDriver = [
-        "order_id" => $order->id,
-        "vehicle_id" => $_POST["vehicle_id"],
-        "driver_id" => $_POST["driver_id"]
-    ];
-
-    OrderDriver::create($orderDriver);
-
-    redirect(BASE_DIR . "orders_list");
 }
 
 $companies = Company::all();

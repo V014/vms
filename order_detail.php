@@ -133,7 +133,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                                     <p class="mb-0">Vehicle Registration Number</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $vehicle->registrationNo; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $vehicle->registrationNo ? $vehicle->registrationNo : "N/A"; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -142,7 +142,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                                     <p class="mb-0">Vehicle Make</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $vehicle->make; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $vehicle->make ? $vehicle->make : "N/A"; ?></p>
                                                 </div>
                                             </div>
                                             <hr>

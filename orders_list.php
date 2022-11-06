@@ -76,7 +76,7 @@ $orders = Order::all();
                                                 <td><?php echo $order->orderDate; ?></td>
                                                 <td><a href="order_detail.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
                                                 <?php if (!isAssigned($order->id)) { ?>
-                                                    <td><a href="assign_order.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">Assign Driver</button></a></td>
+                                                    <td><a href="assign_order.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-primary">Assign Driver</button></a></td>
                                                 <?php } else { ?>
                                                     <td></td>
                                                 <?php } ?>

@@ -113,7 +113,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                         <div class="card mb-4">
                                             <div class="card-body text-center">
                                                 <p>Driver</p>
-                                                <a class="btn btn-primary" href="assign_order.php?id=<?php echo $order->id; ?>">Assign Order</a>
+                                                <a class="btn btn-primary" href="assign_order.php?id=<?php echo $order->id; ?>">Assign Driver</a>
                                             </div>
                                         </div>
                                     <?php } else { ?>

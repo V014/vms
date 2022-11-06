@@ -76,10 +76,10 @@ $orders = findUserOrders();
                                                 <td><?php echo ucfirst($order->status); ?></td>
                                                 <td><?php echo $order->orderDate; ?></td>
                                                 <td><a href="order_detail.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
-                                                <?php if (!isAssigned($order->id) && $user->role === "admin") { ?>
-                                                    <td><a href="assign_order.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">Assign Driver</button></a></td>
+                                                <?php if (!isAssigned($order->id)) { ?>
+                                                    <td class="btn">Assignment Pending</td>
                                                 <?php } else { ?>
-                                                    <td>Assignment Pending</td>
+                                                    <td></td>
                                                 <?php } ?>
                                             </tr>
                                         <?php

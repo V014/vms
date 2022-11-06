@@ -5,6 +5,7 @@ include_once "./includes/entity/company.php";
 include_once "./includes/entity/vehicle.php";
 include_once "./includes/entity/driver.php";
 include_once "./includes/entity/user.php";
+include_once "./includes/entity/order_driver.php";
 
 /*
  * If post request, extract post data such as the order id and the id of the driver
@@ -12,9 +13,14 @@ include_once "./includes/entity/user.php";
  * The order that the company has placed is given the correct driver to execute
  */
 if ($_REQUEST["METHOD"] === "POST") {
-    $orderID = $_POST["order_id"];
-    $driverID = $_POST["driver_id"];
-    $vehicleID = $_POST["vehicle_id"];
+    $orderDriver = [
+        "order_id" => $_POST["order_id"],
+        "driver_id" => $_POST["driver_id"],
+        "vehicle_id" => $_POST["vehicle_id"]
+    ];
+
+    OrderDriver::create($orderDriver);
+    redirect(BASE_DIR . "order_detail.php?id=" . $_POST["order_id"]);
 }
 
 // Retrieve id of the order to assign a driver and vehicle to

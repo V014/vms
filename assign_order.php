@@ -114,6 +114,17 @@ $vehicles = Vehicle::all();
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Assign Driver & Vehicle</h6>
+                                    <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">

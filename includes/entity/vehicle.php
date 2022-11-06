@@ -4,6 +4,8 @@ class Vehicle
 {
     const TABLE = "vehicles";
     const COLUMNS = "id, registration_no, make, year, capacity";
+    const INSERT_COLS = "registration_no, make, year, capacity";
+    const PLACEHOLDERS = ":registration_no, :make, :year, :capacity";
 
     public $id;
     public $registrationNo;
@@ -54,6 +56,26 @@ class Vehicle
         }
 
         return new Vehicle($sth->fetch());
+    }
+
+    public static function create($vehicle)
+    {
+        $conn = DBConnection::getConnection();
+        $params = formatParams($vehicle);
+        $vehicleTable = self::TABLE;
+        $insertCols = self::INSERT_COLS;
+        $placeholders = self::PLACEHOLDERS;
+
+        $sql = "INSERT INTO {$vehicleTable} ({$insertCols}) VALUES ({$placeholders})";
+
+        $sth = $conn->prepare($sql);
+        $result = $sth->execute($params);
+
+        if (!$result) {
+            return null;
+        }
+
+        return self::find($conn->lastInsertId());
     }
 
     public function history()

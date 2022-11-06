@@ -210,4 +210,18 @@ class Order
             "colors" => $colors
         ];
     }
+
+    public function delivered()
+    {
+        $conn = DBConnection::getConnection();
+        $sql = "UPDATE orders SET status = 'delivered' WHERE id = :id";
+
+        $sth = $conn->prepare($sql);
+        $sth->execute([":id" => $this->id]);
+
+        $sql = "DELETE FROM orders WHERE order_id = :order_id";
+
+        $sth = $conn->prepare($sql);
+        $sth->execute([":order_id" => $this->id]);
+    }
 }

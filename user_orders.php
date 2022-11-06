@@ -1,8 +1,9 @@
 <?php
 include_once "./includes/utils.php";
-include_once "./includes/entity/order.php";
+include_once "./includes/auth.php";
 
-$orders = Order::all();
+$user = Auth::getUser();
+$orders = findUserOrders();
 
 ?>
 
@@ -76,7 +77,7 @@ $orders = Order::all();
                                                 <td><?php echo $order->orderDate; ?></td>
                                                 <td><a href="order_detail.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
                                                 <?php if (!isAssigned($order->id)) { ?>
-                                                    <td><a href="assign_order.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-primary">Assign Driver</button></a></td>
+                                                    <td class="btn">Assignment Pending</td>
                                                 <?php } else { ?>
                                                     <td></td>
                                                 <?php } ?>

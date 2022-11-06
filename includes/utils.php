@@ -1,6 +1,7 @@
 <?php
 
 include_once dirname(__FILE__) . "/auth.php";
+include_once dirname(__FILE__) . "/entity/order.php";
 
 const BASE_DIR = "http://localhost/vms/";
 const ADMIN_DASHBOARD = BASE_DIR . "admin_dashboard.php";
@@ -171,4 +172,230 @@ function navActions()
         </li>
     </ul>
 <?php
+}
+
+function totalStats($id)
+{
+    $conn = DBConnection::getConnection();
+    $user = User::find($id);
+    $sql = '';
+
+    switch ($user->role) {
+        case 'company':
+            $sql = "SELECT
+                        SUM(o.quantity) AS total_quantity,
+                        SUM(o.cost) AS total_cost,
+                        (SELECT COUNT(*) FROM orders WHERE company_id = :total_orders_id) AS total_orders,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.type_id = 2 AND o.company_id = :diesel_id) AS total_diesel_orders,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.type_id = 3 AND o.company_id = :petrol_id) AS total_petrol_orders,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.type_id = 1 AND o.company_id = :paraffin_id) AS total_paraffin_orders,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'delivered' AND o.company_id = :delivered_id) AS total_delivered,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'pending' AND o.company_id = :pending_id) AS total_pending
+                    FROM orders AS o
+                    INNER JOIN companies AS c ON o.company_id = c.user_id
+                    WHERE c.user_id = :id AND YEAR(o.order_date) > 2021";
+            break;
+        case 'driver':
+            $sql = "SELECT
+                        SUM(o.quantity) AS total_quantity,
+                        SUM(o.cost) AS total_cost,
+                        (SELECT COUNT(*) FROM orders WHERE company_id = :total_orders_id) AS total_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND od.driver_id = :diesel_id) AS total_diesel_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND od.driver_id = :petrol_id) AS total_petrol_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND od.driver_id = :paraffin_id) AS total_paraffin_orders,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'delivered' AND od.driver_id = :delivered_id) AS total_delivered,
+                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'pending' AND od.driver_id = :pending_id) AS total_pending
+                    FROM order_driver AS od
+                    LEFT JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN drivers AS d ON od.driver_id = d.user_id
+                    WHERE d.user_id = :id AND YEAR(o.order_date) > 2021";
+            break;
+    }
+
+    $sth = $conn->prepare($sql);
+    $sth->execute([
+        ':total_orders_id' => $id,
+        ':diesel_id' => $id,
+        ':petrol_id' => $id,
+        ':paraffin_id' => $id,
+        ':delivered_id' => $id,
+        ':pending_id' => $id,
+        ':id' => $id,
+    ]);
+
+    return $sth->fetch();
+}
+
+function monthlyOrderStats($id)
+{
+    $monthlyStats = [];
+    $conn = DBConnection::getConnection();
+
+    $user = User::find($id);
+    $sql = '';
+
+    switch ($user->role) {
+        case 'company':
+            $sql = "SELECT
+                        MONTHNAME(o.order_date) AS month,
+                        COUNT(*) AS total_orders,
+                        SUM(o.cost) AS total_cost
+                    FROM order_driver AS od
+                    LEFT JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN companies AS c ON c.user_id = o.company_id
+                    WHERE YEAR(o.order_date) = 2022 AND
+                    c.user_id = :id
+                    GROUP BY MONTH(o.order_date)";
+            break;
+        case 'driver':
+            $sql = "SELECT
+                        MONTHNAME(o.order_date) AS month,
+                        COUNT(*) AS total_orders,
+                        SUM(o.cost) AS total_cost
+                    FROM order_driver AS od
+                    LEFT JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN drivers AS d ON d.user_id = od.driver_id
+                    WHERE YEAR(o.order_date) = 2022 AND
+                    d.user_id = :id
+                    GROUP BY MONTH(o.order_date)";
+            break;
+    }
+
+    $sth = $conn->prepare($sql);
+    $sth->execute([':id' => $id]);
+
+    foreach ($sth->fetchAll() as $stat) {
+        $monthlyStats[strtolower($stat["month"])] = [
+            "total_orders" => $stat["total_orders"],
+            "total_cost" => $stat["total_cost"],
+        ];
+    }
+
+    return $monthlyStats;
+}
+
+function totalVehicleStats($id)
+{
+    $conn = DBConnection::getConnection();
+
+    $sql = "SELECT
+                SUM(o.quantity) AS total_quantity,
+                SUM(o.cost) AS total_cost,
+                (SELECT COUNT(*) FROM order_driver WHERE driver_id = 7) AS total_orders,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND od.driver_id = 7) AS total_diesel_orders,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND od.driver_id = 7) AS total_petrol_orders,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND od.driver_id = 7) AS total_paraffin_orders,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'delivered' AND od.driver_id = 7) AS total_delivered,
+                (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'pending' AND od.driver_id = 7) AS total_pending
+            FROM order_driver AS od
+            LEFT JOIN orders AS o ON o.id = od.order_id
+            INNER JOIN drivers AS d ON od.driver_id = d.id
+            WHERE od.driver_id = 7 AND YEAR(o.order_date) > 2021";
+
+    $sth = $conn->prepare($sql);
+    $sth->execute([
+        ':total_orders_id' => $id,
+        ':diesel_id' => $id,
+        ':petrol_id' => $id,
+        ':paraffin_id' => $id,
+        ':delivered_id' => $id,
+        ':pending_id' => $id,
+        ':id' => $id,
+    ]);
+
+    return $sth->fetch();
+}
+
+/**
+ * Returns a boolean result after querying the database checking if the order
+ * has been assigned a driver and vehicle
+ */
+function isAssigned($id)
+{
+    $conn = DBConnection::getConnection();
+
+    // Query to find the id of the order in the order_driver table, if found
+    // then order has been assigned driver otherwise it has not
+    $sql = "SELECT
+                o.id
+            FROM order_driver AS od
+            INNER JOIN orders AS o ON o.id = od.order_id
+            WHERE o.id = :id";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([":id" => $id]);
+    $result = $stmt->fetch();
+
+    if (!is_array($result)) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Retrieves orders for the logged in user, based on role will either return
+ * orders for drivers or company
+ */
+function findUserOrders()
+{
+    $conn = DBConnection::getConnection();
+    $orders = [];
+    $sql = "";
+    $user = Auth::getUser();
+
+    switch ($user->role) {
+        case 'company':
+            $sql = "SELECT
+                        o.id,
+                        c.id AS company_id,
+                        c.name,
+                        ST_X(c.location) AS longitude,
+                        ST_Y(c.location) AS latitude,
+                        ft.name AS fuel_name,
+                        o.quantity,
+                        o.cost,
+                        o.status,
+                        o.order_date,
+                        od.driver_id,
+                        od.vehicle_id
+                    FROM orders AS o
+                    INNER JOIN companies AS c ON c.user_id = o.company_id
+                    INNER JOIN fuel_types AS ft ON ft.id = o.type_id
+                    LEFT JOIN order_driver AS od ON od.order_id = o.id
+                    WHERE c.user_id = :id
+                    ORDER BY o.order_date DESC";
+            break;
+        case 'driver':
+            $sql = "SELECT
+                        o.id,
+                        c.id AS company_id,
+                        c.name,
+                        ST_X(c.location) AS longitude,
+                        ST_Y(c.location) AS latitude,
+                        ft.name AS fuel_name,
+                        o.quantity,
+                        o.cost,
+                        o.status,
+                        o.order_date,
+                        od.driver_id,
+                        od.vehicle_id
+                    FROM order_driver AS od
+                    INNER JOIN orders AS o ON o.id = od.order_id
+                    INNER JOIN companies AS c ON c.user_id = o.company_id
+                    INNER JOIN fuel_types AS ft ON ft.id = o.type_id
+                    WHERE od.driver_id = :id
+                    ORDER BY o.order_date DESC";
+            break;
+    }
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([":id" => $user->id]);
+    $result = $stmt->fetchAll();
+
+    foreach ($result as $order) {
+        $orders[] = new Order($order);
+    }
+
+    return $orders;
 }

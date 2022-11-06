@@ -7,6 +7,13 @@ include_once "./includes/entity/order.php";
 include_once "./includes/entity/user.php";
 include_once "./includes/entity/vehicle.php";
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $order = Order::find($_POST["order_id"]);
+    $order->delivered();
+
+    redirect(BASE_DIR . "order_detail.php?id=" . $order->id);
+}
+
 $authUser = Auth::getUser();
 $order = Order::find($_GET["id"]);
 
@@ -17,6 +24,7 @@ $driver = Driver::find($order->driverID);
 $driverUser = User::find($driver->userID);
 
 $vehicle = Vehicle::find($order->vehicleID);
+
 
 ?>
 
@@ -66,7 +74,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                         ?>
                                             <ol class="breadcrumb mb-0">
                                                 <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "company_dashboard.php"; ?>">Home</a></li>
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Orders</a></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "user_orders.php"; ?>">Orders</a></li>
                                                 <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
                                             </ol>
                                         <?php
@@ -74,7 +82,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                         ?>
                                             <ol class="breadcrumb mb-0">
                                                 <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "driver_dashboard.php"; ?>">Home</a></li>
-                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Order</a></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "user_orders.php"; ?>">Orders</a></li>
                                                 <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
                                             </ol>
                                         <?php
@@ -88,18 +96,34 @@ $vehicle = Vehicle::find($order->vehicleID);
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
                                             <p>Company</p>
-                                            <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                            <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
                                             <h5 class="my-3"><?php echo $company->name; ?></h5>
                                         </div>
                                     </div>
-                                    <div class="card mb-4">
-                                        <div class="card-body text-center">
-                                            <p>Driver</p>
-                                            <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                                            <h5 class="my-3"><?php echo $driver->firstName . " " . $driver->lastName; ?></h5>
-                                            <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
+                                    <?php if (isAssigned($order->id)) { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
+                                                <h5 class="my-3"><?php echo $driver->firstName . " " . $driver->lastName; ?></h5>
+                                                <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    <?php } elseif (!isAssigned($order->id) && $authUser->role === "admin") { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <a class="btn btn-primary" href="assign_order.php?id=<?php echo $order->id; ?>">Assign Driver</a>
+                                            </div>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <p>Not assigned</p>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="card mb-4">
@@ -109,7 +133,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                                     <p class="mb-0">Vehicle Registration Number</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $vehicle->registrationNo; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $vehicle->registrationNo ? $vehicle->registrationNo : "N/A"; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -118,7 +142,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                                                     <p class="mb-0">Vehicle Make</p>
                                                 </div>
                                                 <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo $vehicle->make; ?></p>
+                                                    <p class="text-muted mb-0"><?php echo $vehicle->make ? $vehicle->make : "N/A"; ?></p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -132,12 +156,34 @@ $vehicle = Vehicle::find($order->vehicleID);
                                             </div>
                                             <hr>
                                             <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Status</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
-                                                </div>
+                                                <?php
+                                                if ($order->status === 'pending' && $authUser->role === 'admin') {
+                                                ?>
+                                                    <div class="col-sm-3">
+                                                        <p class="mb-0">Status</p>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
+                                                    </div>
+                                                    <?php if (isAssigned($order->id)) { ?>
+                                                        <div class="col-sm-3">
+                                                            <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                                                <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
+                                                                <input class="btn btn-primary" type="submit" value="MARK DELIVERED">
+                                                            </form>
+                                                        </div>
+                                                    <?php } else { ?>
+                                                        <div class="col-sm-3"></div>
+                                                    <?php } ?>
+                                                <?php } else { ?>
+                                                    <div class="col-sm-3">
+                                                        <p class="mb-0">Status</p>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
+                                                    </div>
+                                                <?php }
+                                                ?>
                                             </div>
                                         </div>
                                     </div>

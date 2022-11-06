@@ -1,8 +1,38 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/order.php";
+include_once "./includes/entity/company.php";
+include_once "./includes/entity/vehicle.php";
+include_once "./includes/entity/driver.php";
+include_once "./includes/entity/user.php";
+include_once "./includes/entity/order_driver.php";
+
+/*
+ * If post request, extract post data such as the order id and the id of the driver
+ * The ids are used to create the order driver entry in the vms database. Ensuring
+ * The order that the company has placed is given the correct driver to execute
+ */
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $orderDriver = [
+        "order_id" => $_POST["order_id"],
+        "driver_id" => $_POST["driver_id"],
+        "vehicle_id" => $_POST["vehicle_id"]
+    ];
+
+    OrderDriver::create($orderDriver);
+    redirect(BASE_DIR . "order_detail.php?id=" . $_POST["order_id"]);
+}
+
+// Retrieve id of the order to assign a driver and vehicle to
+$order = Order::find($_GET["id"]);
+$company = Company::find($order->userID);
+$companyUser = User::find($company->userID);
+
+
+$drivers = Driver::all();
+$vehicles = Vehicle::all();
 
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -30,7 +60,106 @@ include_once "./includes/utils.php";
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-1">Blank Page</h3>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <p>Company</p>
+                                    <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
+                                    <h5 class="my-3"><?php echo $company->name; ?></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Fuel Type</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0"><?php echo ucfirst($order->fuelName); ?></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Quantity</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0"><?php echo $order->quantity; ?></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Cost</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0"><?php echo $order->cost; ?></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Status</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Order Date</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0"><?php echo ucfirst($order->orderDate); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Assign Driver & Vehicle</h6>
+                                    <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                        <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
+                                        <!-- Driver Selection -->
+                                        <div class="mb-5">
+                                            <label for="driver_id" class="form-label">Driver</label>
+                                            <select name="driver_id" class="form-select">
+                                                <?php
+                                                foreach ($drivers as $driver) {
+                                                ?>
+                                                    <option value="<?php echo $driver->userID; ?>"><?php echo $driver->firstName . " " . $driver->lastName . " ( {$driver->nationalID} )"; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <!-- Vehicle Selection -->
+                                        <div class="mb-5">
+                                            <label for="vehicle_id" class="form-label">Vehicle</label>
+                                            <select name="vehicle_id" class="form-select">
+                                                <?php
+                                                foreach ($vehicles as $vehicle) {
+                                                ?>
+                                                    <option value="<?php echo $vehicle->id; ?>"><?php echo $vehicle->make . "( {$vehicle->registrationNo} )"; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-primary d-block btn-user w-100" type="submit">Assign</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">

@@ -1,5 +1,12 @@
 <?php
 include_once "./includes/utils.php";
+include_once "./includes/entity/vehicle.php";
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    Vehicle::create($_POST);
+    redirect(BASE_DIR . "vehicle_list.php");
+}
 
 ?>
 
@@ -29,21 +36,28 @@ include_once "./includes/utils.php";
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-4">
-                            <h3 class="text-dark mb-1">
-                                Add Company
-                            </h3>
-                        </div>
-                        <div class="col-8">
-                            <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email"></div>
-                                <div class="mb-3"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
-                                <div class="mb-3">
-                                    <div class="custom-control custom-checkbox small">
-                                        <div class="form-check"><input class="form-check-input custom-control-input" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Remember Me</label></div>
+                    <div class="row align-items-center px-5" style="width: 650px; margin: 0 auto;">
+                        <div class="col-12">
+                            <h3 style="text-align: center;">Add Vehicle</h3>
+                            <p style="text-align: center;">Provide the details of the vehicle to add it to the system</p>
+                            <form class="user" name="vehicle" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                <div class="row mb-3">
+                                    <div class="mb-3 mb-sm-0">
+                                        <input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Registration Number" name="registration_no" required>
                                     </div>
-                                </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Login</button>
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Make of Vehicle" name="make">
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input class="form-control form-control-user" type="number" id="exampleFirstName" placeholder="Capacity" name="capacity" required>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input class="form-control form-control-user" type="number" id="exampleFirstName" placeholder="Year" name="year" required>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Add Vehicle</button>
                                 <hr>
                             </form>
                         </div>

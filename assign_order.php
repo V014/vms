@@ -120,6 +120,34 @@ $vehicles = Vehicle::all();
                                 <div class="card-body">
                                     <h6>Assign Driver & Vehicle</h6>
                                     <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                        <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
+                                        <!-- Driver Selection -->
+                                        <div class="mb-5">
+                                            <label for="driver_id" class="form-label">Driver</label>
+                                            <select name="driver_id" class="form-select">
+                                                <?php
+                                                foreach ($drivers as $driver) {
+                                                ?>
+                                                    <option value="<?php echo $driver->userID; ?>"><?php echo $driver->firstName . " " . $driver->lastName . " ( {$driver->nationalID} )"; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <!-- Vehicle Selection -->
+                                        <div class="mb-5">
+                                            <label for="vehicle_id" class="form-label">Vehicle</label>
+                                            <select name="vehicle_id" class="form-select">
+                                                <?php
+                                                foreach ($vehicles as $vehicle) {
+                                                ?>
+                                                    <option value="<?php echo $vehicle->id; ?>"><?php echo $vehicle->make . "( {$vehicle->registrationNo} )"; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-primary d-block btn-user w-100" type="submit">Assign</button>
                                     </form>
                                 </div>
                             </div>

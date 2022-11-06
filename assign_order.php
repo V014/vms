@@ -4,10 +4,12 @@ include_once "./includes/entity/order.php";
 include_once "./includes/entity/company.php";
 include_once "./includes/entity/vehicle.php";
 include_once "./includes/entity/driver.php";
+include_once "./includes/entity/user.php";
 
 // Retrieve id of the order to assign a driver and vehicle to
 $order = Order::find($_GET["id"]);
-$company = COmpany::find($order->userID);
+$company = Company::find($order->userID);
+$companyUser = User::find($company->userID);
 
 /*
  * If post request, extract post data such as the order id and the id of the driver
@@ -52,8 +54,30 @@ $vehicles = Vehicle::all();
                 </nav>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-8"></div>
-                        <div class="col-4"></div>
+                        <div class="col-4">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <p>Company</p>
+                                    <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
+                                    <h5 class="my-3"><?php echo $company->name; ?></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Fuel Type</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0"><?php echo ucfirst($order->fuelName); ?></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -8,9 +8,10 @@ include_once "./includes/entity/vehicle.php";
 include_once "./includes/entity/driver.php";
 include_once "./includes/auth.php";
 
+$user = Auth::getUser();
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fuel = Fuel::find($_POST["type_id"]);
-    $user = Auth::getUser();
 
     if ($user->role === "admin") {
         $order = [
@@ -91,69 +92,96 @@ foreach ($fuelTypes as $fuelType) {
                 <div class="container-fluid">
                     <div class="row align-items-center px-5" style="width: 650px; margin: 0 auto;">
                         <div class="col-12">
-                            <h3 style="text-align: center;">Create Order For Company</h3>
-                            <p style="text-align: center;">Provide the details of the company to add it to the system</p>
-                            <form class="user" name="company" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
-                                <div class="mb-3">
-                                    <!-- Company Selection -->
-                                    <div class="mb-5">
-                                        <label for="company_id" class="form-label">Company</label>
-                                        <select name="company_id" class="form-select">
-                                            <?php
-                                            foreach ($companies as $company) {
-                                            ?>
-                                                <option value="<?php echo $company->userID; ?>"><?php echo $company->name; ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>
+                            <?php if ($user->role === "admin") { ?>
+                                <h3 style="text-align: center;">Create Order For Company</h3>
+                                <p style="text-align: center;">Provide the details of the company to add it to the system</p>
+                                <form class="user" name="company" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                    <div class="mb-3">
+                                        <!-- Company Selection -->
+                                        <div class="mb-5">
+                                            <label for="company_id" class="form-label">Company</label>
+                                            <select name="company_id" class="form-select">
+                                                <?php
+                                                foreach ($companies as $company) {
+                                                ?>
+                                                    <option value="<?php echo $company->userID; ?>"><?php echo $company->name; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <!-- Fuel Selection -->
+                                        <div class="mb-5">
+                                            <label for="type_id" class="form-label">Fuel Type</label>
+                                            <select name="type_id" class="form-select">
+                                                <?php
+                                                foreach ($fuelTypes as $fuelType) {
+                                                ?>
+                                                    <option value="<?php echo $fuelType->id; ?>"><?php echo ucfirst($fuelType->name) . " (K" . $fuelType->cost . ")"; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <!-- Driver Selection -->
+                                        <div class="mb-5">
+                                            <label for="driver_id" class="form-label">Driver</label>
+                                            <select name="driver_id" class="form-select">
+                                                <?php
+                                                foreach ($drivers as $driver) {
+                                                ?>
+                                                    <option value="<?php echo $driver->userID; ?>"><?php echo $driver->firstName . " " . $driver->lastName . " ( {$driver->nationalID} )"; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <!-- Vehicle Selection -->
+                                        <div class="mb-5">
+                                            <label for="vehicle_id" class="form-label">Vehicle</label>
+                                            <select name="vehicle_id" class="form-select">
+                                                <?php
+                                                foreach ($vehicles as $vehicle) {
+                                                ?>
+                                                    <option value="<?php echo $vehicle->id; ?>"><?php echo $vehicle->make . "( {$vehicle->registrationNo} )"; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="mb-5">
+                                            <input class="form-control" type="number" max="30000" placeholder="Quantity in Litres" name="quantity">
+                                        </div>
                                     </div>
-                                    <!-- Fuel Selection -->
-                                    <div class="mb-5">
-                                        <label for="type_id" class="form-label">Fuel Type</label>
-                                        <select name="type_id" class="form-select">
-                                            <?php
-                                            foreach ($fuelTypes as $fuelType) {
-                                            ?>
-                                                <option value="<?php echo $fuelType->id; ?>"><?php echo ucfirst($fuelType->name) . " (K" . $fuelType->cost . ")"; ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>
+                                    <button class="btn btn-primary d-block btn-user w-100" type="submit">Create Order</button>
+                                    <hr>
+                                </form>
+                            <?php } elseif ($user->role === "company") { ?>
+                                <h3 style="text-align: center;">Place Your Order</h3>
+                                <p style="text-align: center;">Provide the details of your order</p>
+                                <form class="user" name="company" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                    <div class="mb-3">
+                                        <!-- Fuel Selection -->
+                                        <div class="mb-5">
+                                            <label for="type_id" class="form-label">Fuel Type</label>
+                                            <select name="type_id" class="form-select">
+                                                <?php
+                                                foreach ($fuelTypes as $fuelType) {
+                                                ?>
+                                                    <option value="<?php echo $fuelType->id; ?>"><?php echo ucfirst($fuelType->name) . " (K" . $fuelType->cost . ")"; ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="mb-5">
+                                            <input class="form-control" type="number" max="30000" placeholder="Quantity in Litres" name="quantity">
+                                        </div>
                                     </div>
-                                    <!-- Driver Selection -->
-                                    <div class="mb-5">
-                                        <label for="driver_id" class="form-label">Driver</label>
-                                        <select name="driver_id" class="form-select">
-                                            <?php
-                                            foreach ($drivers as $driver) {
-                                            ?>
-                                                <option value="<?php echo $driver->userID; ?>"><?php echo $driver->firstName . " " . $driver->lastName . " ( {$driver->nationalID} )"; ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <!-- Vehicle Selection -->
-                                    <div class="mb-5">
-                                        <label for="vehicle_id" class="form-label">Vehicle</label>
-                                        <select name="vehicle_id" class="form-select">
-                                            <?php
-                                            foreach ($vehicles as $vehicle) {
-                                            ?>
-                                                <option value="<?php echo $vehicle->id; ?>"><?php echo $vehicle->make . "( {$vehicle->registrationNo} )"; ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="mb-5">
-                                        <input class="form-control" type="number" max="30000" placeholder="Quantity in Litres" name="quantity">
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Create Order</button>
-                                <hr>
-                            </form>
+                                    <button class="btn btn-primary d-block btn-user w-100" type="submit">Create Order</button>
+                                    <hr>
+                                </form>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

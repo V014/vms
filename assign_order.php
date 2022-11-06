@@ -6,11 +6,6 @@ include_once "./includes/entity/vehicle.php";
 include_once "./includes/entity/driver.php";
 include_once "./includes/entity/user.php";
 
-// Retrieve id of the order to assign a driver and vehicle to
-$order = Order::find($_GET["id"]);
-$company = Company::find($order->userID);
-$companyUser = User::find($company->userID);
-
 /*
  * If post request, extract post data such as the order id and the id of the driver
  * The ids are used to create the order driver entry in the vms database. Ensuring
@@ -21,6 +16,12 @@ if ($_REQUEST["METHOD"] === "POST") {
     $driverID = $_POST["driver_id"];
     $vehicleID = $_POST["vehicle_id"];
 }
+
+// Retrieve id of the order to assign a driver and vehicle to
+$order = Order::find($_GET["id"]);
+$company = Company::find($order->userID);
+$companyUser = User::find($company->userID);
+
 
 $drivers = Driver::all();
 $vehicles = Vehicle::all();

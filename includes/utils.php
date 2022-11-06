@@ -364,7 +364,8 @@ function findUserOrders()
                     INNER JOIN companies AS c ON c.user_id = o.company_id
                     INNER JOIN fuel_types AS ft ON ft.id = o.type_id
                     LEFT JOIN order_driver AS od ON od.order_id = o.id
-                    WHERE c.user_id = :id";
+                    WHERE c.user_id = :id
+                    ORDER BY o.order_date DESC";
             break;
         case 'driver':
             $sql = "SELECT
@@ -384,7 +385,8 @@ function findUserOrders()
                     INNER JOIN orders AS o ON o.id = od.order_id
                     INNER JOIN companies AS c ON c.user_id = o.company_id
                     INNER JOIN fuel_types AS ft ON ft.id = o.type_id
-                    WHERE od.driver_id = :id";
+                    WHERE od.driver_id = :id
+                    ORDER BY o.order_date DESC";
             break;
     }
 

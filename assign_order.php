@@ -1,6 +1,13 @@
 <?php
 include_once "./includes/utils.php";
 include_once "./includes/entity/order.php";
+include_once "./includes/entity/company.php";
+include_once "./includes/entity/vehicle.php";
+include_once "./includes/entity/driver.php";
+
+// Retrieve id of the order to assign a driver and vehicle to
+$order = Order::find($_GET["id"]);
+$company = COmpany::find($order->userID);
 
 /*
  * If post request, extract post data such as the order id and the id of the driver
@@ -13,8 +20,8 @@ if ($_REQUEST["METHOD"] === "POST") {
     $vehicleID = $_POST["vehicle_id"];
 }
 
-// Retrieve id of the order to assign a driver and vehicle to
-$order = Order::find($_GET["id"]);
+$drivers = Driver::all();
+$vehicles = Vehicle::all();
 
 ?>
 

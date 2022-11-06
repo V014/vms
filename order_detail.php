@@ -165,12 +165,16 @@ $vehicle = Vehicle::find($order->vehicleID);
                                                     <div class="col-sm-6">
                                                         <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
                                                     </div>
-                                                    <div class="col-sm-3">
-                                                        <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
-                                                            <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
-                                                            <input class="btn btn-primary" type="submit" value="MARK DELIVERED">
-                                                        </form>
-                                                    </div>
+                                                    <?php if (isAssigned($order->id)) { ?>
+                                                        <div class="col-sm-3">
+                                                            <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                                                <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
+                                                                <input class="btn btn-primary" type="submit" value="MARK DELIVERED">
+                                                            </form>
+                                                        </div>
+                                                    <?php } else { ?>
+                                                        <div class="col-sm-3"></div>
+                                                    <?php } ?>
                                                 <?php } else { ?>
                                                     <div class="col-sm-3">
                                                         <p class="mb-0">Status</p>

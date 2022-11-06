@@ -100,14 +100,23 @@ $vehicle = Vehicle::find($order->vehicleID);
                                             <h5 class="my-3"><?php echo $company->name; ?></h5>
                                         </div>
                                     </div>
-                                    <div class="card mb-4">
-                                        <div class="card-body text-center">
-                                            <p>Driver</p>
-                                            <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
-                                            <h5 class="my-3"><?php echo $driver->firstName . " " . $driver->lastName; ?></h5>
-                                            <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
+                                    <?php if (isAssigned($order->id)) { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
+                                                <h5 class="my-3"><?php echo $driver->firstName . " " . $driver->lastName; ?></h5>
+                                                <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    <?php } else { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <p>Not assigned</p>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="card mb-4">

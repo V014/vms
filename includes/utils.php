@@ -186,13 +186,12 @@ function totalStats($id)
                         SUM(o.quantity) AS total_quantity,
                         SUM(o.cost) AS total_cost,
                         (SELECT COUNT(*) FROM orders WHERE company_id = :total_orders_id) AS total_orders,
-                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 2 AND o.company_id = :diesel_id) AS total_diesel_orders,
-                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 3 AND o.company_id = :petrol_id) AS total_petrol_orders,
-                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.type_id = 1 AND o.company_id = :paraffin_id) AS total_paraffin_orders,
-                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'delivered' AND o.company_id = :delivered_id) AS total_delivered,
-                        (SELECT COUNT(*) FROM order_driver AS od LEFT JOIN orders AS o ON o.id = od.order_id WHERE o.status = 'pending' AND o.company_id = :pending_id) AS total_pending
-                    FROM order_driver AS od
-                    LEFT JOIN orders AS o ON o.id = od.order_id
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.type_id = 2 AND o.company_id = :diesel_id) AS total_diesel_orders,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.type_id = 3 AND o.company_id = :petrol_id) AS total_petrol_orders,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.type_id = 1 AND o.company_id = :paraffin_id) AS total_paraffin_orders,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'delivered' AND o.company_id = :delivered_id) AS total_delivered,
+                        (SELECT COUNT(*) FROM orders AS o WHERE o.status = 'pending' AND o.company_id = :pending_id) AS total_pending
+                    FROM orders AS o
                     INNER JOIN companies AS c ON o.company_id = c.user_id
                     WHERE c.user_id = :id AND YEAR(o.order_date) > 2021";
             break;

@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         OrderDriver::create($orderDriver);
 
-        redirect(BASE_DIR . "orders_list");
+        redirect(BASE_DIR . "orders_list.php");
     } elseif ($user->role === "company") {
         $order = [
             "company_id" => $user->id,
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         Order::create($order);
 
-        redirect(BASE_DIR . "user_orders");
+        redirect(BASE_DIR . "user_orders.php");
     }
 }
 

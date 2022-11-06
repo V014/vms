@@ -12,7 +12,7 @@ include_once "./includes/entity/order_driver.php";
  * The ids are used to create the order driver entry in the vms database. Ensuring
  * The order that the company has placed is given the correct driver to execute
  */
-if ($_REQUEST["METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $orderDriver = [
         "order_id" => $_POST["order_id"],
         "driver_id" => $_POST["driver_id"],

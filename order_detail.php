@@ -109,6 +109,13 @@ $vehicle = Vehicle::find($order->vehicleID);
                                                 <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
                                             </div>
                                         </div>
+                                    <?php } elseif (!isAssigned($order->id) && $authUser->role === "admin") { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <a class="btn btn-primary" href="assign_order.php?id=<?php echo $order->id; ?>">Assign Order</a>
+                                            </div>
+                                        </div>
                                     <?php } else { ?>
                                         <div class="card mb-4">
                                             <div class="card-body text-center">

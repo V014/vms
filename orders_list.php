@@ -4,8 +4,6 @@ include_once "./includes/entity/order.php";
 
 $orders = Order::all();
 $trips = getTrips();
-var_dump($trips);
-exit;
 
 ?>
 

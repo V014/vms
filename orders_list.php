@@ -3,6 +3,7 @@ include_once "./includes/utils.php";
 include_once "./includes/entity/order.php";
 
 $orders = Order::all();
+$trips = getTrips();
 
 ?>
 
@@ -60,6 +61,7 @@ $orders = Order::all();
                                             <th>Date Ordered</th>
                                             <th></th>
                                             <th></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,6 +79,11 @@ $orders = Order::all();
                                                 <td><a href="order_detail.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
                                                 <?php if (!isAssigned($order->id)) { ?>
                                                     <td><a href="assign_order.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-primary">Assign Driver</button></a></td>
+                                                <?php } else { ?>
+                                                    <td></td>
+                                                <?php } ?>
+                                                <?php if (in_array($order->id, $trips)) { ?>
+                                                    <td><a href="tracking.php?id=<?php echo $order->id; ?>"><button type="button" class="btn">Tracking</button></a></td>
                                                 <?php } else { ?>
                                                     <td></td>
                                                 <?php } ?>

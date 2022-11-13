@@ -83,7 +83,7 @@ $trips = getTrips();
                                                     <td></td>
                                                 <?php } ?>
                                                 <?php if (in_array($order->id, $trips)) { ?>
-                                                    <td><a href="tracking.php?id=<?php echo $order->id; ?>"><button type="button" class="btn">Tracking</button></a></td>
+                                                    <td><a href="tracking.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-primary">Tracking</button></a></td>
                                                 <?php } else { ?>
                                                     <td></td>
                                                 <?php } ?>

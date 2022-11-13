@@ -240,28 +240,29 @@ $coords = getDriverCoords($order->id);
     </div>
     <script>
         function initMap() {
+            let driverCoords = {
+                lat: <?php echo $coords["latitude"]; ?>,
+                lng: <?php echo $coords["longitude"]; ?>
+            };
+
+            let companyCoords = {
+                lat: <?php echo $company->latitude; ?>,
+                lng: <?php echo $company->longitude; ?>
+            };
+
             const options = {
                 zoom: 8,
-                center: {
-                    lat: <?php echo $coords["latitude"]; ?>,
-                    lng: <?php echo $coords["longitude"]; ?>
-                }
+                center: driverCoords
             };
 
             let map = new google.maps.Map(document.getElementById('map'), options);
 
             new google.maps.Marker({
-                position: {
-                    lat: <?php echo $company->latitude; ?>,
-                    lng: <?php echo $company->longitude; ?>
-                }
+                position: companyCoords
             });
 
             new google.maps.Marker({
-                position: {
-                    lat: <?php echo $coords["latitude"]; ?>,
-                    lng: <?php echo $coords["longitude"]; ?>
-                }
+                position: driverCoords
             });
         }
     </script>

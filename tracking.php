@@ -40,7 +40,7 @@ $coords = getDriverCoords($order->id);
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <style>
         #map {
-            height: 400px;
+            height: 550px;
             width: 100%;
         }
     </style>
@@ -241,30 +241,46 @@ $coords = getDriverCoords($order->id);
     <script>
         function initMap() {
             let driverCoords = {
-                lat: <?php echo $coords["latitude"]; ?>,
-                lng: <?php echo $coords["longitude"]; ?>
+                lng: <?php echo $coords["latitude"]; ?>,
+                lat: <?php echo $coords["longitude"]; ?>
             };
 
             let companyCoords = {
-                lat: <?php echo $company->latitude; ?>,
-                lng: <?php echo $company->longitude; ?>
+                lng: <?php echo $company->latitude; ?>,
+                lat: <?php echo $company->longitude; ?>
             };
 
             let options = {
-                zoom: 8,
+                zoom: 10,
                 center: driverCoords
             };
 
             let map = new google.maps.Map(document.getElementById('map'), options);
 
-            new google.maps.Marker({
+            let companyMarker = new google.maps.Marker({
                 position: companyCoords,
                 map: map
             });
 
-            new google.maps.Marker({
+            let driverMarker = new google.maps.Marker({
                 position: driverCoords,
                 map: map
+            });
+
+            companyInfoWindow = new google.maps.InfoWindow({
+                content: '<h3><?php echo $company->name; ?></h3>'
+            });
+
+            driverInfoWindow = new google.maps.InfoWindow({
+                content: '<h3><?php echo $driver->firstName . ' ' . $driver->lastName; ?></h3>'
+            });
+
+            companyMarker.addListener('click', function() {
+                companyInfoWindow.open(map, companyMarker);
+            });
+
+            driverMarker.addListener('click', function() {
+                driverInfoWindow.open(map, driverMarker);
             });
         }
     </script>

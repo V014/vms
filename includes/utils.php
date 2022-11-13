@@ -399,3 +399,32 @@ function findUserOrders()
 
     return $orders;
 }
+
+function getTrips()
+{
+    $conn = DBConnection::getConnection();
+    $trips = [];
+    $sql = "SELECT order_id FROM trips";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+    foreach ($result as $trip) {
+        $trips[] = $trip["order_id"];
+    }
+
+    return $trips;
+}
+
+function getDriverCoords($id)
+{
+    $conn = DBConnection::getConnection();
+    $sql = "SELECT ST_X(current_location) AS longitude, ST_Y(current_location) AS latitude FROM trips WHERE order_id = :id";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([":id" => $id]);
+    return $stmt->fetch();
+}
+
+const GOOGLE_MAPS_API = "AIzaSyAKlDIwTY2lo-TW-MZU4p7M2MwRuWog4N4";

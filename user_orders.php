@@ -4,6 +4,7 @@ include_once "./includes/auth.php";
 
 $user = Auth::getUser();
 $orders = findUserOrders();
+$trips = getTrips($user->id);
 
 ?>
 
@@ -61,6 +62,7 @@ $orders = findUserOrders();
                                             <th>Date Ordered</th>
                                             <th></th>
                                             <th></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -78,6 +80,11 @@ $orders = findUserOrders();
                                                 <td><a href="order_detail.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
                                                 <?php if (!isAssigned($order->id)) { ?>
                                                     <td class="btn">Assignment Pending</td>
+                                                <?php } else { ?>
+                                                    <td></td>
+                                                <?php } ?>
+                                                <?php if (in_array($order->id, $trips)) { ?>
+                                                    <td><a href="tracking.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-primary">Tracking</button></a></td>
                                                 <?php } else { ?>
                                                     <td></td>
                                                 <?php } ?>

@@ -258,11 +258,13 @@ $coords = getDriverCoords($order->id);
             let map = new google.maps.Map(document.getElementById('map'), options);
 
             new google.maps.Marker({
-                position: companyCoords
+                position: companyCoords,
+                map: map
             });
 
             new google.maps.Marker({
-                position: driverCoords
+                position: driverCoords,
+                map: map
             });
         }
     </script>

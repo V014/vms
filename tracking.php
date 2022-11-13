@@ -250,7 +250,7 @@ $coords = getDriverCoords($order->id);
                 lng: <?php echo $company->longitude; ?>
             };
 
-            const options = {
+            let options = {
                 zoom: 8,
                 center: driverCoords
             };

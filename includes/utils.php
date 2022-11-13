@@ -426,3 +426,5 @@ function getDriverCoords($id)
     $stmt->execute([":id" => $id]);
     return $stmt->fetch();
 }
+
+const GOOGLE_MAPS_API = "AIzaSyAKlDIwTY2lo-TW-MZU4p7M2MwRuWog4N4";

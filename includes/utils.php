@@ -407,10 +407,11 @@ function getTrips()
     $sql = "SELECT order_id FROM trips";
 
     $stmt = $conn->prepare($sql);
+    $stmt->execute();
     $result = $stmt->fetchAll();
 
     foreach ($result as $trip) {
-        $trips[] = $trip;
+        $trips[] = $trip["order_id"];
     }
 
     return $trips;

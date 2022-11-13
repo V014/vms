@@ -416,3 +416,13 @@ function getTrips()
 
     return $trips;
 }
+
+function getDriverCoords($id)
+{
+    $conn = DBConnection::getConnection();
+    $sql = "SELECT ST_X(current_location) AS longitude, ST_Y(current_location) AS latitude FROM trips WHERE order_id = :id";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([":id" => $id]);
+    return $stmt->fetch();
+}

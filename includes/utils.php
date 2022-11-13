@@ -399,3 +399,19 @@ function findUserOrders()
 
     return $orders;
 }
+
+function getTrips()
+{
+    $conn = DBConnection::getConnection();
+    $trips = [];
+    $sql = "SELECT order_id FROM trips";
+
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->fetchAll();
+
+    foreach ($result as $trip) {
+        $trips[] = $trip;
+    }
+
+    return $trips;
+}

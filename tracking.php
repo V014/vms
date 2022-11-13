@@ -97,7 +97,7 @@ $coords = getDriverCoords($order->id);
                                     </nav>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mb-5">
                                 <div id="map"></div>
                             </div>
                             <div class="row">
@@ -243,12 +243,26 @@ $coords = getDriverCoords($order->id);
             const options = {
                 zoom: 8,
                 center: {
-                    lat: <?php echo $coords["latitude"] ?>,
-                    lng: <?php echo $coords["longitude"] ?>,
+                    lat: <?php echo $coords["latitude"]; ?>,
+                    lng: <?php echo $coords["longitude"]; ?>
                 }
             };
 
             let map = new google.maps.Map(document.getElementById('map'), options);
+
+            new google.maps.Marker({
+                position: {
+                    lat: <?php echo $company->latitude; ?>,
+                    lng: <?php echo $company->longitude; ?>
+                }
+            });
+
+            new google.maps.Marker({
+                position: {
+                    lat: <?php echo $coords["latitude"]; ?>,
+                    lng: <?php echo $coords["longitude"]; ?>
+                }
+            });
         }
     </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>

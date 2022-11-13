@@ -1,31 +1,47 @@
+<?php
+include_once "./includes/utils.php";
+include_once "./includes/auth.php";
+include_once "./includes/entity/company.php";
+include_once "./includes/entity/driver.php";
+include_once "./includes/entity/order.php";
+include_once "./includes/entity/user.php";
+include_once "./includes/entity/vehicle.php";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $order = Order::find($_POST["order_id"]);
+    $order->delivered();
+
+    redirect(BASE_DIR . "order_detail.php?id=" . $order->id);
+}
+
+$authUser = Auth::getUser();
+$order = Order::find($_GET["id"]);
+
+$company = Company::find($order->userID);
+$companyUser = User::find($company->userID);
+
+$driver = Driver::find($order->driverID);
+$driverUser = User::find($driver->userID);
+
+$vehicle = Vehicle::find($order->vehicleID);
+
+?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Blank - Brand</title>
+    <title>VMS - <?php echo $company->name; ?></title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-<script defer src="https://pyscript.net/latest/pyscript.js"></script>
 </head>
 
 <body id="page-top">
     <div id="wrapper">
-        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
-            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
-                    <div class="sidebar-brand-text mx-3"><span>Brand</span></div>
-                </a>
-                <hr class="sidebar-divider my-0">
-                <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <?php include_once "./components/nav_items.php" ?>
-                </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
-            </div>
-        </nav>
+        <?php include_once('./components/nav_bar.php') ?>
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -33,108 +49,176 @@
                         <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
                             <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..."><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
                         </form>
-                        <ul class="navbar-nav flex-nowrap ms-auto">
-                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
-                                <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
-                                    <form class="me-auto navbar-search w-100">
-                                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
-                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                        <h6 class="dropdown-header">alerts center</h6><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 12, 2019</span>
-                                                <p>A new monthly report is ready to download!</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 7, 2019</span>
-                                                <p>$290.29 has been deposited into your account!</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Spending Alert: We've noticed unusually high spending for your account.</p>
-                                            </div>
-                                        </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter">7</span><i class="fas fa-envelope fa-fw"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                        <h6 class="dropdown-header">alerts center</h6><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image me-3"><img class="rounded-circle" src="assets/img/avatars/avatar4.jpeg">
-                                                <div class="bg-success status-indicator"></div>
-                                            </div>
-                                            <div class="fw-bold">
-                                                <div class="text-truncate"><span>Hi there! I am wondering if you can help me with a problem I've been having.</span></div>
-                                                <p class="small text-gray-500 mb-0">Emily Fowler - 58m</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image me-3"><img class="rounded-circle" src="assets/img/avatars/avatar2.jpeg">
-                                                <div class="status-indicator"></div>
-                                            </div>
-                                            <div class="fw-bold">
-                                                <div class="text-truncate"><span>I have the photos that you ordered last month!</span></div>
-                                                <p class="small text-gray-500 mb-0">Jae Chun - 1d</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image me-3"><img class="rounded-circle" src="assets/img/avatars/avatar3.jpeg">
-                                                <div class="bg-warning status-indicator"></div>
-                                            </div>
-                                            <div class="fw-bold">
-                                                <div class="text-truncate"><span>Last month's report looks great, I am very happy with the progress so far, keep up the good work!</span></div>
-                                                <p class="small text-gray-500 mb-0">Morgan Alvarez - 2d</p>
-                                            </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image me-3"><img class="rounded-circle" src="assets/img/avatars/avatar5.jpeg">
-                                                <div class="bg-success status-indicator"></div>
-                                            </div>
-                                            <div class="fw-bold">
-                                                <div class="text-truncate"><span>Am I a good boy? The reason I ask is because someone told me that people say this to all dogs, even if they aren't good...</span></div>
-                                                <p class="small text-gray-500 mb-0">Chicken the Dog · 2w</p>
-                                            </div>
-                                        </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                                    </div>
-                                </div>
-                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div>
-                            </li>
-                            <div class="d-none d-sm-block topbar-divider"></div>
-                            <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">Valerie Luna</span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
-                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Activity log</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                        <?php navActions(); ?>
                     </div>
                 </nav>
                 <div class="container-fluid">
-                <h1>PyScript Tests</h1>
-<py-script> 
-import phonenumbers
-
-from myphone import number 
-
-from phonenumbers import geocoder 
-pepnumber = phonenumbers.parse(number)
-location = geocoder.description_for_number(pepnumber, "en")
-print(location)
-
- </py-script>
+                    <!-- Profile Section -->
+                    <section style="background-color: #eee;">
+                        <div class="container py-5">
+                            <!-- Breadcrumb Section -->
+                            <div class="row">
+                                <div class="col">
+                                    <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                                        <?php
+                                        if ($authUser->role === "admin") {
+                                        ?>
+                                            <ol class="breadcrumb mb-0">
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "admin_dashboard.php"; ?>">Home</a></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "orders_list.php"; ?>">Orders</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
+                                            </ol>
+                                        <?php
+                                        } elseif ($authUser->role === "company") {
+                                        ?>
+                                            <ol class="breadcrumb mb-0">
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "company_dashboard.php"; ?>">Home</a></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "user_orders.php"; ?>">Orders</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
+                                            </ol>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <ol class="breadcrumb mb-0">
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "driver_dashboard.php"; ?>">Home</a></li>
+                                                <li class="breadcrumb-item"><a href="<?php echo BASE_DIR . "user_orders.php"; ?>">Orders</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page"><?php echo $company->name; ?></li>
+                                            </ol>
+                                        <?php
+                                        }
+                                        ?>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="card mb-4">
+                                        <div class="card-body text-center">
+                                            <p>Company</p>
+                                            <img src="<?php echo $companyUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
+                                            <h5 class="my-3"><?php echo $company->name; ?></h5>
+                                        </div>
+                                    </div>
+                                    <?php if (isAssigned($order->id)) { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <img src="<?php echo $driverUser->profilePicture; ?>" alt="avatar" style="width: 150px;">
+                                                <h5 class="my-3"><?php echo $driver->firstName . " " . $driver->lastName; ?></h5>
+                                                <p class="text-muted mb-1"><?php echo $driver->nationalID; ?></p>
+                                            </div>
+                                        </div>
+                                    <?php } elseif (!isAssigned($order->id) && $authUser->role === "admin") { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <a class="btn btn-primary" href="assign_order.php?id=<?php echo $order->id; ?>">Assign Driver</a>
+                                            </div>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div class="card mb-4">
+                                            <div class="card-body text-center">
+                                                <p>Driver</p>
+                                                <p>Not assigned</p>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Vehicle Registration Number</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <p class="text-muted mb-0"><?php echo $vehicle->registrationNo ? $vehicle->registrationNo : "N/A"; ?></p>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Vehicle Make</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <p class="text-muted mb-0"><?php echo $vehicle->make ? $vehicle->make : "N/A"; ?></p>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Order Date</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <p class="text-muted mb-0"><?php echo $order->orderDate; ?></p>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <?php
+                                                if ($order->status === 'pending' && $authUser->role === 'admin') {
+                                                ?>
+                                                    <div class="col-sm-3">
+                                                        <p class="mb-0">Status</p>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
+                                                    </div>
+                                                    <?php if (isAssigned($order->id)) { ?>
+                                                        <div class="col-sm-3">
+                                                            <form method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+                                                                <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
+                                                                <input class="btn btn-primary" type="submit" value="MARK DELIVERED">
+                                                            </form>
+                                                        </div>
+                                                    <?php } else { ?>
+                                                        <div class="col-sm-3"></div>
+                                                    <?php } ?>
+                                                <?php } else { ?>
+                                                    <div class="col-sm-3">
+                                                        <p class="mb-0">Status</p>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
+                                                    </div>
+                                                <?php }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="card shadow border-start-primary py-2">
+                                                <div class="card-body">
+                                                    <div class="row align-items-center no-gutters">
+                                                        <div class="col me-2">
+                                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Quantity</span></div>
+                                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo $order->quantity . "L"; ?></span></div>
+                                                        </div>
+                                                        <div class="col-auto"><i class="fas fa-truck fa-2x text-gray-300"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="card shadow border-start-primary py-2">
+                                                <div class="card-body">
+                                                    <div class="row align-items-center no-gutters">
+                                                        <div class="col me-2">
+                                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Cost</span></div>
+                                                            <div class="text-dark fw-bold h5 mb-0"><span><?php echo "K" . number_format($order->cost); ?></span></div>
+                                                        </div>
+                                                        <div class="col-auto"><i class="fas fa-money-bill fa-2x text-gray-300"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- End Profile Section -->
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
@@ -150,4 +234,3 @@ print(location)
 </body>
 
 </html>
-

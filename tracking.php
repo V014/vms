@@ -38,6 +38,12 @@ $coords = getDriverCoords($order->id);
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -234,7 +240,15 @@ $coords = getDriverCoords($order->id);
     </div>
     <script>
         function initMap() {
+            const options = {
+                zoom: 8,
+                center: {
+                    lat: <?php echo $coords["latitude"] ?>,
+                    lng: <?php echo $coords["longitude"] ?>,
+                }
+            };
 
+            let map = new google.maps.Map(document.getElementById('map'), options);
         }
     </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>

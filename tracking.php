@@ -24,6 +24,7 @@ $driver = Driver::find($order->driverID);
 $driverUser = User::find($driver->userID);
 
 $vehicle = Vehicle::find($order->vehicleID);
+$coords = getDriverCoords($order->id);
 
 ?>
 
@@ -33,7 +34,7 @@ $vehicle = Vehicle::find($order->vehicleID);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>VMS - <?php echo $company->name; ?></title>
+    <title>VMS - Tracking <?php echo $company->name; ?></title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -89,6 +90,9 @@ $vehicle = Vehicle::find($order->vehicleID);
                                         ?>
                                     </nav>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div id="map"></div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-4">
@@ -228,9 +232,15 @@ $vehicle = Vehicle::find($order->vehicleID);
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
+    <script>
+        function initMap() {
+
+        }
+    </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_MAPS_API; ?>&callback=initMap" defer></script>
 </body>
 
 </html>

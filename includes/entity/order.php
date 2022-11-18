@@ -5,11 +5,12 @@ include_once dirname(__FILE__) . "/../utils.php";
 class Order
 {
     const TABLE = "orders";
-    const COLUMNS = "o.id, c.user_id AS company_id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date, od.driver_id AS driver_id, od.vehicle_id";
+    const COLUMNS = "o.id, o.date_delivered, c.user_id AS company_id, c.name, ST_X(c.location) AS longitude, ST_Y(c.location) AS latitude, f.name AS fuel_name, o.quantity, o.cost, o.status, o.order_date, od.driver_id AS driver_id, od.vehicle_id";
     const INSERT_COLS = "company_id, type_id, quantity, cost, status, order_date";
     const PLACEHOLDERS = ":company_id, :type_id, :quantity, :cost, :status, :order_date";
 
     public $id;
+    public $dateDelivered;
     public $userID;
     public $name;
     public $longitude;
@@ -25,6 +26,7 @@ class Order
     public function __construct($data)
     {
         $this->id = $data["id"];
+        $this->dateDelivered = $data["date_delivered"];
         $this->userID = $data["company_id"];
         $this->name = $data["name"];
         $this->longitude = $data["longitude"];
@@ -213,13 +215,14 @@ class Order
 
     public function delivered()
     {
+        $dateDelivered = date("Y/m/d", strtotime("today"));
         $conn = DBConnection::getConnection();
-        $sql = "UPDATE orders SET status = 'delivered' WHERE id = :id";
+        $sql = "UPDATE orders SET status = 'delivered', date_delivered = $dateDelivered WHERE id = :id";
 
         $sth = $conn->prepare($sql);
         $sth->execute([":id" => $this->id]);
 
-        $sql = "DELETE FROM orders WHERE order_id = :order_id";
+        $sql = "DELETE FROM trips WHERE order_id = :order_id";
 
         $sth = $conn->prepare($sql);
         $sth->execute([":order_id" => $this->id]);

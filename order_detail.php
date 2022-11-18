@@ -181,6 +181,9 @@ $vehicle = Vehicle::find($order->vehicleID);
                                                     </div>
                                                     <div class="col-sm-9">
                                                         <p class="text-muted mb-0"><?php echo ucfirst($order->status); ?></p>
+                                                        <?php if ($order->status === 'delivered') { ?>
+                                                            <p class="text-muted mb-0"><?php echo $order->dateDelivered; ?></p>
+                                                        <?php } ?>
                                                     </div>
                                                 <?php }
                                                 ?>

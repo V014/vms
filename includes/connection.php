@@ -124,7 +124,8 @@ CREATE TABLE IF NOT EXISTS orders(
     quantity INT NOT NULL,
     cost DECIMAL(15,2) NOT NULL,
     status ENUM('pending', 'delivered') NOT NULL,
-    order_date DATE NOT NULL
+    order_date DATE NOT NULL,
+    date_delivered DATE
 ) ENGINE = INNODB;
 
 CREATE TABLE IF NOT EXISTS order_driver(

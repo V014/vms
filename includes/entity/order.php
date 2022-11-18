@@ -215,8 +215,9 @@ class Order
 
     public function delivered()
     {
+        $dateDelivered = date("Y/m/d", strtotime("today"));
         $conn = DBConnection::getConnection();
-        $sql = "UPDATE orders SET status = 'delivered' WHERE id = :id";
+        $sql = "UPDATE orders SET status = 'delivered', date_delivered = $dateDelivered WHERE id = :id";
 
         $sth = $conn->prepare($sql);
         $sth->execute([":id" => $this->id]);

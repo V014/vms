@@ -283,16 +283,25 @@ $coords = getDriverCoords($order->id);
                 driverInfoWindow.open(map, driverMarker);
             });
 
-            const driverPath = new google.maps.Polyline({
-                path: [driverCoords, companyCoords],
-                geodesic: true,
-                strokeColor: "#FF0000",
-                strokeOpacity: 1.0,
-                strokeWeight: 2,
-            });
+            const directionsRequest = {
+                origin: driverCoords,
+                destination: companyCoords,
+                travelMode: 'DRIVING',
+                provideRouteAlternatives: false
+            };
 
-            driverPath.setMap(map);
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+
+            directionsRenderer.setMap(map);
+            calculateAndDisplayRoute(directionsService, directionsRenderer, directionsRequest);
         }
+
+        function calculateAndDisplayRoute(directionsService, directionsRenderer, directionsRequest) {
+            directionsService.route(directionsRequest).then((response) => {
+                directionsRenderer.setDirections(response);
+            }).catch((e) => window.alert("Directions request failed due to " + status));
+    }
     </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>

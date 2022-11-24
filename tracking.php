@@ -282,6 +282,16 @@ $coords = getDriverCoords($order->id);
             driverMarker.addListener('click', function() {
                 driverInfoWindow.open(map, driverMarker);
             });
+
+            const driverPath = new google.maps.Polyline({
+                path: [driverCoords, companyCoords],
+                geodesic: true,
+                strokeColor: "#FF0000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+            });
+
+            driverPath.setMap(map);
         }
     </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>

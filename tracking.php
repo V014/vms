@@ -38,9 +38,13 @@ $coords = getDriverCoords($order->id);
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <style>
         #map {
-            height: 550px;
+            height: 480px;
             width: 100%;
         }
     </style>
@@ -239,74 +243,33 @@ $coords = getDriverCoords($order->id);
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script>
-        function initMap() {
-            let driverCoords = {
-                lng: <?php echo $coords["latitude"]; ?>,
-                lat: <?php echo $coords["longitude"]; ?>
-            };
+        const map = L.map('map').setView([<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>], 13);
 
-            let companyCoords = {
-                lng: <?php echo $company->latitude; ?>,
-                lat: <?php echo $company->longitude; ?>
-            };
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 17,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
 
-            let options = {
-                zoom: 10,
-                center: driverCoords
-            };
+        const driverMarker = L.marker(
+            [<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>],
+            {title: '<?php echo $driver->firstName . ' ' . $driver->lastName; ?>'}
+        ).addTo(map);
 
-            let map = new google.maps.Map(document.getElementById('map'), options);
+        const companyMarker = L.marker(
+            [<?php echo $company->longitude; ?>, <?php echo $company->latitude; ?>],
+            {title: '<?php echo $company->name; ?>'}
+        ).addTo(map);
 
-            let companyMarker = new google.maps.Marker({
-                position: companyCoords,
-                map: map
-            });
-
-            let driverMarker = new google.maps.Marker({
-                position: driverCoords,
-                map: map
-            });
-
-            companyInfoWindow = new google.maps.InfoWindow({
-                content: '<h3><?php echo $company->name; ?></h3>'
-            });
-
-            driverInfoWindow = new google.maps.InfoWindow({
-                content: '<h3><?php echo $driver->firstName . ' ' . $driver->lastName; ?></h3>'
-            });
-
-            companyMarker.addListener('click', function() {
-                companyInfoWindow.open(map, companyMarker);
-            });
-
-            driverMarker.addListener('click', function() {
-                driverInfoWindow.open(map, driverMarker);
-            });
-
-            const directionsRequest = {
-                origin: driverCoords,
-                destination: companyCoords,
-                travelMode: 'DRIVING',
-                provideRouteAlternatives: false
-            };
-
-            const directionsService = new google.maps.DirectionsService();
-            const directionsRenderer = new google.maps.DirectionsRenderer();
-
-            directionsRenderer.setMap(map);
-            calculateAndDisplayRoute(directionsService, directionsRenderer, directionsRequest);
-        }
-
-        function calculateAndDisplayRoute(directionsService, directionsRenderer, directionsRequest) {
-            directionsService.route(directionsRequest).then((response) => {
-                directionsRenderer.setDirections(response);
-            }).catch((e) => window.alert("Directions request failed due to " + status));
-    }
+        L.Routing.control({
+            waypoints: [
+                L.latLng(<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>),
+                L.latLng(<?php echo $company->longitude; ?>, <?php echo $company->latitude; ?>)
+            ]
+        }).addTo(map);
     </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_MAPS_API; ?>&callback=initMap" defer></script>
 </body>
 
 </html>

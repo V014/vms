@@ -252,20 +252,32 @@ $coords = getDriverCoords($order->id);
 
         const driverMarker = L.marker(
             [<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>],
-            {title: '<?php echo $driver->firstName . ' ' . $driver->lastName; ?>'}
+            {
+                title: '<?php echo $driver->firstName . ' ' . $driver->lastName; ?>',
+            }
         ).addTo(map);
 
         const companyMarker = L.marker(
             [<?php echo $company->longitude; ?>, <?php echo $company->latitude; ?>],
-            {title: '<?php echo $company->name; ?>'}
+            {
+                title: '<?php echo $company->name; ?>',
+            }
         ).addTo(map);
 
-        L.Routing.control({
+        const control = L.Routing.control({
             waypoints: [
                 L.latLng(<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>),
                 L.latLng(<?php echo $company->longitude; ?>, <?php echo $company->latitude; ?>)
             ]
-        }).addTo(map);
+        }).on('routesfound', routeHandler).addTo(map);
+
+        function routeHandler(e) {
+            e.routes[0].coordinates.forEach(function(coord, index) {
+                setTimeout(() => {
+                    driverMarker.setLatLng([coord.lat, coord.lng]);
+                }, 100 * index);
+            });
+        }
     </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>

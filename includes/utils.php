@@ -357,6 +357,7 @@ function findUserOrders()
                         o.cost,
                         o.status,
                         o.order_date,
+                        o.date_delivered,
                         od.driver_id,
                         od.vehicle_id
                     FROM orders AS o
@@ -378,6 +379,7 @@ function findUserOrders()
                         o.cost,
                         o.status,
                         o.order_date,
+                        o.date_delivered,
                         od.driver_id,
                         od.vehicle_id
                     FROM order_driver AS od

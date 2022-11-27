@@ -4,18 +4,26 @@ include_once "./includes/entity/topic.php";
 include_once "./includes/entity/message.php";
 include_once "./includes/entity/user.php";
 include_once "./includes/auth.php";
+include_once "./includes/utils.php";
 
 $topic = null;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-}
+    $user = Auth::getUser();
+    $id = $_POST["topic_id"];
 
-if (!isset($_GET["id"])) {
+    $message = [
+        "topic_id" => $id,
+        "user_id" => $user->id,
+        "body" => $_POST["body"],
+        "date_created" => date("Y/m/d", strtotime("today")),
+    ];
+
+    Message::create($message);
+    redirect(BASE_DIR . "forum_topic_messages.php?id=$id");
 }
 
 $topic = Topic::find($_GET["id"]);
-var_dump($topic);
-exit;
 
 ?>
 

@@ -7,8 +7,9 @@ include_once "./includes/entity/order.php";
 include_once "./includes/entity/user.php";
 include_once "./includes/entity/vehicle.php";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["update"]) {
-    exit;
+$uri = $_SERVER["REQUEST_URI"];
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($uri, "update")) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -279,7 +280,16 @@ $coords = getDriverCoords($order->id);
             e.routes[0].coordinates.forEach(function(coord, index) {
                 setTimeout(() => {
                     driverMarker.setLatLng([coord.lat, coord.lng]);
-                }, 2500 * index);
+                    fetch('/vms/tracking.php?type=update', {
+                        method: 'POST',
+                        credentials: 'same-origin', // include, *same-origin, omit
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                        body: JSON.stringify({lat: coord.lat, lng: coord.lng}) // body data type must match "Content-Type" header
+                    });
+                }, 1800 * index);
             });
         }
     </script>

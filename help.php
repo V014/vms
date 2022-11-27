@@ -123,9 +123,12 @@
                 <div class="container-fluid">
                     <h3 class="text-dark mb-1">Help Center</h3>
                     <p>This page will demonstrate a few instructions on how to use the system to achieve required operations and reports.</p>
+                    <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100" method="POST" action="">
+                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Ask question ..."><button class="btn btn-primary py-0" type="button"><i class="fas fa-comment"></i></button></div>
+                    </form>
+                    
                 </div>
             </div>
-            /* included footer here */
             <?php include "footer.php" ?>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>

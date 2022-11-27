@@ -58,4 +58,19 @@ class Topic
 
         return $topics;
     }
+
+    public static function find($id)
+    {
+        $table = self::TABLE;
+        $columns = self::COLUMNS;
+        $connection = DBConnection::getConnection();
+        $query = "SELECT {$columns} FROM {$table} WHERE id = :id";
+        $sth = $connection->prepare($query);
+
+        if (!$sth->execute([":id" => $id])) {
+            return null;
+        }
+
+        return new Topic($sth->fetch());
+    }
 }

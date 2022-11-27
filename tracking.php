@@ -7,6 +7,10 @@ include_once "./includes/entity/order.php";
 include_once "./includes/entity/user.php";
 include_once "./includes/entity/vehicle.php";
 
+if ($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["update"]) {
+    exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $order = Order::find($_POST["order_id"]);
     $order->delivered();
@@ -243,7 +247,7 @@ $coords = getDriverCoords($order->id);
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script>
-        const map = L.map('map').setView([<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>], 13);
+        const map = L.map('map').setView([<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>], 10);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 17,
@@ -275,7 +279,7 @@ $coords = getDriverCoords($order->id);
             e.routes[0].coordinates.forEach(function(coord, index) {
                 setTimeout(() => {
                     driverMarker.setLatLng([coord.lat, coord.lng]);
-                }, 100 * index);
+                }, 2500 * index);
             });
         }
     </script>

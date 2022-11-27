@@ -429,4 +429,7 @@ function getDriverCoords($id)
     return $stmt->fetch();
 }
 
+function updateDriverStart($lat, $lng) {
+}
+
 const GOOGLE_MAPS_API = "AIzaSyAKlDIwTY2lo-TW-MZU4p7M2MwRuWog4N4";

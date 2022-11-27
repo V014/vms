@@ -10,6 +10,14 @@ include_once "./includes/entity/vehicle.php";
 $uri = $_SERVER["REQUEST_URI"];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($uri, "update")) {
+    $parsed = explode('&', parse_url($uri)['query']);
+
+    $lat = explode('=', $parsed[1])[1];
+    $lng = explode('=', $parsed[2])[1];
+    $id = explode('=', $parsed[3])[1];
+
+    updateDriverStart($lat, $lng, $id);
+    exit;
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -280,14 +288,13 @@ $coords = getDriverCoords($order->id);
             e.routes[0].coordinates.forEach(function(coord, index) {
                 setTimeout(() => {
                     driverMarker.setLatLng([coord.lat, coord.lng]);
-                    fetch('/vms/tracking.php?type=update', {
+                    fetch(`http://localhost/vms/tracking.php?type=update&lat=${coord.lat}&lng=${coord.lng}&id=<?php echo $order->id; ?>`, {
                         method: 'POST',
-                        credentials: 'same-origin', // include, *same-origin, omit
+                        credentials: 'same-origin',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                        body: JSON.stringify({lat: coord.lat, lng: coord.lng}) // body data type must match "Content-Type" header
+                        referrerPolicy: 'no-referrer',
                     });
                 }, 1800 * index);
             });

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Sep 23, 2022 at 01:18 PM
--- Server version: 5.7.36
--- PHP Version: 7.4.26
+-- Host: 127.0.0.1
+-- Generation Time: Nov 27, 2022 at 04:55 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,15 +27,13 @@ SET time_zone = "+00:00";
 -- Table structure for table `companies`
 --
 
-DROP TABLE IF EXISTS `companies`;
-CREATE TABLE IF NOT EXISTS `companies` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `companies` (
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `name` text,
+  `name` text DEFAULT NULL,
   `established` int(11) DEFAULT NULL,
-  `location` point DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+  `location` point DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `companies`
@@ -54,16 +52,14 @@ INSERT INTO `companies` (`id`, `user_id`, `name`, `established`, `location`) VAL
 -- Table structure for table `drivers`
 --
 
-DROP TABLE IF EXISTS `drivers`;
-CREATE TABLE IF NOT EXISTS `drivers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `drivers` (
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `national_id` varchar(50) NOT NULL,
   `dob` date NOT NULL,
   `first_name` text NOT NULL,
-  `last_name` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+  `last_name` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `drivers`
@@ -87,14 +83,11 @@ INSERT INTO `drivers` (`id`, `user_id`, `national_id`, `dob`, `first_name`, `las
 -- Table structure for table `fuel_types`
 --
 
-DROP TABLE IF EXISTS `fuel_types`;
-CREATE TABLE IF NOT EXISTS `fuel_types` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `fuel_types` (
+  `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
-  `cost_per_litre` decimal(15,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `cost_per_litre` decimal(15,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `fuel_types`
@@ -108,78 +101,90 @@ INSERT INTO `fuel_types` (`id`, `name`, `cost_per_litre`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `help`
+--
+
+CREATE TABLE `help` (
+  `id` int(11) NOT NULL,
+  `username` text NOT NULL,
+  `question` text NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE IF NOT EXISTS `orders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
   `company_id` int(11) NOT NULL,
   `type_id` int(11) DEFAULT NULL,
   `quantity` int(11) NOT NULL,
   `cost` decimal(15,2) NOT NULL,
   `status` enum('pending','delivered') NOT NULL,
   `order_date` date NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
+  `date_delivered` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `company_id`, `type_id`, `quantity`, `cost`, `status`, `order_date`) VALUES
-(1, 2, 2, 3500, '6475000.00', 'delivered', '2022-01-22'),
-(2, 2, 2, 5000, '9250000.00', 'delivered', '2022-01-01'),
-(3, 2, 2, 7600, '12950000.00', 'delivered', '2022-03-10'),
-(4, 2, 3, 10000, '20000000.00', 'delivered', '2022-04-01'),
-(5, 2, 3, 7600, '15200000.00', 'delivered', '2022-07-05'),
-(6, 2, 3, 12000, '24000000.00', 'delivered', '2022-02-10'),
-(7, 2, 3, 20000, '40000000.00', 'delivered', '2021-12-22'),
-(8, 2, 2, 13000, '24050000.00', 'delivered', '2021-09-22'),
-(9, 2, 3, 8500, '17000000.00', 'pending', '2022-09-21'),
-(10, 2, 2, 7900, '14615000.00', 'pending', '2022-09-21'),
-(11, 3, 3, 10000, '20000000.00', 'delivered', '2022-03-22'),
-(12, 3, 2, 12000, '22200000.00', 'delivered', '2022-02-02'),
-(13, 3, 3, 5000, '10000000.00', 'delivered', '2022-06-09'),
-(14, 3, 3, 7000, '14000000.00', 'delivered', '2022-03-01'),
-(15, 3, 2, 8400, '15540000.00', 'delivered', '2022-05-01'),
-(16, 3, 2, 5000, '9250000.00', 'delivered', '2022-08-22'),
-(17, 3, 2, 7900, '14615000.00', 'delivered', '2022-07-01'),
-(18, 3, 3, 10000, '20000000.00', 'delivered', '2022-04-05'),
-(19, 3, 3, 8000, '16000000.00', 'delivered', '2021-10-20'),
-(20, 3, 2, 6000, '11100000.00', 'pending', '2022-09-22'),
-(21, 4, 2, 7000, '12950000.00', 'delivered', '2022-01-01'),
-(22, 4, 3, 9000, '18000000.00', 'delivered', '2022-01-31'),
-(23, 4, 2, 6900, '12765000.00', 'delivered', '2022-02-01'),
-(24, 4, 3, 8000, '16000000.00', 'delivered', '2022-02-27'),
-(25, 4, 3, 4000, '8000000.00', 'delivered', '2022-03-01'),
-(26, 4, 2, 7000, '12950000.00', 'delivered', '2022-03-31'),
-(27, 4, 2, 6900, '12765000.00', 'delivered', '2022-04-01'),
-(28, 4, 3, 15000, '30000000.00', 'pending', '2022-09-22'),
-(29, 4, 3, 27000, '54000000.00', 'pending', '2022-09-21'),
-(30, 4, 2, 14000, '25900000.00', 'pending', '2022-09-22'),
-(31, 5, 3, 7000, '14000000.00', 'delivered', '2022-01-01'),
-(32, 5, 2, 8000, '14800000.00', 'delivered', '2022-02-01'),
-(33, 5, 3, 20000, '40000000.00', 'delivered', '2022-03-01'),
-(34, 5, 2, 10000, '18500000.00', 'delivered', '2022-04-01'),
-(35, 5, 3, 8000, '16000000.00', 'delivered', '2022-05-01'),
-(36, 5, 2, 5000, '9250000.00', 'delivered', '2022-06-01'),
-(37, 5, 2, 9000, '16650000.00', 'delivered', '2022-07-01'),
-(38, 5, 2, 10000, '18500000.00', 'pending', '2022-09-22'),
-(39, 5, 3, 6700, '13400000.00', 'pending', '2022-09-21'),
-(40, 5, 3, 8000, '16000000.00', 'pending', '2022-09-22'),
-(41, 6, 2, 10000, '18500000.00', 'delivered', '2022-01-01'),
-(42, 6, 3, 7500, '15000000.00', 'delivered', '2022-02-01'),
-(43, 6, 2, 8000, '8000.00', 'delivered', '2022-03-01'),
-(44, 6, 2, 10000, '18500000.00', 'delivered', '2022-04-01'),
-(45, 6, 3, 5000, '10000000.00', 'delivered', '2022-05-01'),
-(46, 6, 2, 6700, '12395000.00', 'delivered', '2022-06-01'),
-(47, 6, 3, 7900, '15800000.00', 'delivered', '2022-07-01'),
-(48, 6, 3, 5000, '10000000.00', 'delivered', '2022-08-01'),
-(49, 6, 2, 6000, '11100000.00', 'delivered', '2021-12-01'),
-(50, 6, 2, 8000, '14800000.00', 'pending', '2022-09-22'),
-(51, 6, 2, 2000, '3700000.00', 'delivered', '2021-12-01'),
-(52, 6, 2, 20000, '37000000.00', 'delivered', '2021-11-01');
+INSERT INTO `orders` (`id`, `company_id`, `type_id`, `quantity`, `cost`, `status`, `order_date`, `date_delivered`) VALUES
+(1, 2, 2, 3500, '6475000.00', 'delivered', '2022-01-22', NULL),
+(2, 2, 2, 5000, '9250000.00', 'delivered', '2022-01-01', NULL),
+(3, 2, 2, 7600, '12950000.00', 'delivered', '2022-03-10', NULL),
+(4, 2, 3, 10000, '20000000.00', 'delivered', '2022-04-01', NULL),
+(5, 2, 3, 7600, '15200000.00', 'delivered', '2022-07-05', NULL),
+(6, 2, 3, 12000, '24000000.00', 'delivered', '2022-02-10', NULL),
+(7, 2, 3, 20000, '40000000.00', 'delivered', '2021-12-22', NULL),
+(8, 2, 2, 13000, '24050000.00', 'delivered', '2021-09-22', NULL),
+(9, 2, 3, 8500, '17000000.00', 'pending', '2022-11-16', NULL),
+(10, 2, 2, 7900, '14615000.00', 'pending', '2022-11-16', NULL),
+(11, 3, 3, 10000, '20000000.00', 'delivered', '2022-03-22', NULL),
+(12, 3, 2, 12000, '22200000.00', 'delivered', '2022-02-02', NULL),
+(13, 3, 3, 5000, '10000000.00', 'delivered', '2022-06-09', NULL),
+(14, 3, 3, 7000, '14000000.00', 'delivered', '2022-03-01', NULL),
+(15, 3, 2, 8400, '15540000.00', 'delivered', '2022-05-01', NULL),
+(16, 3, 2, 5000, '9250000.00', 'delivered', '2022-08-22', NULL),
+(17, 3, 2, 7900, '14615000.00', 'delivered', '2022-07-01', NULL),
+(18, 3, 3, 10000, '20000000.00', 'delivered', '2022-04-05', NULL),
+(19, 3, 3, 8000, '16000000.00', 'delivered', '2021-10-20', NULL),
+(20, 3, 2, 6000, '11100000.00', 'pending', '2022-11-17', NULL),
+(21, 4, 2, 7000, '12950000.00', 'delivered', '2022-01-01', NULL),
+(22, 4, 3, 9000, '18000000.00', 'delivered', '2022-01-31', NULL),
+(23, 4, 2, 6900, '12765000.00', 'delivered', '2022-02-01', NULL),
+(24, 4, 3, 8000, '16000000.00', 'delivered', '2022-02-27', NULL),
+(25, 4, 3, 4000, '8000000.00', 'delivered', '2022-03-01', NULL),
+(26, 4, 2, 7000, '12950000.00', 'delivered', '2022-03-31', NULL),
+(27, 4, 2, 6900, '12765000.00', 'delivered', '2022-04-01', NULL),
+(28, 4, 3, 15000, '30000000.00', 'pending', '2022-11-17', NULL),
+(29, 4, 3, 27000, '54000000.00', 'pending', '2022-11-16', NULL),
+(30, 4, 2, 14000, '25900000.00', 'pending', '2022-11-17', NULL),
+(31, 5, 3, 7000, '14000000.00', 'delivered', '2022-01-01', NULL),
+(32, 5, 2, 8000, '14800000.00', 'delivered', '2022-02-01', NULL),
+(33, 5, 3, 20000, '40000000.00', 'delivered', '2022-03-01', NULL),
+(34, 5, 2, 10000, '18500000.00', 'delivered', '2022-04-01', NULL),
+(35, 5, 3, 8000, '16000000.00', 'delivered', '2022-05-01', NULL),
+(36, 5, 2, 5000, '9250000.00', 'delivered', '2022-06-01', NULL),
+(37, 5, 2, 9000, '16650000.00', 'delivered', '2022-07-01', NULL),
+(38, 5, 2, 10000, '18500000.00', 'pending', '2022-11-17', NULL),
+(39, 5, 3, 6700, '13400000.00', 'pending', '2022-11-16', NULL),
+(40, 5, 3, 8000, '16000000.00', 'pending', '2022-11-17', NULL),
+(41, 6, 2, 10000, '18500000.00', 'delivered', '2022-01-01', NULL),
+(42, 6, 3, 7500, '15000000.00', 'delivered', '2022-02-01', NULL),
+(43, 6, 2, 8000, '8000.00', 'delivered', '2022-03-01', NULL),
+(44, 6, 2, 10000, '18500000.00', 'delivered', '2022-04-01', NULL),
+(45, 6, 3, 5000, '10000000.00', 'delivered', '2022-05-01', NULL),
+(46, 6, 2, 6700, '12395000.00', 'delivered', '2022-06-01', NULL),
+(47, 6, 3, 7900, '15800000.00', 'delivered', '2022-07-01', NULL),
+(48, 6, 3, 5000, '10000000.00', 'delivered', '2022-08-01', NULL),
+(49, 6, 2, 6000, '11100000.00', 'delivered', '2021-12-01', NULL),
+(50, 6, 2, 8000, '14800000.00', 'pending', '2022-11-17', NULL),
+(51, 6, 2, 2000, '3700000.00', 'delivered', '2021-12-01', NULL),
+(52, 6, 2, 20000, '37000000.00', 'delivered', '2021-11-01', NULL);
 
 -- --------------------------------------------------------
 
@@ -187,14 +192,12 @@ INSERT INTO `orders` (`id`, `company_id`, `type_id`, `quantity`, `cost`, `status
 -- Table structure for table `order_driver`
 --
 
-DROP TABLE IF EXISTS `order_driver`;
-CREATE TABLE IF NOT EXISTS `order_driver` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `order_driver` (
+  `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `driver_id` int(11) NOT NULL,
-  `vehicle_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
+  `vehicle_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_driver`
@@ -260,13 +263,11 @@ INSERT INTO `order_driver` (`id`, `order_id`, `driver_id`, `vehicle_id`) VALUES
 -- Table structure for table `trips`
 --
 
-DROP TABLE IF EXISTS `trips`;
-CREATE TABLE IF NOT EXISTS `trips` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `trips` (
+  `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
-  `current_location` point NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+  `current_location` point NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `trips`
@@ -290,9 +291,8 @@ INSERT INTO `trips` (`id`, `order_id`, `current_location`) VALUES
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `profile_picture` varchar(255) NOT NULL,
@@ -300,34 +300,30 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` date DEFAULT NULL,
   `phone_number` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `role` enum('company','driver','admin') NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `phone_number` (`phone_number`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+  `role` enum('company','driver','admin') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `profile_picture`, `created_at`, `updated_at`, `phone_number`, `email`, `role`) VALUES
-(1, 'admin', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-19', '2022-08-19', '+265884939415', 'admin@gmail.com', 'admin'),
-(2, 'neonfuel', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-09', '2022-08-09', '+265997824309', 'neonfuel@gmail.com', 'company'),
-(3, 'futurenergy', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-11', '2022-08-11', '+265886781899', 'futurenergy@gmail.com', 'company'),
-(4, 'workfuel', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-13', '2022-08-13', '+265999737243', 'workfuel@gmail.com', 'company'),
-(5, 'energyplus', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-14', '2022-08-14', '+265995406053', 'energyplus@gmail.com', 'company'),
-(6, 'enegrade', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-14', '2022-08-14', '+265997422139', 'enegrade@gmail.com', 'company'),
-(7, 'leon', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-10', '2022-08-10', '+265880855211', 'leon@gmail.com', 'driver'),
-(8, 'bright', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-12', '2022-08-12', '+265885800864', 'bright@gmail.com', 'driver'),
-(9, 'masala', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-19', '2022-08-19', '+265881219961', 'masala@gmail.com', 'driver'),
-(10, 'john', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-09', '2022-08-09', '+265882445243', 'john@gmail.com', 'driver'),
-(11, 'henry', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-11', '2022-08-11', '+265885126511', 'henry@gmail.com', 'driver'),
-(12, 'benjamin', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-10', '2022-08-10', '+265889294166', 'benjamin@gmail.com', 'driver'),
-(13, 'edward', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-12', '2022-08-12', '+265990605221', 'edward@gmail.com', 'driver'),
-(14, 'daniel', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-14', '2022-08-14', '+265884853366', 'daniel@gmail.com', 'driver'),
-(15, 'mike', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-13', '2022-08-13', '+265998434179', 'mike@gmail.com', 'driver'),
-(16, 'stewart', '$2y$10$r5nBwSqrth2T.guQ5wvS2es8OLqkwxmgvPZpL7U0P.jSt7HVs50Ni', 'uploads/profiles/user-profile.png', '2022-08-19', '2022-08-19', '+265991003620', 'stewart@gmail.com', 'driver');
+(1, 'admin', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-14', '2022-10-14', '+265887013077', 'admin@gmail.com', 'admin'),
+(2, 'neonfuel', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-04', '2022-10-04', '+265887031610', 'neonfuel@gmail.com', 'company'),
+(3, 'futurenergy', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-06', '2022-10-06', '+265886268585', 'futurenergy@gmail.com', 'company'),
+(4, 'workfuel', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-08', '2022-10-08', '+265995133886', 'workfuel@gmail.com', 'company'),
+(5, 'energyplus', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-09', '2022-10-09', '+265997652456', 'energyplus@gmail.com', 'company'),
+(6, 'enegrade', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-09', '2022-10-09', '+265887065997', 'enegrade@gmail.com', 'company'),
+(7, 'leon', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-05', '2022-10-05', '+265886707196', 'leon@gmail.com', 'driver'),
+(8, 'bright', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-07', '2022-10-07', '+265886096405', 'bright@gmail.com', 'driver'),
+(9, 'masala', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-14', '2022-10-14', '+265994943434', 'masala@gmail.com', 'driver'),
+(10, 'john', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-04', '2022-10-04', '+265884344235', 'john@gmail.com', 'driver'),
+(11, 'henry', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-06', '2022-10-06', '+265993196992', 'henry@gmail.com', 'driver'),
+(12, 'benjamin', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-05', '2022-10-05', '+265992372013', 'benjamin@gmail.com', 'driver'),
+(13, 'edward', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-07', '2022-10-07', '+265881433552', 'edward@gmail.com', 'driver'),
+(14, 'daniel', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-09', '2022-10-09', '+265887993307', 'daniel@gmail.com', 'driver'),
+(15, 'mike', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-08', '2022-10-08', '+265997362621', 'mike@gmail.com', 'driver'),
+(16, 'stewart', '$2y$10$2s9C16/qsAKbsuw1xHja9u25yhOgqzKLP/HUN7XgyQFZpr8SrLyra', 'uploads/profiles/user-profile.png', '2022-10-14', '2022-10-14', '+265889576450', 'stewart@gmail.com', 'driver');
 
 -- --------------------------------------------------------
 
@@ -335,15 +331,13 @@ INSERT INTO `users` (`id`, `username`, `password`, `profile_picture`, `created_a
 -- Table structure for table `vehicles`
 --
 
-DROP TABLE IF EXISTS `vehicles`;
-CREATE TABLE IF NOT EXISTS `vehicles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `vehicles` (
+  `id` int(11) NOT NULL,
   `registration_no` varchar(50) NOT NULL,
   `make` text NOT NULL,
   `capacity` int(11) NOT NULL,
-  `year` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+  `year` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `vehicles`
@@ -360,6 +354,126 @@ INSERT INTO `vehicles` (`id`, `registration_no`, `make`, `capacity`, `year`) VAL
 (8, 'SJ9433', 'Toyota', 30000, 2009),
 (9, 'EQVD34', 'VolksWagen', 30000, 2005),
 (10, 'LK0493', 'Toyota', 30000, 2008);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `companies`
+--
+ALTER TABLE `companies`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `drivers`
+--
+ALTER TABLE `drivers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `fuel_types`
+--
+ALTER TABLE `fuel_types`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `help`
+--
+ALTER TABLE `help`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `order_driver`
+--
+ALTER TABLE `order_driver`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `trips`
+--
+ALTER TABLE `trips`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `phone_number` (`phone_number`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `vehicles`
+--
+ALTER TABLE `vehicles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `companies`
+--
+ALTER TABLE `companies`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `drivers`
+--
+ALTER TABLE `drivers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `fuel_types`
+--
+ALTER TABLE `fuel_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `help`
+--
+ALTER TABLE `help`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT for table `order_driver`
+--
+ALTER TABLE `order_driver`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT for table `trips`
+--
+ALTER TABLE `trips`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `vehicles`
+--
+ALTER TABLE `vehicles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

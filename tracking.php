@@ -275,7 +275,7 @@ $coords = getDriverCoords($order->id);
             e.routes[0].coordinates.forEach(function(coord, index) {
                 setTimeout(() => {
                     driverMarker.setLatLng([coord.lat, coord.lng]);
-                }, 100 * index);
+                }, 10000 * index);
             });
         }
     </script>

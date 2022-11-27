@@ -155,6 +155,19 @@ CREATE TABLE IF NOT EXISTS fuel_types(
     cost_per_litre DECIMAL(15, 2) NOT NULL
 ) ENGINE = INNODB;
 
+CREATE TABLE IF NOT EXISTS topics(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR() NOT NULL,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS messages(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    topic_id INT NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    body TEXT NOT NULL
+) ENGINE = INNODB;
+
 INSERT INTO fuel_types(name, cost_per_litre) VALUES
     ('parafin', '1200'),
     ('diesel', '1850'),

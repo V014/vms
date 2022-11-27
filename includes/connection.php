@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS messages(
     topic_id INT NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     body TEXT NOT NULL,
-    date_delivered DATE NOT NULL
+    date_created DATE NOT NULL
 ) ENGINE = INNODB;
 
 INSERT INTO fuel_types(name, cost_per_litre) VALUES
@@ -344,7 +344,16 @@ INSERT INTO vehicles (registration_no, make, capacity, year) VALUES
     ('SJ9433', 'Toyota', '30000', '2009'),
     ('EQVD34', 'VolksWagen', '30000', '2005'),
     ('LK0493', 'Toyota', '30000', '2008');
-        ";
+
+INSERT INTO topics (title, user_id, date_created) VALUES
+    ('General Questions', '1', '2022/01/22');
+
+INSERT INTO messages (topic_id, user_id, body, date_delivered) VALUES
+    ('1', '1', 'This topic is for anyone that has general questions to ask', '2022/01/22'),
+    ('1', '2', 'I wanted some pointers on how the system works overall', '2022/01/22'),
+    ('1', '3', 'I agree as well, kind of lost', '2022/01/22'),
+    ('1', '1', 'Use the navigation list on the left side to go through your orders and your homepage to view statistics', '2022/01/22');
+";
 
         return $schema;
     }

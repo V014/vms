@@ -1,6 +1,7 @@
 <?php
 
 include_once "./includes/entity/topic.php";
+include_once "./includes/entity/message.php";
 include_once "./includes/auth.php";
 
 $topics = Topic::all();
@@ -68,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <div class="card-header py-3">
                             <p class="text-primary m-0 fw-bold">Forum Topics and Discussions</p>
                         </div>
-                        <a href="order_create.php"><button type="button" class="btn btn-primary">Create Order</button></a>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12 text-nowrap">
@@ -89,6 +89,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                             <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
                                         </ul>
                                     </nav>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <?php foreach ($topics as $topic) { ?>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>

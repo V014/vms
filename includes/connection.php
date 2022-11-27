@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS fuel_types(
 
 CREATE TABLE IF NOT EXISTS topics(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR() NOT NULL,
+    title VARCHAR(100) NOT NULL,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     date_created DATE NOT NULL
 ) ENGINE = INNODB;
@@ -348,7 +348,7 @@ INSERT INTO vehicles (registration_no, make, capacity, year) VALUES
 INSERT INTO topics (title, user_id, date_created) VALUES
     ('General Questions', '1', '2022/01/22');
 
-INSERT INTO messages (topic_id, user_id, body, date_delivered) VALUES
+INSERT INTO messages (topic_id, user_id, body, date_created) VALUES
     ('1', '1', 'This topic is for anyone that has general questions to ask', '2022/01/22'),
     ('1', '2', 'I wanted some pointers on how the system works overall', '2022/01/22'),
     ('1', '3', 'I agree as well, kind of lost', '2022/01/22'),

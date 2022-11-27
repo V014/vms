@@ -22,6 +22,7 @@ switch ($user->role) {
     ?>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/company_dashboard/", $currentPage) == 1 ? "active" : "" ?>" href="index.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/user_orders/", $currentPage) == 1 ? "active" : "" ?>" href="user_orders.php"><i class="fas fa-truck"></i><span>Orders</span></a></li>
+        <li class="nav-item"><a class="nav-link <?php echo preg_match("/help/", $currentPage) == 1 ? "active" : "" ?>" href="help.php"><i class="fas fa-question"></i><span>Help</span></a></li>
 <?php
         break;
 }

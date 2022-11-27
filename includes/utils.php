@@ -431,10 +431,10 @@ function getDriverCoords($id)
 
 function updateDriverStart($lat, $lng, $id) {
     $conn = DBConnection::getConnection();
-    $sql = "UPDATE trips SET current_location = ST_GeomFromText('POINT(:lat :lng)') WHERE order_id = :id";
+    $sql = "UPDATE trips SET current_location = ST_GeomFromText('POINT($lat $lng)') WHERE order_id = $id";
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([":id" => $id, ":lat" => $lat, ":lng" => $lng]);
+    $stmt->execute();
 }
 
 const GOOGLE_MAPS_API = "AIzaSyAKlDIwTY2lo-TW-MZU4p7M2MwRuWog4N4";

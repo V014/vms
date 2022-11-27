@@ -1,8 +1,21 @@
 <?php
 
 include_once "./includes/entity/topic.php";
+include_once "./includes/auth.php";
 
 $topics = Topic::all();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $user = Auth::getUser();
+
+    $topic = [
+        "title" => $_POST["title"],
+        "user_id" => $user->id,
+        "date_created" => date("Y/m/d", strtotime("today")),
+    ];
+
+    Topic::create($topic);
+}
 
 ?>
 

@@ -41,7 +41,11 @@ $topics = Topic::all();
                                 <div class="card-body">
                                     <p>Create Forum Topic</p>
                                     <form class="user" name="forum_topic" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
-
+                                        <div class="mb-3">
+                                            <input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Topic Title" name="title" required>
+                                        </div>
+                                        <button class="btn btn-primary d-block btn-user w-100" type="submit">Submit Topic</button>
+                                        <hr>
                                     </form>
                                 </div>
                             </div>
@@ -49,16 +53,13 @@ $topics = Topic::all();
                     </div>
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Order List</p>
+                            <p class="text-primary m-0 fw-bold">Forum Topics and Discussions</p>
                         </div>
                         <a href="order_create.php"><button type="button" class="btn btn-primary">Create Order</button></a>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6 text-nowrap">
+                                <div class="col-md-12 text-nowrap">
                                     <span><?php echo count($topics); ?> Topics</span>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
                                 </div>
                             </div>
                             <div class="row">

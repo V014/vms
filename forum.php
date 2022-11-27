@@ -2,6 +2,7 @@
 
 include_once "./includes/entity/topic.php";
 include_once "./includes/entity/message.php";
+include_once "./includes/entity/user.php";
 include_once "./includes/auth.php";
 
 $topics = Topic::all();
@@ -94,23 +95,73 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="row">
                                 <div class="col-12">
                                     <?php foreach ($topics as $topic) { ?>
-                                    <?php } ?>
+                                        <?php
+                                        $messages = Message::all($topic->id);
+                                        $messageCount = count($messages);
+                                        $lastMessage = end($messages);
+                                        $poster = false;
+
+                                        if ($lastMessage) {
+                                            $poster = User::find($lastMessage->userID);
+                                        }
+
+                                        $user = User::find($topic->userID);
+                                        ?>
+                                        <div class="row">
+                                            <div class="container-fluid mt-100">
+                                                <div class="card mb-3">
+                                                    <div class="card-header pl-0 pr-0">
+                                                        <div class="row no-gutters w-100 align-items-center">
+                                                            <div class="col ml-3"></div>
+                                                            <div class="col-4 text-muted">
+                                                                <div class="row no-gutters align-items-center">
+                                                                    <div class="col-4">Replies</div>
+                                                                    <div class="col-8">Last update</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body py-3">
+                                                        <div class="row no-gutters align-items-center">
+                                                            <div class="col"> <a href="forum_topic_messages.php?id=<?php echo $topic->id; ?>" class="text-big" data-abc="true"><?php echo $topic->title; ?></a>
+                                                                <div class="text-muted small mt-1">Created <?php echo $topic->dateCreated; ?> &nbsp;·&nbsp; <span href="javascript:void(0)" class="text-muted" data-abc="true"><?php echo ucfirst($user->username); ?></span></div>
+                                                            </div>
+                                                            <div class="d-none d-md-block col-4">
+                                                                <div class="row no-gutters align-items-center">
+                                                                    <div class="col-4"><?php echo $messageCount; ?></div>
+                                                                    <div class="media col-8 align-items-center">
+                                                                        <?php if ($poster) { ?>
+                                                                            <img src="<?php echo $poster->profilePicture; ?>" alt="" class="d-block ui-w-30 rounded-circle" style="width: 65px;">
+                                                                            <div class="media-body flex-truncate ml-2">
+                                                                                <div class="line-height-1 text-truncate"><?php echo $lastMessage->dateCreated; ?></div> <a href="javascript:void(0)" class="text-muted small text-truncate" data-abc="true">by <?php echo ucfirst($poster->username); ?></a>
+                                                                            </div>
+                                                                        <?php } else { ?>
+                                                                            <p>No Poster</p>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            <?php } ?>
+                                            </div>
+                                        </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <footer class="bg-white sticky-footer">
+                        <div class="container my-auto">
+                            <div class="text-center my-auto copyright"><span>Copyright © Brand 2022</span></div>
+                        </div>
+                    </footer>
+                </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
             </div>
-            <footer class="bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2022</span></div>
-                </div>
-            </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    </div>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/theme.js"></script>
+            <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+            <script src="assets/js/bs-init.js"></script>
+            <script src="assets/js/theme.js"></script>
 </body>
 
 </html>

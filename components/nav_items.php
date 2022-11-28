@@ -11,11 +11,13 @@ switch ($user->role) {
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/driver_list/", $currentPage) == 1 ? "active" : "" ?>" href="driver_list.php"><i class="fas fa-car"></i><span>Drivers</span></a></li>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/orders_list/", $currentPage) == 1 ? "active" : "" ?>" href="orders_list.php"><i class="fas fa-truck"></i><span>Orders</span></a></li>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/vehicle_list/", $currentPage) == 1 ? "active" : "" ?>" href="vehicle_list.php"><i class="fas fa-truck"></i><span>Vehicles</span></a></li>
+        <li class="nav-item"><a class="nav-link <?php echo preg_match("/forum/", $currentPage) == 1 ? "active" : "" ?>" href="forum.php"><i class="fas fa-book"></i><span>Forums</span></a></li>
     <?php
         break;
     case 'driver': ?>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/driver_dashboard/", $currentPage) == 1 ? "active" : "" ?>" href="index.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/user_orders/", $currentPage) == 1 ? "active" : "" ?>" href="user_orders.php"><i class="fas fa-truck"></i><span>Orders</span></a></li>
+        <li class="nav-item"><a class="nav-link <?php echo preg_match("/forum/", $currentPage) == 1 ? "active" : "" ?>" href="forum.php"><i class="fas fa-book"></i><span>Forums</span></a></li>
     <?php
         break;
     case 'company':
@@ -23,6 +25,7 @@ switch ($user->role) {
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/company_dashboard/", $currentPage) == 1 ? "active" : "" ?>" href="index.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/user_orders/", $currentPage) == 1 ? "active" : "" ?>" href="user_orders.php"><i class="fas fa-truck"></i><span>Orders</span></a></li>
         <li class="nav-item"><a class="nav-link <?php echo preg_match("/help/", $currentPage) == 1 ? "active" : "" ?>" href="help.php"><i class="fas fa-question"></i><span>Help</span></a></li>
+        <li class="nav-item"><a class="nav-link <?php echo preg_match("/forum/", $currentPage) == 1 ? "active" : "" ?>" href="forum.php"><i class="fas fa-book"></i><span>Forums</span></a></li>
 <?php
         break;
 }

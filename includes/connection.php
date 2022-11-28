@@ -155,6 +155,21 @@ CREATE TABLE IF NOT EXISTS fuel_types(
     cost_per_litre DECIMAL(15, 2) NOT NULL
 ) ENGINE = INNODB;
 
+CREATE TABLE IF NOT EXISTS topics(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    date_created DATE NOT NULL
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS messages(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    topic_id INT NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    body TEXT NOT NULL,
+    date_created DATE NOT NULL
+) ENGINE = INNODB;
+
 INSERT INTO fuel_types(name, cost_per_litre) VALUES
     ('parafin', '1200'),
     ('diesel', '1850'),
@@ -329,7 +344,16 @@ INSERT INTO vehicles (registration_no, make, capacity, year) VALUES
     ('SJ9433', 'Toyota', '30000', '2009'),
     ('EQVD34', 'VolksWagen', '30000', '2005'),
     ('LK0493', 'Toyota', '30000', '2008');
-        ";
+
+INSERT INTO topics (title, user_id, date_created) VALUES
+    ('General Questions', '1', '2022/01/22');
+
+INSERT INTO messages (topic_id, user_id, body, date_created) VALUES
+    ('1', '1', 'This topic is for anyone that has general questions to ask', '2022/01/22'),
+    ('1', '2', 'I wanted some pointers on how the system works overall', '2022/01/22'),
+    ('1', '3', 'I agree as well, kind of lost', '2022/01/22'),
+    ('1', '1', 'Use the navigation list on the left side to go through your orders and your homepage to view statistics', '2022/01/22');
+";
 
         return $schema;
     }

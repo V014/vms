@@ -7,6 +7,19 @@ include_once "./includes/entity/order.php";
 include_once "./includes/entity/user.php";
 include_once "./includes/entity/vehicle.php";
 
+$uri = $_SERVER["REQUEST_URI"];
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && strpos($uri, "update")) {
+    $parsed = explode('&', parse_url($uri)['query']);
+
+    $lat = explode('=', $parsed[1])[1];
+    $lng = explode('=', $parsed[2])[1];
+    $id = explode('=', $parsed[3])[1];
+
+    updateDriverStart($lat, $lng, $id);
+    exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $order = Order::find($_POST["order_id"]);
     $order->delivered();
@@ -38,7 +51,7 @@ $coords = getDriverCoords($order->id);
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
@@ -243,7 +256,7 @@ $coords = getDriverCoords($order->id);
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script>
-        const map = L.map('map').setView([<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>], 13);
+        const map = L.map('map').setView([<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>], 10);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 17,
@@ -251,15 +264,13 @@ $coords = getDriverCoords($order->id);
         }).addTo(map);
 
         const driverMarker = L.marker(
-            [<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>],
-            {
+            [<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>], {
                 title: '<?php echo $driver->firstName . ' ' . $driver->lastName; ?>',
             }
         ).addTo(map);
 
         const companyMarker = L.marker(
-            [<?php echo $company->longitude; ?>, <?php echo $company->latitude; ?>],
-            {
+            [<?php echo $company->longitude; ?>, <?php echo $company->latitude; ?>], {
                 title: '<?php echo $company->name; ?>',
             }
         ).addTo(map);
@@ -275,6 +286,14 @@ $coords = getDriverCoords($order->id);
             e.routes[0].coordinates.forEach(function(coord, index) {
                 setTimeout(() => {
                     driverMarker.setLatLng([coord.lat, coord.lng]);
+                    fetch(`http://localhost/vms/tracking.php?type=update&lat=${coord.lat}&lng=${coord.lng}&id=<?php echo $order->id; ?>`, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        referrerPolicy: 'no-referrer',
+                    });
                 }, 10000 * index);
             });
         }

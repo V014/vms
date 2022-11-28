@@ -55,70 +55,85 @@ $messages = Message::all($topic->id);
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <div class="card shadow">
-                        <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Viewing Discussion Messages</p>
+                    <div class="row">
+                        <div class="card">
+                            <div class="col">
+                                <p>Write a Message</p>
+                                <form class="user" name="message" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
+
+                                </form>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12 text-nowrap">
-                                    <span><?php echo count($messages); ?> Messages</span>
-                                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+
+                        </div>
+                        <div class="card shadow">
+                            <div class="card-header py-3">
+                                <p class="text-primary m-0 fw-bold">Viewing Discussion Messages</p>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 align-self-center">
-                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of Message Posts</p>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12 text-nowrap">
+                                        <span><?php echo count($messages); ?> Messages</span>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                        <ul class="pagination">
-                                            <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
-                                        </ul>
-                                    </nav>
+                                <div class="row">
+                                    <div class="col-md-6 align-self-center">
+                                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of Message Posts</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                            <ul class="pagination">
+                                                <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+                                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="container-fluid mt-100">
-                                        <?php
-                                        foreach ($messages as $message) {
-                                            $user = user::find($message->userID);
-                                        ?>
-                                            <div class="card mb-3">
-                                                <div class="card-header pl-0 pr-0">
-                                                    <div class="row no-gutters w-100 align-items-center">
-                                                        <div class="col ml-3">
-                                                            <div>Message</div>
-                                                        </div>
-                                                        <div class="col-2 text-muted">
-                                                            <div>Posted By</div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="container-fluid mt-100">
+                                            <?php
+                                            foreach ($messages as $message) {
+                                                $user = user::find($message->userID);
+                                            ?>
+                                                <div class="card mb-3">
+                                                    <div class="card-header pl-0 pr-0">
+                                                        <div class="row no-gutters w-100 align-items-center">
+                                                            <div class="col ml-3">
+                                                                <div>Message</div>
+                                                            </div>
+                                                            <div class="col-2 text-muted">
+                                                                <div>Posted By</div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="card-body py-3">
-                                                    <div class="row no-gutters align-items-left">
-                                                        <div class="col">
-                                                            <?php echo $message->body; ?></a>
-                                                            <div class="text-muted small mt-1">Created <?php echo $message->dateCreated; ?> &nbsp;·&nbsp; <span href="javascript:void(0)" class="text-muted" data-abc="true"><?php echo ucfirst($user->username); ?></span></div>
-                                                        </div>
-                                                        <div class="d-none d-md-block col-2">
-                                                            <div class="row no-gutters align-items-center">
-                                                                <div class="media col align-items-center">
-                                                                    <img src="<?php echo $user->profilePicture; ?>" alt="" class="d-block ui-w-30 rounded-circle" style="width: 65px;">
-                                                                    <div class="media-body flex-truncate ml-2">
-                                                                        <div class="line-height-1 text-truncate"><?php echo $message->dateCreated; ?></div> <a href="javascript:void(0)" class="text-muted small text-truncate" data-abc="true">by <?php echo ucfirst($user->username); ?></a>
+                                                    <div class="card-body py-3">
+                                                        <div class="row no-gutters align-items-left">
+                                                            <div class="col">
+                                                                <?php echo $message->body; ?></a>
+                                                                <div class="text-muted small mt-1">Created <?php echo $message->dateCreated; ?> &nbsp;·&nbsp; <span href="javascript:void(0)" class="text-muted" data-abc="true"><?php echo ucfirst($user->username); ?></span></div>
+                                                            </div>
+                                                            <div class="d-none d-md-block col-2">
+                                                                <div class="row no-gutters align-items-center">
+                                                                    <div class="media col align-items-center">
+                                                                        <img src="<?php echo $user->profilePicture; ?>" alt="" class="d-block ui-w-30 rounded-circle" style="width: 65px;">
+                                                                        <div class="media-body flex-truncate ml-2">
+                                                                            <div class="line-height-1 text-truncate"><?php echo $message->dateCreated; ?></div> <a href="javascript:void(0)" class="text-muted small text-truncate" data-abc="true">by <?php echo ucfirst($user->username); ?></a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        <?php } ?>
+                                            <?php } ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

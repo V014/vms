@@ -9,12 +9,12 @@ include_once "./includes/utils.php";
 $topic = null;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $user = Auth::getUser();
+    $authUser = Auth::getUser();
     $id = $_POST["topic_id"];
 
     $message = [
         "topic_id" => $id,
-        "user_id" => $user->id,
+        "user_id" => $authUser->id,
         "body" => $_POST["body"],
         "date_created" => date("Y/m/d", strtotime("today")),
     ];
@@ -58,9 +58,15 @@ $messages = Message::all($topic->id);
                     <div class="row">
                         <div class="card">
                             <div class="col">
-                                <p>Write a Message</p>
                                 <form class="user" name="message" method="POST" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>">
-
+                                    <input type="hidden" name="topic_id" value="<?php echo $topic->id; ?>">
+                                    <input type="hidden" name="user_id" value="<?php echo $topic->id; ?>">
+                                    <div class="form-group mb-3">
+                                        <label for="exampleFormControlTextarea1">Write Message</label>
+                                        <textarea class="form-control" rows="5"></textarea>
+                                    </div>
+                                    <button class="btn btn-primary d-block btn-user w-100" type="submit">Submit Message</button>
+                                    <hr>
                                 </form>
                             </div>
                         </div>

@@ -29,14 +29,10 @@ include_once "./includes/utils.php";
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-1">Blank Page</h3>
+                    <h3 class="text-dark mb-1">VMS</h3>
                 </div>
             </div>
-            <footer class="bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2022</span></div>
-                </div>
-            </footer>
+            <?php include "footer.php" ?>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>

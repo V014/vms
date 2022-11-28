@@ -93,6 +93,7 @@ class Vehicle
         $query = "SELECT
                     COUNT(o.id) AS total_orders,
                     SUM(o.cost) AS total_profit,
+                    (SELECT SUM(o.quantity) FROM order_driver AS od INNER JOIN orders AS o ON o.id = od.order_id WHERE od.vehicle_id = :total_quantity) AS total_quantity,
                     (SELECT COUNT(*) FROM order_driver INNER JOIN orders ON orders.id = order_driver.order_id WHERE orders.type_id = 2 AND order_driver.vehicle_id = :diesel_deliveries) AS diesel_deliveries,
                     (SELECT COUNT(*) FROM order_driver INNER JOIN orders ON orders.id = order_driver.order_id WHERE orders.type_id = 3 AND order_driver.vehicle_id = :petrol_deliveries) AS petrol_deliveries
                   FROM vehicles AS v INNER JOIN order_driver AS od ON od.vehicle_id = v.id INNER JOIN drivers AS d ON d.user_id = od.driver_id INNER JOIN orders AS o ON o.id = od.order_id WHERE v.id = :vehicle_id";
@@ -101,7 +102,8 @@ class Vehicle
         $sth->execute([
             ":diesel_deliveries" => $this->id,
             ":petrol_deliveries" => $this->id,
-            ":vehicle_id" => $this->id
+            ":vehicle_id" => $this->id,
+            ":total_quantity" => $this->id
         ]);
         return $sth->fetch();
     }

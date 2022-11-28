@@ -294,7 +294,7 @@ $coords = getDriverCoords($order->id);
                         },
                         referrerPolicy: 'no-referrer',
                     });
-                }, 1500 * index);
+                }, 10000 * index);
             });
         }
     </script>

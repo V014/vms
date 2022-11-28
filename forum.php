@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ];
 
     Topic::create($topic);
+    redirect(BASE_DIR . 'forum.php');
 }
 
 ?>

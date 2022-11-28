@@ -77,7 +77,7 @@ $trips = getTrips($user->id);
                                                 <td><?php echo number_format($order->cost); ?></td>
                                                 <td><?php echo ucfirst($order->status); ?></td>
                                                 <td><?php echo $order->orderDate; ?></td>
-                                                <td><a href="order_detail.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">View</button></a></td>
+                                                <td><a href="order_detail.php?id=<?php echo $order->id; ?>"><button type="button" class="btn btn-secondary">Report</button></a></td>
                                                 <?php if (!isAssigned($order->id)) { ?>
                                                     <td class="btn">Assignment Pending</td>
                                                 <?php } else { ?>

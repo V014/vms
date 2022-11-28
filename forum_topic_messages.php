@@ -63,7 +63,7 @@ $messages = Message::all($topic->id);
                                     <input type="hidden" name="user_id" value="<?php echo $topic->id; ?>">
                                     <div class="form-group mb-3">
                                         <label for="exampleFormControlTextarea1">Write Message</label>
-                                        <textarea class="form-control" rows="5"></textarea>
+                                        <textarea name="body" class="form-control" rows="5"></textarea>
                                     </div>
                                     <button class="btn btn-primary d-block btn-user w-100" type="submit">Submit Message</button>
                                     <hr>

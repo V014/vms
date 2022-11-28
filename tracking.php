@@ -51,7 +51,7 @@ $coords = getDriverCoords($order->id);
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
@@ -264,15 +264,13 @@ $coords = getDriverCoords($order->id);
         }).addTo(map);
 
         const driverMarker = L.marker(
-            [<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>],
-            {
+            [<?php echo $coords["longitude"]; ?>, <?php echo $coords["latitude"]; ?>], {
                 title: '<?php echo $driver->firstName . ' ' . $driver->lastName; ?>',
             }
         ).addTo(map);
 
         const companyMarker = L.marker(
-            [<?php echo $company->longitude; ?>, <?php echo $company->latitude; ?>],
-            {
+            [<?php echo $company->longitude; ?>, <?php echo $company->latitude; ?>], {
                 title: '<?php echo $company->name; ?>',
             }
         ).addTo(map);

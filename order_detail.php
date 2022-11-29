@@ -45,7 +45,7 @@ $vehicle = Vehicle::find($order->vehicleID);
         <?php include_once('./components/nav_bar.php') ?>
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
-                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top d-print-none">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
                             <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..."><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
@@ -58,7 +58,7 @@ $vehicle = Vehicle::find($order->vehicleID);
                     <section style="background-color: #eee;">
                         <div class="container py-5">
                             <!-- Breadcrumb Section -->
-                            <div class="row">
+                            <div class="row d-print-none">
                                 <div class="col">
                                     <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
                                         <?php
@@ -90,6 +90,12 @@ $vehicle = Vehicle::find($order->vehicleID);
                                         ?>
                                     </nav>
                                 </div>
+                            </div>
+                            <div class="row d-print-none mb-3">
+                                <div class="col-1">
+                                    <button class="btn btn-primary" onclick="window.print();">Print</button>
+                                </div>
+                                <div class="col-11"></div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-4">
